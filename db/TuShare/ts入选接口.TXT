@@ -1,0 +1,21 @@
+行业分类   ts.get_industry_classified()
+概念分类   ts.get_concept_classified()
+地域分类   ts.get_area_classified()
+           ts.get_sme_classified()
+           ts.get_hs300s()
+           ts.get_sz50s()
+           ts.get_zz500s()
+           
+
+股票列表   ts.get_stock_basics()
+           df = ts.get_stock_basics()
+           df.columns =['name', 'industry', 'area', 'pe', 'outstanding', 'totals','totalassets', 'liquidassets', 'fixedassets', 'reserved','reservedpershare', 'esp', 'bvps', 'pb', 'timetomarket']
+           print(df.columns)
+           engine = create_engine('oracle://c##tushare:didierg160@myoracle')
+           df.to_sql('tb_stock_list',engine,if_exists='append')           
+          
+业绩报告   ts.get_report_data(2014,3)
+
+个股上榜统计   ts.cap_tops()
+机构席位追踪   ts.inst_tops()
+每日龙虎榜列表 ts.top_list('2016-06-12')

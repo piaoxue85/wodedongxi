@@ -1,0 +1,24 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<BorlandProject>
+	<Transactions>
+    <Transaction>2015/11/09 16:54:16.000.663,=C:\Users\moonlit\Documents\Embarcadero\Studio\Projects\Unit2.pas</Transaction>
+    <Transaction>2015/11/09 16:56:29.000.377,C:\Users\moonlit\Documents\Embarcadero\Studio\Projects\Unit2.pas=D:\Projects\j金融\g股票数据分析系统\sourceCode\stockFinder\main.pas</Transaction>
+    <Transaction>2015/11/09 16:56:29.000.377,C:\Users\moonlit\Documents\Embarcadero\Studio\Projects\Unit2.dfm=D:\Projects\j金融\g股票数据分析系统\sourceCode\stockFinder\main.dfm</Transaction>
+    <Transaction>2015/11/09 16:56:41.000.046,C:\Users\moonlit\Documents\Embarcadero\Studio\Projects\Project1.dproj=D:\Projects\j金融\g股票数据分析系统\sourceCode\stockFinder\stockFinder.dproj</Transaction>
+    <Transaction>2015/11/09 17:35:08.000.647,=D:\Projects\j金融\g股票数据分析系统\sourceCode\stockFinder\Unit1.pas</Transaction>
+    <Transaction>2015/11/09 17:35:24.000.401,D:\Projects\j金融\g股票数据分析系统\sourceCode\stockFinder\Unit1.pas=D:\Projects\j金融\g股票数据分析系统\sourceCode\stockFinder\ThreadFinder.pas</Transaction>
+    <Transaction>2015/11/10 10:01:56.000.128,=D:\Projects\MyFunc\DelphiFunc\adodb_tlb.pas</Transaction>
+    <Transaction>2015/11/10 10:01:56.000.182,=D:\Projects\MyFunc\DelphiFunc\Unit_StrFuncs.pas</Transaction>
+    <Transaction>2015/11/10 10:01:56.000.110,=D:\Projects\MyFunc\DelphiFunc\ADO_Controller.pas</Transaction>
+    <Transaction>2015/11/10 10:01:56.000.104,=D:\Projects\MyFunc\DelphiFunc\ADO.pas</Transaction>
+    <Transaction>2015/11/10 10:01:56.000.157,=D:\Projects\MyFunc\DelphiFunc\Hashtable.pas</Transaction>
+    <Transaction>2015/11/10 10:01:56.000.133,=D:\Projects\MyFunc\DelphiFunc\CnMD5.pas</Transaction>
+    <Transaction>2015/11/10 10:01:56.000.168,=D:\Projects\MyFunc\DelphiFunc\Unit_FileFuncs.pas</Transaction>
+    <Transaction>2015/11/10 10:01:56.000.145,=D:\Projects\MyFunc\DelphiFunc\Dailog.pas</Transaction>
+    <Transaction>2015/11/10 10:01:56.000.162,=D:\Projects\MyFunc\DelphiFunc\MD5.pas</Transaction>
+    <Transaction>2015/11/10 10:01:56.000.117,=D:\Projects\MyFunc\DelphiFunc\ADO_Shell.pas</Transaction>
+    <Transaction>2015/11/10 10:01:56.000.151,=D:\Projects\MyFunc\DelphiFunc\Global_Setting.pas</Transaction>
+    <Transaction>2015/11/10 10:01:56.000.139,=D:\Projects\MyFunc\DelphiFunc\ComPersist.pas</Transaction>
+    <Transaction>2015/11/10 10:01:56.000.176,=D:\Projects\MyFunc\DelphiFunc\Unit_MathFuncs.pas</Transaction>
+  </Transactions>
+</BorlandProject>

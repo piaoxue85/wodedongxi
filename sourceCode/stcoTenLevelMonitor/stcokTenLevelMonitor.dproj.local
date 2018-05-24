@@ -1,0 +1,10 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<BorlandProject>
+	<Transactions>
+    <Transaction>2016/05/10 15:53:21.000.536,=C:\Users\moonlit\Documents\Embarcadero\Studio\Projects\Unit1.pas</Transaction>
+    <Transaction>2016/06/30 14:54:48.000.638,=C:\Users\moonlit\Documents\Embarcadero\Studio\Projects\Unit3.pas</Transaction>
+    <Transaction>2016/06/30 14:56:10.000.147,D:\Projects\j金融\g股票数据分析系统\sourceCode\stcoTenLevelMonitor\Main.pas=C:\Users\moonlit\Documents\Embarcadero\Studio\Projects\Unit3.pas</Transaction>
+    <Transaction>2016/06/30 14:56:10.000.147,D:\Projects\j金融\g股票数据分析系统\sourceCode\stcoTenLevelMonitor\Main.dfm=C:\Users\moonlit\Documents\Embarcadero\Studio\Projects\Unit3.dfm</Transaction>
+    <Transaction>2016/06/30 14:56:34.000.280,D:\Projects\j金融\g股票数据分析系统\sourceCode\stcoTenLevelMonitor\stcokTenLevelMonitor.dproj=C:\Users\moonlit\Documents\Embarcadero\Studio\Projects\Project1.dproj</Transaction>
+  </Transactions>
+</BorlandProject>

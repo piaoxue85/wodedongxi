@@ -1,0 +1,23 @@
+'''
+Created on 2017年11月22日
+
+@author: moonlit
+'''
+import numpy as np
+import pandas as pd
+import cx_Oracle
+from math import ceil
+from sqlalchemy import create_engine
+from sklearn.utils import shuffle  
+import getStockData as gsd
+
+def importStockList():
+    pass
+
+def importStockDataDaily():
+    pass
+
+#是否除权了
+def isXR(code=""):
+    pass
+

@@ -1,0 +1,4 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<session version="1.0">
+<refactoring comment="Rename resource &apos;test/src/Copy of testRQAlphaMacd.py&apos; to &apos;testRQAlphaMA8.py&apos;" description="Rename resource &apos;Copy of testRQAlphaMacd.py&apos;" flags="7" id="org.eclipse.ltk.core.refactoring.rename.resource" input="src/Copy of testRQAlphaMacd.py" name="testRQAlphaMA8.py" stamp="1501144760503" updateReferences="true"/>
+</session>

@@ -1,0 +1,78 @@
+'''
+Created on 2017年6月3日
+
+@author: moonlit
+
+'''
+
+from BigQuantTrade import TradeHLPrice
+import BigQuantImportRank as importR
+import numpy as np
+
+def getRank(rank , buy_black):
+    rank_new = []
+    for r in rank:
+        if r in buy_black :
+            continue
+        rank_new.append(r)
+    
+    return rank_new
+
+Position_ratio = 51.45/100
+Position       = [  # code    ,市值
+                    ["002427",18094.01 ],
+                    ["600019",304.69   ],
+                    ["002606",47706.91 ],
+                    ["600680",36041.22 ],
+                    ["002879",29701.9  ],
+                 ]
+buy_sell       = [   #            ，股数
+                    ["002879","卖",890 ],
+                    ["002606","卖",5679],
+                    ["600680","卖",5596],
+                    ["600019","买",5137],
+                    ["002359","买",1292],
+                    ["002543","买",1122],
+                ]
+
+stockCount = 4
+weights = []
+    
+print("#-------------------------------------------------------------------庄华-----------------------------------------------------------------------------------------------")        
+rank = ["300446"]
+rank = getRank(rank = rank , buy_black=[])
+sell_black = []
+T = TradeHLPrice(user_name = "庄华",start_date = "2017-08-01" , op_date = "" ,Position_ratio = Position_ratio , Position = Position , buy_sell = buy_sell)     
+T.can_buy_GEM = True  
+# shi_jian  ="2017-08-02"
+shi_jian  = T.get_op_date() 
+T.op_date = shi_jian
+
+importR.importRank(prank = rank, shi_jian = shi_jian)
+print(T.user)
+sell_list = T.sell(sell_black)
+print(sell_list)
+buy = T.buy(buy_black)
+print(buy)
+
+print("#---------------------------------------------------------------龚雯-----------------------------------------------------------------------------------------------------")
+rank = []
+rank = getRank(rank = rank , buy_black=buy_black)
+sell_black = [
+              "002307",
+              "600419",
+              ]
+
+w = list(np.array(weights)/1) 
+
+T = TradeSmallMarketValue(user_name = "龚雯",start_date = "2017-08-01" , op_date = shi_jian ,weights = w)
+T.can_buy_GEM = False   
+T.op_date = shi_jian
+
+importR.importRank(prank = rank, shi_jian = shi_jian)
+print(T.user)
+sell_list = T.sell(sell_black)
+print(sell_list)
+buy = T.buy(buy_black)
+print(buy)
+

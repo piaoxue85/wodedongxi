@@ -1,0 +1,106 @@
+#复权数据  http://tushare.org/trading.html#id3
+# 参数说明：
+# 
+#     code:string,股票代码 e.g. 600848
+#     start:string,开始日期 format：YYYY-MM-DD 为空时取当前日期
+#     end:string,结束日期 format：YYYY-MM-DD 为空时取去年今日
+#     autype:string,复权类型，qfq-前复权 hfq-后复权 None-不复权，默认为qfq
+#     index:Boolean，是否是大盘指数，默认为False
+#     retry_count : int, 默认3,如遇网络等问题重复执行的次数
+#     pause : int, 默认 0,重复请求数据过程中暂停的秒数，防止请求间隔时间太短出现的问题
+# 
+# 返回值说明：
+# 
+#     date : 交易日期 (index)
+#     open : 开盘价
+#     high : 最高价
+#     close : 收盘价
+#     low : 最低价
+#     volume : 成交量
+#     amount : 成交金额
+
+from sqlalchemy import create_engine
+import tushare as ts
+
+
+def fImportHData(pCode,pName,pStart,pEnd) :  
+    df = ts.get_h_data(pCode, start=pStart, end=pEnd)
+    df['code']=pCode
+    df['name']=pName    
+    df['shi_jian']=df.index
+    df = df.reset_index(drop=True)
+    df.columns =[
+                    'price_today_open',
+                    'max_price'       ,
+                    'price'           ,
+                    'min_price'       ,
+                    'vol'             ,
+                    'amount'          ,
+                    'code'            ,
+                    'name'            ,
+                    'shi_jian'
+                ]
+    df = df.set_index('shi_jian')
+    engine = create_engine('oracle://c##tushare:didierg160@myoracle')
+    df.to_sql('tb_stock_data_daily',engine,if_exists='append') 
+    print(df)
+    print(df.index)
+  
+def fImportStockBasicsAll():
+    df = ts.get_stock_basics()
+    df.columns =['name', 'industry', 'area', 'pe', 'outstanding', 'totals','totalassets', 'liquidassets', 'fixedassets', 'reserved','reservedpershare', 'esp', 'bvps', 'pb', 'timetomarket']
+    #print(df.columns)
+    engine = create_engine('oracle://c##tushare:didierg160@myoracle')
+    df.to_sql('tb_stock_list',engine,if_exists='append')  
+
+#导入股票分类数据
+def fImportClass():
+    engine = create_engine('oracle://c##tushare:didierg160@myoracle')
+###----------------------------------行业分类    
+#     df = ts.get_industry_classified()
+#     df = df.reset_index(drop=True)
+#     df.columns =[
+#                     'code'       ,
+#                     'name'       ,
+#                     'c_name'           
+#                 ]    
+#     df = df.set_index('c_name')
+#     df.to_sql('tb_stock_classified',engine,if_exists='append')  
+
+###--------------------------------概念分类
+#     df = ts.get_concept_classified()
+#     df = df.reset_index(drop=True)
+#     df.columns =[
+#                     'code'       ,
+#                     'name'       ,
+#                     'c_name'           
+#                 ]    
+#     df = df.reset_index(drop=True)
+#     df = df.set_index('c_name')
+#     df.to_sql('tb_stock_classified',engine,if_exists='append')  
+
+###-------------------------------地区分类
+#     df = ts.get_area_classified()
+#     df = df.reset_index(drop=True)    
+#     df.columns =[
+#                     'code'       ,
+#                     'name'       ,
+#                     'c_name'           
+#                 ]    
+#     df = df.set_index('c_name')
+#     df.to_sql('tb_stock_classified',engine,if_exists='append')   
+
+###------------------------------
+    df = ts.get_sme_classified()
+    df = df.reset_index(drop=True) 
+    df['c_name'] = '中小板'   
+    df.columns =[
+                    'code'       ,
+                    'name'       ,
+                    'c_name'           
+                ]    
+    df = df.set_index('c_name')
+    df.to_sql('tb_stock_classified',engine,if_exists='append')      
+    print(df)
+    print(df.columns)
+    print(df.index)

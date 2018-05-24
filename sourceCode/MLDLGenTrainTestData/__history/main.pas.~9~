@@ -1,0 +1,47 @@
+unit main;
+
+interface
+
+uses
+  ThreadGen ,
+  Winapi.Windows, Winapi.Messages, System.SysUtils, System.Variants, System.Classes, Vcl.Graphics,
+  Vcl.Controls, Vcl.Forms, Vcl.Dialogs, Vcl.StdCtrls, Vcl.Menus, Vcl.ExtCtrls;
+
+type
+  TfMain = class(TForm)
+    MainMenu1: TMainMenu;
+    N1: TMenuItem;
+    CSV1: TMenuItem;
+    Memo1: TMemo;
+    Timer1: TTimer;
+    procedure CSV1Click(Sender: TObject);
+    procedure Timer1Timer(Sender: TObject);
+  private
+    { Private declarations }
+  public
+    { Public declarations }
+  end;
+
+var
+  fMain: TfMain;
+
+implementation
+
+{$R *.dfm}
+
+procedure TfMain.CSV1Click(Sender: TObject);
+var
+  thGen : TThreadGen ;
+begin
+  thGen := TThreadGen.Create ;
+  self.CSV1.Enabled := false ;
+  self.Memo1.Clear ;
+end;
+
+procedure TfMain.Timer1Timer(Sender: TObject);
+begin
+  if self.Memo1.Lines.Count>=5000 then
+     self.Memo1.Clear ;
+end;
+
+end.

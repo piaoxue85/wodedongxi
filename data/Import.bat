@@ -1,0 +1,1 @@
+sqlldr c##stock/didierg160@myoracle control=loader.ctl errors=99999999 direct=true

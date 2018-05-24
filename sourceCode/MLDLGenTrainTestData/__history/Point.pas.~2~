@@ -1,0 +1,12 @@
+unit Point;
+
+interface
+uses
+  SysUtils ,
+  Controls ,
+  Classes
+  ;
+
+implementation
+
+end.

@@ -1,0 +1,1950 @@
+[General]
+Description=EVE-总流程
+BeginHotkey=36
+BeginHotkeyMod=8
+PauseHotkey=19
+PauseHotkeyMod=0
+StopHotkey=35
+StopHotkeyMod=8
+RunOnce=1
+EnableWindow=
+Enable=1
+AutoRun=0
+[Repeat]
+Type=0
+Number=1
+[CallBack]
+OnSetup=
+[Comment]
+Content=
+
+[Script]
+//全局变量
+//配置ini文件绝对路径
+VBS dim sIni
+//当前窗口帐号Idx
+VBS dim iIDXCurrentAcc
+VBS dim iAccNum
+//
+VBS dim sActType
+VBS dim saActType(15)
+//残骸货舱已打开
+VBS dim bWreckageCabinOpened(15)
+//船舱满
+VBS dim bCabinFull(15)
+//船舱空
+VBS dim bCabinEmpty(15)
+//是否有红减
+VBS dim bRedSubtractionFound(15)
+//是否有红星
+VBS dim bRedStarFound(15)
+//总览的鼠标位置没有东西
+VBS dim bNothingHere(15)
+//发现目标
+VBS dim bTargetFound(15)
+//是否已经锁定目标
+VBS dim bTargetLocked(15)
+//当前目标可否攻击
+VBS dim bTargetCanAttack(15)
+//是否入站
+VBS dim bSpaceStationDocked(15)
+//已经进入太空
+VBS dim bInSpace(15)
+//
+//正在跳跃
+VBS dim bJumping(15)
+//有黄色的星门
+VBS dim bFindYellowStarGate(15)
+//应该在跳跃
+VBS dim bShouldJumping(15)
+//应该入站
+VBS dim bShouldSpaceStationDocked(15)
+//应该已经锁定目标
+VBS dim bShouldTargetLocked(15)
+//应该进入太空
+VBS dim bShouldInSpace(15)
+//已经登录在线
+VBS dim bOnLine(15)
+//当前窗口句柄
+VBS dim hwnd(15)
+//写log内容
+VBS dim sLogLine
+//txt文件对象
+VBS dim LogFile(15)
+VBS dim LogFileTotal
+//自定义X轴位置
+VBS dim icurX
+//自定义Y轴位置
+VBS dim icurY
+//图片匹配精确度
+VBS dim fPicMatchPrecision
+//匹配图片路径
+VBS dim sPicFilePath
+//
+VBS dim sTmp
+VBS dim iTmp
+VBS dim iTmpa
+//视角控制
+VBS dim iSightControl(15)
+VBS dim x
+VBS dim y
+//
+//高槽激活范围
+VBS dim iHSlotBegin(15)
+VBS dim iHSlotEnd(15)
+//中槽激活范围
+VBS dim iMSlotBegin(15)
+VBS dim iMSlotEnd(15)
+//
+//低槽激活范围
+VBS dim iLSlotBegin(15)
+VBS dim iLSlotEnd(15)
+//
+//F1键键值
+VBS dim iFKeyBegin
+//F8键键值
+VBS dim iFKeyEnd
+//正在点击的键
+VBS dim iCurrentKey
+//
+//判断船舱满的左上，右下位置
+VBS dim iCabinFullLeft(15)
+VBS dim iCabinFullUp(15)
+VBS dim iCabinFullRight(15)
+VBS dim iCabinFullDown(15)
+//
+//判断船舱空的左上，右下位置
+VBS dim iCabinEmptyLeft(15)
+VBS dim iCabinEmptyUp(15)
+VBS dim iCabinEmptyRight(15)
+VBS dim iCabinEmptyDown(15)
+//中高低槽，已经激活
+VBS dim bHighSlotActived(15)
+VBS dim bMidSlotActived(15)
+VBS dim bLowSlotActived(15)
+//
+//登录游戏 用户名，密码
+VBS dim sUserName(15)
+VBS dim sPassWord(15)
+//
+//目标数组
+VBS dim saTarget(15,127)
+VBS dim iaTarCursor(15)
+//
+//目标小行星带数组
+VBS dim saMineField(15,127)
+VBS dim saMineFieldWhite(15,127)
+VBS dim iaMineFieldCursor(15)
+//
+//停靠空间站数组
+VBS dim saSpaceStation(15,127)
+VBS dim saSpaceStationWhite(15,127)
+VBS dim iaSpaceStationCursor(15)
+//
+//多开各个窗口点击位置
+VBS dim iaWinPosX(15)
+VBS dim iaWinPosY
+//
+Gosub Initialize
+Gosub main
+Gosub Finish
+EndScript 
+//
+//-----------------------------框架 begin ----------------------------------------------//
+//
+//初始化
+Sub Initialize
+    //
+    Plugin LogFileTotal = File.OpenFile( "D:\Projects\eve\script\z正式\logs\EVE-total.log" )
+    sLogLine = "开始"
+    Gosub WriteLogTotal
+    //
+    //ini文件绝对路径
+    sIni="D:\Projects\eve\script\z正式\Initialize.ini"
+    //
+    //匹配图片路径
+    Plugin sPicFilePath = File.ReadINI( "PicFilePath" , "Path" , sIni )
+    sLogLine = "sPicFilePath = " + sPicFilePath
+    Gosub WriteLogTotal
+    //
+    //加载各个窗口任务栏位置
+    //Y坐标
+    Plugin sTmp = File.ReadINI( "SwitchWinPos","WinPosY"  , sIni )
+    iaWinPosY   = cint( sTmp )
+    //
+    //F1键键值
+    iFKeyBegin = 112
+    //F8键键值
+    iFKeyEnd   = 119
+    //
+    //当前窗口帐号Idx
+    iIDXCurrentAcc = -1
+    //
+    sActType = "Null"
+    //
+    While sActType <> "end"
+        sActType = ""
+        //
+        iIDXCurrentAcc = iIDXCurrentAcc + 1
+        //iTmp = iIDXCurrentAcc + 1
+        //
+        Plugin sActType = File.ReadINI( "ActType","ActType"+cstr( iIDXCurrentAcc )  , sIni )
+        //
+        If sActType <> "end"
+            saActType( iIDXCurrentAcc ) = sActType
+            //
+            sLogLine = "saActType( iIDXCurrentAcc ) = " + saActType( iIDXCurrentAcc )
+            Gosub WriteLogTotal
+            //
+        Else 
+            iAccNum = iIDXCurrentAcc - 1
+        EndIf 
+    EndWhile 
+    //
+    sLogLine = "iAccNum = " + cstr( iAccNum )
+    Gosub WriteLogTotal
+    //
+    iIDXCurrentAcc = 0
+    //
+    While iIDXCurrentAcc <= iAccNum
+        //
+        sLogLine = "For iIDXCurrentAcc = 0 to iAccNum "
+        Gosub WriteLogTotal
+        //
+        //iTmp = iIDXCurrentAcc + 1
+        //初始化所有状态
+        bCabinFull( iIDXCurrentAcc )                = 0
+        bCabinEmpty( iIDXCurrentAcc )               = 0
+        bRedSubtractionFound( iIDXCurrentAcc )      = 1
+        bRedStarFound( iIDXCurrentAcc )             = 1
+        bNothingHere( iIDXCurrentAcc )              = 0
+        bTargetFound( iIDXCurrentAcc )              = 0
+        bTargetLocked( iIDXCurrentAcc )             = 0
+        bSpaceStationDocked( iIDXCurrentAcc )       = 0
+        bInSpace( iIDXCurrentAcc )                  = 0
+        bJumping( iIDXCurrentAcc )                  = 0
+        bFindYellowStarGate(iIDXCurrentAcc)         = 0
+        bShouldJumping( iIDXCurrentAcc )            = 0
+        bShouldSpaceStationDocked( iIDXCurrentAcc ) = 0
+        bShouldTargetLocked( iIDXCurrentAcc )       = 0
+        bShouldInSpace( iIDXCurrentAcc )            = 0
+        bOnLine( iIDXCurrentAcc )                   = 0
+        bHighSlotActived( iIDXCurrentAcc )          = 0
+        bMidSlotActived( iIDXCurrentAcc )           = 0
+        bLowSlotActived( iIDXCurrentAcc )           = 0
+        //
+        //打开各个log文件
+        Plugin sTmp = File.ReadINI( "Log","Log" + cstr(iIDXCurrentAcc)  , sIni )
+        //Plugin LogFile( iIDXCurrentAcc ) = File.OpenFile( sTmp )
+        //
+        sLogLine = "LogFilePath=" + sTmp
+        Gosub WriteLogTotal
+        //加载帐号信息
+        Plugin sTmp = File.ReadINI( "GameSignIn","UserName" + cstr(iIDXCurrentAcc )  , sIni )
+        sUserName( iIDXCurrentAcc )  = sTmp
+        Plugin sTmp = File.ReadINI( "GameSignIn","PassWord" + cstr(iIDXCurrentAcc )  , sIni )
+        sPassWord( iIDXCurrentAcc )  = sTmp
+        //
+        //加载各个窗口任务栏位置
+        //X坐标
+        Plugin sTmp = File.ReadINI( "SwitchWinPos","WinPosX" + cstr(iIDXCurrentAcc )  , sIni )
+        iaWinPosX( iIDXCurrentAcc ) = cint( sTmp )
+        //
+        sLogLine = "sUserName=" + sUserName( iIDXCurrentAcc ) + " sPassWord=" + sPassWord( iIDXCurrentAcc )
+        Gosub WriteLogTotal
+        //加载各个帐号的目标图片路径
+        sTmp = "Null"
+        //
+        iTmp = 0
+        //
+        While sTmp <> "end"
+            sTmp = ""
+            //
+            Plugin sTmp = File.ReadINI( "Target" + cstr(iIDXCurrentAcc ) , "Tar"+cstr( iTmp )  , sIni )
+            //
+            If sTmp <> "end"
+                saTarget( iIDXCurrentAcc , iTmp ) = sTmp
+                saTarget( 0 , 0 ) = sTmp
+                //
+                sLogLine = "tar =" + saTarget( iIDXCurrentAcc , iTmp )
+                Gosub WriteLogTotal
+            EndIf 
+            //
+            iTmp = iTmp + 1
+            //
+        EndWhile 
+        //
+        //加载各个帐号的目标小行星带数组
+        sTmp = "Null"
+        //
+        iTmp = 0
+        While sTmp <> "end"
+            sTmp = ""
+            //
+            Plugin sTmp = File.ReadINI( "MineField" + cstr(iIDXCurrentAcc ) , "Field"+cstr( iTmp )  , sIni )
+            //
+            If sTmp <> "end"
+                saMineField( iIDXCurrentAcc , iTmp ) = sTmp
+                sLogLine = saMineField( iIDXCurrentAcc , iTmp )
+                Gosub WriteLogTotal
+            EndIf 
+            //
+            sTmp = ""
+            //
+            Plugin sTmp = File.ReadINI( "MineField" + cstr(iIDXCurrentAcc ) , "FieldWhite"+cstr( iTmp )  , sIni )
+            //
+            If sTmp <> "end"
+                saMineFieldWhite( iIDXCurrentAcc , iTmp ) = sTmp
+                sLogLine = saMineField( iIDXCurrentAcc , iTmp )
+                Gosub WriteLogTotal
+            EndIf 
+            //
+            iTmp = iTmp + 1
+            //
+            //sLogLine = "saMineField( iIDXCurrentAcc , iTmp )=" + saMineField( iIDXCurrentAcc , iTmp )
+            //Gosub WriteLogTotal
+        EndWhile 
+        //
+        //加载各个帐号的停靠空间站数组
+        sTmp = "Null"
+        //
+        iTmp = 0
+        While sTmp <> "end"
+            sTmp = ""
+            //
+            Plugin sTmp = File.ReadINI( "SpaceStation" + cstr(iIDXCurrentAcc ) , "Station"+cstr( iTmp )  , sIni )
+            //
+            If sTmp <> "end"
+                saSpaceStation( iIDXCurrentAcc , iTmp ) = sTmp
+                sLogLine =  "saSpaceStation = " + saSpaceStation( iIDXCurrentAcc , iTmp )
+                Gosub WriteLogTotal
+            EndIf 
+            //
+            sTmp = ""
+            //
+            Plugin sTmp = File.ReadINI( "SpaceStation" + cstr(iIDXCurrentAcc ) , "StationWhite"+cstr( iTmp )  , sIni )
+            //
+            If sTmp <> "end"
+                saSpaceStationWhite( iIDXCurrentAcc , iTmp ) = sTmp
+                sLogLine =  "saSpaceStationWhite = " + cstr(saSpaceStationWhite( iIDXCurrentAcc , iTmp ))
+                Gosub WriteLogTotal
+            EndIf 
+            //
+            iTmp = iTmp + 1
+            //
+        EndWhile 
+        //
+        //加载定义舱位满了的位置
+        Plugin iCabinFullLeft(iIDXCurrentAcc)  = File.ReadINI( "CabinFull"  , "Left"  + cstr(iIDXCurrentAcc )  , sIni )
+        Plugin iCabinFullUp(iIDXCurrentAcc)    = File.ReadINI( "CabinFull"  , "Up"    + cstr(iIDXCurrentAcc )  , sIni )
+        Plugin iCabinFullRight(iIDXCurrentAcc) = File.ReadINI( "CabinFull"  , "Right" + cstr(iIDXCurrentAcc )  , sIni )
+        Plugin iCabinFullDown(iIDXCurrentAcc)  = File.ReadINI( "CabinFull"  , "Down"  + cstr(iIDXCurrentAcc )  , sIni )
+        //
+        sLogLine = "iCabinFullLeft(iIDXCurrentAcc)=" + cstr( iCabinFullLeft(iIDXCurrentAcc) )
+        Gosub WriteLogTotal
+        sLogLine = "iCabinFullUp(iIDXCurrentAcc)=" + cstr ( iCabinFullUp(iIDXCurrentAcc) )
+        Gosub WriteLogTotal
+        sLogLine = "iCabinFullRight(iIDXCurrentAcc)=" + cstr( iCabinFullRight(iIDXCurrentAcc) )
+        Gosub WriteLogTotal
+        sLogLine = "iCabinFullDown(iIDXCurrentAcc)=" + cstr( iCabinFullDown(iIDXCurrentAcc) )
+        Gosub WriteLogTotal
+        //
+        //判断船舱空的左上，右下位置
+        Plugin iCabinEmptyLeft(iIDXCurrentAcc)  = File.ReadINI( "CabinEmpty"  , "Left"  + cstr(iIDXCurrentAcc ) , sIni )
+        Plugin iCabinEmptyUp(iIDXCurrentAcc)    = File.ReadINI( "CabinEmpty"  , "Up"    + cstr(iIDXCurrentAcc ) , sIni )
+        Plugin iCabinEmptyRight(iIDXCurrentAcc) = File.ReadINI( "CabinEmpty"  , "Right" + cstr(iIDXCurrentAcc ) , sIni )
+        Plugin iCabinEmptyDown(iIDXCurrentAcc)  = File.ReadINI( "CabinEmpty"  , "Down"  + cstr(iIDXCurrentAcc ) , sIni )
+        //
+        sLogLine = "iCabinEmptyLeft(iIDXCurrentAcc)=" + cstr( iCabinEmptyLeft(iIDXCurrentAcc) )
+        Gosub WriteLogTotal
+        sLogLine = "iCabinEmptyUp(iIDXCurrentAcc)=" + cstr ( iCabinEmptyUp(iIDXCurrentAcc) )
+        Gosub WriteLogTotal
+        sLogLine = "iCabinEmptyRight(iIDXCurrentAcc)=" + cstr( iCabinEmptyRight(iIDXCurrentAcc) )
+        Gosub WriteLogTotal
+        sLogLine = "iCabinEmptyDown(iIDXCurrentAcc)=" + cstr( iCabinEmptyDown(iIDXCurrentAcc) )
+        Gosub WriteLogTotal
+        //
+        //高槽激活范围
+        Plugin iHSlotBegin(iIDXCurrentAcc) = File.ReadINI( "HighSlot"  , "SlotBegin"  + cstr(iIDXCurrentAcc ) , sIni )
+        Plugin iHSlotEnd(iIDXCurrentAcc)   = File.ReadINI( "HighSlot"  , "SlotEnd"    + cstr(iIDXCurrentAcc ) , sIni )
+        //
+        sLogLine = "iHSlotBegin(iIDXCurrentAcc)" + cstr( iHSlotBegin(iIDXCurrentAcc) )
+        Gosub WriteLogTotal
+        sLogLine = "iHSlotEnd(iIDXCurrentAcc)" + cstr ( iHSlotEnd(iIDXCurrentAcc) )
+        Gosub WriteLogTotal
+        //
+        //中槽激活范围
+        Plugin iMSlotBegin(iIDXCurrentAcc) = File.ReadINI( "MidSlot"  , "SlotBegin"  + cstr(iIDXCurrentAcc ) , sIni )
+        Plugin iMSlotEnd(iIDXCurrentAcc)   = File.ReadINI( "MidSlot"  , "SlotEnd"    + cstr(iIDXCurrentAcc ) , sIni )
+        //
+        sLogLine = "iMSlotBegin(iIDXCurrentAcc)=" + cstr( iMSlotBegin(iIDXCurrentAcc) )
+        Gosub WriteLogTotal
+        sLogLine = "iMSlotEnd(iIDXCurrentAcc)" + cstr ( iMSlotEnd(iIDXCurrentAcc) )
+        Gosub WriteLogTotal
+        //
+        //低槽激活范围
+        Plugin iLSlotBegin(iIDXCurrentAcc) = File.ReadINI( "LowSlot"  , "SlotBegin"  + cstr(iIDXCurrentAcc ) , sIni )
+        Plugin iLSlotEnd(iIDXCurrentAcc)   = File.ReadINI( "LowSlot"  , "SlotEnd"    + cstr(iIDXCurrentAcc ) , sIni )
+        //
+        sLogLine = "iLSlotBegin(iIDXCurrentAcc)=" + cstr( iLSlotBegin(iIDXCurrentAcc) )
+        Gosub WriteLogTotal
+        sLogLine = "iLSlotEnd(iIDXCurrentAcc)=" + cstr ( iLSlotEnd(iIDXCurrentAcc) )
+        Gosub WriteLogTotal
+        //
+        iIDXCurrentAcc = iIDXCurrentAcc + 1
+    EndWhile 
+    //
+Return Initialize
+//
+//结束工作
+Sub Finish
+    //
+    //打开各个窗口的log文件
+    iIDXCurrentAcc = 0
+    //
+    While iIDXCurrentAcc <= iAccNum
+        sLogLine = "结束"
+        Gosub WriteLogTotal
+        Plugin File.CloseFile( LogFile(iIDXCurrentAcc) )
+        iIDXCurrentAcc = iIDXCurrentAcc + 1
+    EndWhile 
+    //
+    //结束
+Return Finish
+//
+//主过程
+Sub main
+    //
+    sLogLine = "主过程开始"
+    Gosub WriteLogTotal
+    //
+    iIDXCurrentAcc = 0
+    iaTarCursor( iIDXCurrentAcc ) = 0
+    //
+    iTmpa = 0
+    While iTmpa<= 999
+        //
+        iIDXCurrentAcc = 0
+        While iIDXCurrentAcc <= iAccNum
+            sLogLine = "各个窗口流程"
+            Gosub WriteLogTotal
+            iaTarCursor( iIDXCurrentAcc ) = 0
+            Gosub 麦基诺-采冰-事件方式
+            //Gosub chkTargetLocked
+            //Gosub ResetOrder
+            iIDXCurrentAcc = iIDXCurrentAcc + 1
+        EndWhile 
+        //
+        iTmpa=iTmpa+1
+        //Delay 10000
+    EndWhile 
+    //
+    //VBSCall FindPic( 815 , 58 , 973 , 124 , sPicFilePath + "\g公共匹配图片\j解除锁定图标.bmp" , 1 , x , y )
+    //
+    //MoveTo x , y
+Return main
+//
+//设置窗口位置到 0 ， 0
+Sub SetWindowPosition
+    Plugin hwnd(iIDXCurrentAcc) = Window.Foreground()
+    Plugin Window.Move( hwnd(iIDXCurrentAcc) , 0 , 0 )
+Return SetWindowPosition
+//
+//关闭信息窗口
+Sub CloseInfoWindow
+    //
+    sLogLine = "关闭信息窗口"
+    Gosub WriteLogTotal
+    //
+    VBSCall FindPic( 0 , 0 , 1024 , 768 , sPicFilePath + "\g公共匹配图片\g信息窗口.bmp" , 1 , x , y )
+    //
+    If x>0 and y>0
+        MoveTo x , y
+        LeftClick 1
+        Delay 100
+        KeyDown 17,1
+        Delay 100
+        KeyPress 87,1
+        Delay 100
+        KeyUp 17,1
+    EndIf 
+    //
+    Rem exit-CloseInfoWindow
+Return 
+//找黄色星门（有则表示有星门要过）
+Sub FindYellowStarGate
+    //
+    sLogLine = "找黄色星门（有则表示有星门要过）"
+    Gosub WriteLogTotal
+    //
+    bFindYellowStarGate(iIDXCurrentAcc) = 0
+    VBSCall FindPic( 773 , 100 , 1008 , 662 ,  sPicFilePath + "\g公共匹配图片\h黄色星门.bmp" , 1 , x , y )
+    //有黄色星门
+    If x > 0 and y > 0
+        bFindYellowStarGate(iIDXCurrentAcc) = 1
+    EndIf 
+    If bFindYellowStarGate(iIDXCurrentAcc) = 0
+        VBSCall FindPic( 773 , 100 , 1008 , 662 ,  sPicFilePath + "\g公共匹配图片\h黄色星门_灰底.bmp" , 1 , x , y )
+        If x >0 and y > 0
+            bFindYellowStarGate(iIDXCurrentAcc) = 1
+        EndIf 
+    EndIf 
+Return FindYellowStarGate
+//
+//过黄色星门
+Sub GoThroughYellowStarGate
+    //
+    sLogLine = "过黄色星门"
+    Gosub WriteLogTotal
+    //
+    Gosub FindYellowStarGate
+    //
+    If x > 0 and y > 0
+        //点中黄色星门
+        x = x + 2
+        y = y + 2
+        MoveTo x , y
+        Delay 100
+        LeftClick 1
+        Delay 200
+        //点跃迁到0M
+        MoveTo 817 , 97
+        Delay 500
+        LeftClick 1
+        Delay 1000
+        //点跳跃
+        MoveTo 841 , 95
+        Delay 500
+        LeftClick 1
+    EndIf 
+Return GoThroughYellowStarGate
+//跳到安全点
+Sub JumpToSafePoint
+Return JumpToSafePoint
+//
+//退出游戏
+Sub QuitGame
+Return QuitGame
+//
+//装弹药到船舱
+Sub LoadAmmoToCabin
+    //
+    sLogLine = "装弹药到船舱"
+    Gosub WriteLogTotal
+    //打开船舱
+    Gosub OpenCabin
+    //打开空间站货舱
+    Gosub OpenStationCabin
+    //
+    KeyPress 13,1
+    //鼠标移到空间站货舱窗口第一个物品（图标模式）
+    MoveTo 350,303
+    Delay 500
+    LeftClick 1
+    Delay 500
+    //ctrl + A 全选物品
+    KeyDown 17,1
+    KeyPress 65,1
+    KeyUp 17,1
+    Delay 500
+    //拖拽到船舱
+    LeftDown 1
+    Delay 500
+    MoveTo 345 , 112
+    Delay 500
+    LeftUp 1
+    Delay 500
+    KeyPress 13,1
+    //
+Return LoadAmmoToCabin
+//
+//在本地栏查看是否有红星
+Sub FindRedSar
+    //
+    bRedStarFound(iIDXCurrentAcc) = 0
+    //
+    sLogLine = "在本地栏查看是否有红星"
+    Gosub WriteLogTotal
+    //
+    x = -1
+    y = -1
+    //
+    VBSCall FindPic(42 , 54 , 295, 785 , sPicFilePath + "\g公共匹配图片\h红星.bmp" , 0.9 , x , y )
+    //
+    If x > 0 and y > 0
+        bRedStarFound(iIDXCurrentAcc) = 1
+    EndIf 
+    //
+Return FindRedSar
+//
+//在本地栏查看是否有红减
+Sub FindRedSubtraction
+    //
+    sLogLine = "在本地栏查看是否有红减"
+    Gosub WriteLogTotal
+    //
+    bRedSubtractionFound(iIDXCurrentAcc) = 0
+    x = -1
+    y = -1
+    //
+    VBSCall FindPic(42 , 54 , 295, 785 , sPicFilePath + "\g公共匹配图片\h红减.bmp" , 0.9 , x , y )
+    //
+    If x > 0 and y > 0
+        bRedSubtractionFound(iIDXCurrentAcc) = 1
+    EndIf 
+    //
+Return FindRedSubtraction
+//
+//停靠空间站
+Sub DockToSpaceStation
+    //
+    sLogLine = "停靠空间站"
+    Gosub WriteLogTotal
+    //
+    //
+    //If bShouldSpaceStationDocked(iIDXCurrentAcc) > 3
+    //    bShouldSpaceStationDocked(iIDXCurrentAcc) = 1
+    //EndIf
+    //
+    If bShouldSpaceStationDocked(iIDXCurrentAcc) >= 1 and bShouldSpaceStationDocked(iIDXCurrentAcc) <= 7
+        bShouldSpaceStationDocked(iIDXCurrentAcc) = bShouldSpaceStationDocked(iIDXCurrentAcc) + 1
+        Goto exit-DockToSpaceStation
+    EndIf 
+    //
+    fPicMatchPrecision = 1
+    //
+    x = -1
+    y = -1
+    //
+    //crtl + 4 打开人物和地点
+    KeyDown 17,1
+    Delay 500
+    KeyPress 52,1
+    Delay 500
+    KeyUp 17,1
+    Delay 2000
+    //
+    MoveTo 352 , 227
+    Delay 200
+    LeftClick 1
+    Delay 100
+    //
+    VBSCall FindPic( 306 , 295 , 754 , 596 , sPicFilePath + saSpaceStation(iIDXCurrentAcc , iaSpaceStationCursor(iIDXCurrentAcc) ) , 1 , x , y )
+    //
+    If x > 0 and y > 0
+        //
+        x = x + 1
+        y = y + 1
+        MoveTo x , y
+        Delay 500
+        //
+        RightClick 1
+        Delay 1000
+        x = -1
+        y = -1
+        VBSCall FindPic( 306 , 295 , 754 , 596 , sPicFilePath + "\g公共匹配图片\t停靠.bmp" , fPicMatchPrecision , x , y )
+        If x > 0 and y > 0
+            Delay 100
+            MoveTo x , y
+            Delay 500
+            LeftClick 1
+            Delay 1000
+            //
+            bShouldJumping(iIDXCurrentAcc) = 1
+            //
+        EndIf 
+    EndIf 
+    //
+    //如果在本地没找到
+    If x<0 and y<0
+        //找是否存在于其他星域
+        VBSCall FindPic( 306 , 295 , 754 , 596 , sPicFilePath + saSpaceStationWhite(iIDXCurrentAcc , iaSpaceStationCursor(iIDXCurrentAcc) ) , 1 , x , y )
+        //如找到
+        If x > 0 and y > 0
+            //
+            x = x + 2
+            y = y + 2
+            MoveTo x  , y
+            Delay 500
+            //
+            RightClick 1
+            Delay 2000
+            x = -1
+            y = -1
+            //设置为终点
+            VBSCall FindPic( 234 , 334 , 754 , 596 , sPicFilePath + "\g公共匹配图片\s设置为终点.bmp" , fPicMatchPrecision , x , y )
+            sLogLine = "点击设置为终点 x = " + cstr( x ) + " y = " + cstr( y )
+            Gosub WriteLogTotal
+            //
+            If x > 0 and y > 0
+                Delay 100
+                MoveTo x , y
+                Delay 500
+                LeftClick 1
+                Delay 2000
+                bShouldJumping(iIDXCurrentAcc) = 0
+            EndIf 
+        EndIf 
+        //
+    EndIf 
+    //
+    MoveTo 352 , 227
+    Delay 200
+    LeftClick 1
+    Delay 100
+    //
+    //ctrl + w 关闭当前窗口
+    KeyDown 17,1
+    Delay 500
+    KeyPress 87,1
+    Delay 500
+    KeyUp 17,1
+    Delay 100
+    //
+    bShouldTargetLocked(iIDXCurrentAcc)       = 0
+    bShouldSpaceStationDocked(iIDXCurrentAcc) = 1
+    bShouldInSpace(iIDXCurrentAcc)            = 1
+    //
+    Rem exit-DockToSpaceStation
+Return DockToSpaceStation
+//
+//检查货舱是否满了
+Sub chkCabinFull
+    //
+    bCabinFull(iIDXCurrentAcc) = 0
+    sLogLine = "检查货舱是否满了"
+    Gosub WriteLogTotal
+    //
+    x = -1
+    y = -1
+    //
+    If x < 0 and x < 0
+        VBSCall FindColorEx( iCabinFullLeft(iIDXCurrentAcc) , iCabinFullUp(iIDXCurrentAcc) , iCabinFullRight(iIDXCurrentAcc) , iCabinFullDown(iIDXCurrentAcc) , "8484bd" , 0 , 0.8 , x , y )
+    EndIf 
+    //
+    If x < 0 and x < 0
+        VBSCall FindColorEx( iCabinFullLeft(iIDXCurrentAcc) , iCabinFullUp(iIDXCurrentAcc) , iCabinFullRight(iIDXCurrentAcc) , iCabinFullDown(iIDXCurrentAcc) , "3a5294" , 0 , 0.8 , x , y )
+    EndIf 
+    //
+    If x < 0 and x < 0
+        VBSCall FindColorEx( iCabinFullLeft(iIDXCurrentAcc) , iCabinFullUp(iIDXCurrentAcc) , iCabinFullRight(iIDXCurrentAcc) , iCabinFullDown(iIDXCurrentAcc) , "3a84bd" , 0 , 0.8 , x , y )
+    EndIf 
+    //
+    If x < 0 and x < 0
+        VBSCall FindColorEx( iCabinFullLeft(iIDXCurrentAcc) , iCabinFullUp(iIDXCurrentAcc) , iCabinFullRight(iIDXCurrentAcc) , iCabinFullDown(iIDXCurrentAcc) , "6bb5ef" , 0 , 0.8 , x , y )
+    EndIf 
+    //
+    If x < 0 and x < 0
+        VBSCall FindColorEx( iCabinFullLeft(iIDXCurrentAcc) , iCabinFullUp(iIDXCurrentAcc) , iCabinFullRight(iIDXCurrentAcc) , iCabinFullDown(iIDXCurrentAcc) , "b5e6ff" , 0 , 0.8 , x , y )
+    EndIf 
+    //
+    If x > 0 and y > 0
+        bCabinFull(iIDXCurrentAcc) = 1
+    EndIf 
+Return chkCabinFull
+//
+//总览中重置排序，令其距离按升序排列
+Sub ResetOrder
+    //
+    sLogLine = "总览中重置排序，令其距离按升序排列"
+    Gosub WriteLog
+    //
+    MoveTo 100 , 100
+    Delay 500
+    //
+    x = -1
+    y = -1
+    VBSCall FindPic( 1 , 1 , 1024 , 768 , sPicFilePath + "\g公共匹配图片\j距离.bmp" , 0.9 , x , y )
+    //
+    If x > 0 and y > 0
+        //
+        icurX = x + 1
+        icurY = y + 1
+        x = -1
+        y = -1
+        //
+        iTmp = 0
+        While x < 0 and y < 0 and iTmp < 10
+            Gosub chkOnlineStatus
+            //
+            MoveTo icurX , icurY
+            Delay 100
+            LeftClick 1
+            Delay 500
+            MoveTo 100 , 100
+            Delay 500
+            //
+            VBSCall FindPic( 770 , 146 , 1000 , 250 , sPicFilePath + "\g公共匹配图片\p排序标记_asc.bmp" , 1 , x , y )
+            //VBSCall FindPic( 1 , 1 , 1024 , 768 , sImgPath + "\g公共匹配图片\p排序标记_asc.bmp" , 1 , x , y )
+            //
+            iTmp = iTmp + 1
+        EndWhile 
+    EndIf 
+    //
+Return ResetOrder
+//
+//
+//检查是否锁定完毕
+Sub chkTargetLocked
+    //
+    sLogLine = "检查是否锁定完毕"
+    Gosub WriteLogTotal
+    //
+    bNothingHere(iIDXCurrentAcc) = 0
+    bTargetLocked(iIDXCurrentAcc) = 0
+    itmp = 0
+    //
+    x = -1
+    y = -1
+    //
+    icurX = 777
+    icurY = 188
+    //
+    While bNothingHere(iIDXCurrentAcc) = 0 and bTargetLocked(iIDXCurrentAcc) = 0 and itmp <= 10
+        //
+        MoveTo icurX , icurY
+        Delay 100
+        LeftClick 1
+        Delay 500
+        //
+        VBSCall FindPic( 815 , 58 , 973 , 124 , sPicFilePath + "\g公共匹配图片\j解除锁定图标.bmp" , 1 , x , y )
+        //
+        If x < 0 or y < 0
+            VBSCall FindPic( 815 , 58 , 973 , 124 , sPicFilePath + "\g公共匹配图片\j解除锁定图标1.bmp" , 1 , x , y )
+        EndIf 
+        //
+        If x > 0 and y > 0
+            //有目标已经锁定
+            sLogLine = "有目标已经锁定"
+            Gosub WriteLogTotal
+            bTargetLocked(iIDXCurrentAcc) = 1
+            //有目标锁定等同于：找到目标
+            bTargetFound(iIDXCurrentAcc) = 1
+            //看看当前锁定的是不是怪，是怪设为可攻击
+            VBSCall FindColorEx( icurX , icurY , icurX + 233 , icurY + 14 , "1111BD" , 0 , 0.9 , x , y )
+            //
+            If x > 0 and y > 0
+                bTargetCanAttack(iIDXCurrentAcc) = 1
+            Else 
+                bTargetCanAttack(iIDXCurrentAcc) = 0
+                x = 1
+                y = 1
+            EndIf 
+            //
+        EndIf 
+        //
+        IfColor icurX , icurY , 0 , 0
+            //
+            bNothingHere(iIDXCurrentAcc) = 1
+            //
+        EndIf 
+        //
+        icurY = icurY + 19
+        //
+        itmp = itmp + 1
+    EndWhile 
+    //
+    //If bTargetLocked(iIDXCurrentAcc) = 0
+    //    bHighSlotActived(iIDXCurrentAcc) = 0
+    //EndIf
+Return chkTargetLocked
+//
+//激活高槽
+Sub ActiveHighSlot
+    //
+    sLogLine = "激活高槽"
+    Gosub WriteLogTotal
+    //
+    iCurrentKey = iFKeyBegin + iHSlotBegin(iIDXCurrentAcc)
+    iCurrentKey = iCurrentKey - 1
+    //
+    iTmp = iFKeyBegin + iHSlotEnd(iIDXCurrentAcc)
+    iTmp = iTmp - 1
+    //
+    While iCurrentKey <= iTmp and iCurrentKey <= iFKeyEnd
+        //
+        sLogLine = "激活高槽： " + cstr( iCurrentKey ) + " " + cstr( iTmp )
+        Gosub WriteLogTotal
+        //
+        KeyPress iCurrentKey , 1
+        Delay 400
+        //
+        iCurrentKey = iCurrentKey + 1
+    EndWhile 
+    //
+    bHighSlotActived(iIDXCurrentAcc) = 1
+    //
+Return ActiveHighSlot
+//
+//激活中槽
+Sub ActiveMidSlot
+    //
+    sLogLine = "激活中槽"
+    Gosub WriteLogTotal
+    //
+    iCurrentKey = iFKeyBegin + iMSlotBegin(iIDXCurrentAcc)
+    iCurrentKey = iCurrentKey - 1
+    //
+    iTmp = iFKeyBegin + iMSlotEnd(iIDXCurrentAcc)
+    iTmp = iTmp - 1
+    //
+    While iCurrentKey <= iTmp and iCurrentKey <= iFKeyEnd
+        //
+        KeyDown 18,1
+        Delay 500
+        KeyPress iCurrentKey , 1
+        Delay 500
+        KeyUp 18,1
+        Delay 200
+        //
+        iCurrentKey = iCurrentKey + 1
+    EndWhile 
+    //
+    bMidSlotActived(iIDXCurrentAcc) = 1
+    //
+Return ActiveMidSlot
+//
+//激活低槽
+Sub ActiveLowSlot
+    //
+    sLogLine = "激活低槽"
+    Gosub WriteLogTotal
+    //
+    iCurrentKey = iFKeyBegin + iLSlotBegin(iIDXCurrentAcc)
+    iCurrentKey = iCurrentKey - 1
+    //
+    iTmp = iFKeyBegin + iLSlotEnd(iIDXCurrentAcc)
+    iTmp = iTmp - 1
+    //
+    While iCurrentKey <= iTmp and iCurrentKey <= iFKeyEnd
+        //While iCurrentKey <= 115
+        //
+        sLogLine = "打开防御 " + cstr( iCurrentKey ) + " " + cstr( iTmp )
+        Gosub WriteLogTotal
+        //
+        KeyDown 18,1
+        KeyPress iCurrentKey , 1
+        KeyUp 18,1
+        Delay 200
+        //
+        iCurrentKey = iCurrentKey + 1
+    EndWhile 
+    //
+    bLowSlotActived(iIDXCurrentAcc) = 1
+    //
+Return ActiveLowSlot
+//
+//锁定目标
+Sub LockTarget
+    //
+    sLogLine = "锁定目标"
+    Gosub WriteLogTotal
+    //
+    KeyDown 17,1
+    Delay 500
+    LeftClick 1
+    Delay 500
+    KeyUp 17,1
+    Delay 200
+    //
+    //MoveTo 926 , 108
+    //Delay 100
+    //LeftClick 1
+    //
+    bTargetLocked(iIDXCurrentAcc)             = 0
+    bShouldTargetLocked(iIDXCurrentAcc)       = 1
+    bShouldSpaceStationDocked(iIDXCurrentAcc) = 0
+    bShouldInSpace(iIDXCurrentAcc)            = 1
+    bShouldJumping(iIDXCurrentAcc)            = 0
+    //
+Return LockTarget
+//
+//寻找目标
+Sub FindTarget
+    //
+    sLogLine = "寻找目标"
+    Gosub WriteLogTotal
+    //
+    bNothingHere(iIDXCurrentAcc) = 0
+    bTargetFound(iIDXCurrentAcc) = 0
+    //
+    x = -1
+    y = -1
+    //
+    icurX = 777
+    icurY = 188
+    //
+    itmp = 0
+    //
+    While bNothingHere(iIDXCurrentAcc) = 0 and bTargetFound(iIDXCurrentAcc) = 0 and itmp <= 25
+        //
+        MoveTo icurX , icurY
+        //
+        Delay 100
+        LeftClick 1
+        Delay 500
+        //
+        IfColor icurX , icurY  , 737373 , 0
+            //sLogLine = sPicFilePath  + saTarget( iIDXCurrentAcc ,iaTarCursor( iIDXCurrentAcc ) )
+            //Gosub WriteLogTotal
+            //
+            VBSCall FindPic( 700 , 100 , 1010 , 680 , sPicFilePath + saTarget( iIDXCurrentAcc ,iaTarCursor( iIDXCurrentAcc ) ) , 0.9 , x , y )
+            //
+            If x > 0 and y > 0
+                //发现目标
+                bTargetFound(iIDXCurrentAcc) = 1
+                //
+            EndIf 
+        EndIf 
+        //
+        IfColor icurX  ,icurY  , 0 , 0
+            //
+            bNothingHere(iIDXCurrentAcc) = 1
+            //
+        EndIf 
+        //
+        icurY = icurY + 19
+        //
+        itmp = itmp + 1
+    EndWhile 
+Return FindTarget
+//
+//移动视角
+Sub MoveSight
+    //
+    sLogLine = "移动视角"
+    Gosub WriteLogTotal
+    //
+    If iSightControl(iIDXCurrentAcc) = 1
+        MoveTo 438 , 481
+        LeftDown 1
+        Delay 1000
+        MoveTo 458 , 461
+        Delay 1000
+        LeftUp 1
+        Delay 200
+        iSightControl(iIDXCurrentAcc) = 0
+    Else 
+        MoveTo 513 , 508
+        LeftDown 1
+        Delay 1000
+        MoveTo 533  , 528
+        Delay 200
+        LeftUp 1
+        Delay 1000
+        iSightControl(iIDXCurrentAcc) = 1
+    EndIf 
+    //
+Return MoveSight
+//
+//检查是否跃迁中
+Sub chkJumping
+    //
+    sLogLine = "检查是否跃迁中"
+    Gosub WriteLogTotal
+    //
+    //按F10调出星图
+    KeyPress 121,1
+    Delay 2000
+    //
+    MoveTo 375,421
+    Delay 200
+    LeftClick 1
+    Delay 500
+    //
+    //缩小画面
+    Gosub ZoomToMin
+    //把整个星图移开，令中间画面纯黑
+    MoveTo 375 , 421
+    Delay 500
+    LeftDown 1
+    Delay 200
+    MoveTo 698 , 421
+    Delay 500
+    LeftUp 1
+    Delay 200
+    //
+    //MoveTo 375 , 421
+    //Delay 500
+    //LeftDown 1
+    //Delay 200
+    //MoveTo 698 , 421
+    //Delay 500
+    //LeftUp 1
+    //Delay 200
+    //
+    //尝试寻找 跃迁时出现的“目的地”
+    iTmp = 0
+    bJumping(iIDXCurrentAcc) = 0
+    VBSCall FindPic( 302 , 400 , 766 , 633 , sPicFilePath + "\g公共匹配图片\y跃迁_目的地.bmp" , 0.9 , x , y )
+    //VBSCall FindPic( 1 , 1 , 1024 , 768 , sPicFilePath + "\g公共匹配图片\y跃迁_目的地.bmp" , 0.9 , x , y )
+    //
+    If x > 0 and y > 0
+        bJumping(iIDXCurrentAcc) = 1
+        bHighSlotActived( iIDXCurrentAcc ) = 0
+    EndIf 
+    //
+    If x < 0 or y < 0
+        bJumping(iIDXCurrentAcc) = 0
+    EndIf 
+    //
+    //再按F10一次关闭星图
+    x = -1
+    y = -1
+    VBSCall FindPic( 289 , 189 , 766 , 769 , sPicFilePath + "\g公共匹配图片\s世界星图控制面板.bmp" , 0.9 , x , y )
+    //
+    If x > 0 and y > 0
+        KeyPress 121,1
+        Delay 3000
+    EndIf 
+    //
+Return chkJumping
+//
+//跃迁到矿区
+Sub JumpToMineField
+    //
+    sLogLine = "跃迁到矿区"
+    Gosub WriteLogTotal
+    //
+    fPicMatchPrecision = 1
+    //
+    x = -1
+    y = -1
+    //
+    KeyDown 17,1
+    KeyPress 52,1
+    KeyUp 17,1
+    Delay 2000
+    //
+    MoveTo 352 , 227
+    Delay 200
+    LeftClick 1
+    Delay 100
+    //
+    VBSCall FindPic( 306 , 295 , 754 , 596 , sPicFilePath + saMineField(iIDXCurrentAcc , iaMineFieldCursor(iIDXCurrentAcc) ) , 1 , x , y )
+    Delay 100
+    //
+    If x > 0 and y > 0
+        sLogLine = "t停靠 x = " + cstr( x ) + " y = " + cstr( y )
+        Gosub WriteLogTotal
+        //
+        x = x + 2
+        y = y + 2
+        MoveTo x  , y
+        Delay 500
+        //
+        RightClick 1
+        Delay 2000
+        x = -1
+        y = -1
+        VBSCall FindPic( 234 , 334 , 754 , 596 , sPicFilePath + "\g公共匹配图片\y跃迁至0m内.bmp" , fPicMatchPrecision , x , y )
+        sLogLine = "点击跃迁至0m内 x = " + cstr( x ) + " y = " + cstr( y )
+        Gosub WriteLogTotal
+        //
+        If x > 0 and y > 0
+            Delay 100
+            MoveTo x , y
+            Delay 500
+            LeftClick 1
+            Delay 2000
+            bShouldJumping(iIDXCurrentAcc) = 1
+            //
+            bShouldTargetLocked(iIDXCurrentAcc)       = 0
+            bShouldSpaceStationDocked(iIDXCurrentAcc) = 0
+            bShouldInSpace(iIDXCurrentAcc)            = 1
+        EndIf 
+    EndIf 
+    //
+    //如果在本地没找到
+    If x<0 and y<0
+        //找是否存在于其他星域
+        VBSCall FindPic( 306 , 295 , 754 , 596 , sPicFilePath + saMineFieldWhite(iIDXCurrentAcc , iaMineFieldCursor(iIDXCurrentAcc) ) , 1 , x , y )
+        //如找到
+        If x > 0 and y > 0
+            //
+            x = x + 2
+            y = y + 2
+            MoveTo x  , y
+            Delay 500
+            //
+            RightClick 1
+            Delay 2000
+            x = -1
+            y = -1
+            //设置为终点
+            VBSCall FindPic( 234 , 334 , 754 , 596 , sPicFilePath + "\g公共匹配图片\s设置为终点.bmp" , fPicMatchPrecision , x , y )
+            sLogLine = "点击设置为终点 x = " + cstr( x ) + " y = " + cstr( y )
+            Gosub WriteLogTotal
+            //
+            If x > 0 and y > 0
+                Delay 100
+                MoveTo x , y
+                Delay 500
+                LeftClick 1
+                Delay 2000
+                bShouldJumping(iIDXCurrentAcc) = 0
+                //
+                bShouldInSpace(iIDXCurrentAcc) = 1
+            EndIf 
+        EndIf 
+        //
+    EndIf 
+    //
+    MoveTo 352 , 227
+    Delay 200
+    LeftClick 1
+    Delay 100
+    //
+    //ctrl + w 关闭当前窗口
+    KeyDown 17,1
+    Delay 500
+    KeyPress 87,1
+    Delay 500
+    KeyUp 17,1
+    Delay 100
+    //
+Return JumpToMineField
+//
+//左键点击一下本地窗口
+Sub LeftClickLocalWindow
+    //
+    sLogLine = "左键点击一下本地窗口"
+    Gosub WriteLogTotal
+    //
+    MoveTo 97 , 519
+    Delay 100
+    LeftClick 1
+    Delay 100
+Return LeftClickLocalWindow
+//
+//检查是否已经进入太空
+Sub chkInSpace
+    //
+    sLogLine = "检查是否已经进入太空"
+    Gosub WriteLogTotal
+    //
+    //bInSpace = 0
+    //
+    x = -1
+    y = -1
+    VBSCall FindPic( 1 , 1 , 1024 , 768 , sPicFilePath + "\g公共匹配图片\y已经进入太空.bmp" , 1 , x , y )
+    //
+    If x >= 1 and y >= 1
+        bInSpace(iIDXCurrentAcc) = 1
+    Else 
+        bInSpace(iIDXCurrentAcc) = 0
+    EndIf 
+    //
+Return chkInSpace
+//
+//检查是否在空间站里
+Sub chkInSpaceStation
+    //
+    sLogLine = "检查是否在空间站里"
+    Gosub WriteLogTotal
+    //
+    //bSpaceStationDocked = 0
+    //
+    x = -1
+    y = -1
+    VBSCall FindPic( 1 , 1 , 1024 , 768 , sPicFilePath + "\g公共匹配图片\z在空间站里.bmp" , 1 , x , y )
+    //
+    If x >= 1 and y >= 1
+        bSpaceStationDocked(iIDXCurrentAcc) = 1
+        bShouldSpaceStationDocked(iIDXCurrentAcc) = 0
+        bMidSlotActived( iIDXCurrentAcc )  = 0
+        bHighSlotActived( iIDXCurrentAcc ) = 0
+        bLowSlotActived( iIDXCurrentAcc )  = 0
+    Else 
+        bSpaceStationDocked(iIDXCurrentAcc) = 0
+    EndIf 
+    Delay 200
+    //
+Return chkInSpaceStation
+//
+//检查船舱是否清空
+Sub chkCabinEmpty
+    //
+    sLogLine = "检查船舱是否清空"
+    Gosub WriteLogTotal
+    //
+    bCabinEmpty(iIDXCurrentAcc) = 0
+    //
+    x = -1
+    y = -1
+    //
+    If x < 0 and x < 0
+        VBSCall FindColorEx( iCabinEmptyLeft(iIDXCurrentAcc) , iCabinEmptyUp(iIDXCurrentAcc) , iCabinEmptyRight(iIDXCurrentAcc) , iCabinEmptyDown(iIDXCurren) , "848484" , 0 , 0.8 , x , y )
+    EndIf 
+    //
+    If x < 0 and x < 0
+        VBSCall FindColorEx( iCabinEmptyLeft(iIDXCurrentAcc) , iCabinEmptyUp(iIDXCurrentAcc) , iCabinEmptyRight(iIDXCurrentAcc) , iCabinEmptyDown(iIDXCurren) , "635b3a" , 0 , 0.8 , x , y )
+    EndIf 
+    //
+    If x < 0 and x < 0
+        VBSCall FindColorEx( iCabinEmptyLeft(iIDXCurrentAcc) , iCabinEmptyUp(iIDXCurrentAcc) , iCabinEmptyRight(iIDXCurrentAcc) , iCabinEmptyDown(iIDXCurren) , "94846b" , 0 , 0.8 , x , y )
+    EndIf 
+    //
+    If x < 0 and x < 0
+        VBSCall FindColorEx( iCabinEmptyLeft(iIDXCurrentAcc) , iCabinEmptyUp(iIDXCurrentAcc) , iCabinEmptyRight(iIDXCurrentAcc) , iCabinEmptyDown(iIDXCurren) , "c5b59c" , 0 , 0.8 , x , y )
+    EndIf 
+    //
+    If x < 0 and x < 0
+        VBSCall FindColorEx( iCabinEmptyLeft(iIDXCurrentAcc) , iCabinEmptyUp(iIDXCurrentAcc) , iCabinEmptyRight(iIDXCurrentAcc) , iCabinEmptyDown(iIDXCurren) , "ffe6ce" , 0 , 0.8 , x , y )
+    EndIf 
+    //
+    If x >= 1 and y >= 1
+        bCabinEmpty(iIDXCurrentAcc) = 1
+    EndIf 
+    //
+Return chkCabinEmpty
+//
+//离站
+Sub LeftSpaceStation
+    //
+    sLogLine = "离站"
+    Gosub WriteLogTotal
+    //快捷键方式 crtl + 3
+    KeyDown 17,1
+    500
+    KeyPress 51,1
+    500
+    KeyUp 17,1
+    //
+    //鼠标点击方式
+    //MoveTo 20 , 760
+    //Delay 300
+    //LeftClick 1
+    //
+    bShouldTargetLocked(iIDXCurrentAcc)       = 0
+    bShouldSpaceStationDocked(iIDXCurrentAcc) = 0
+    bShouldInSpace(iIDXCurrentAcc)            = 1
+    bShouldJumping(iIDXCurrentAcc)            = 0
+    //
+Return LeftSpaceStation
+//
+//清空货舱
+Sub EmptyCabin
+    //
+    sLogLine = "清空货舱"
+    Gosub WriteLogTotal
+    //
+    KeyPress 13,1
+    //鼠标移到货舱窗口第一个物品（图标模式）
+    MoveTo 345 , 112
+    Delay 500
+    LeftClick 1
+    Delay 500
+    //ctrl + A 全选物品
+    KeyDown 17,1
+    KeyPress 65,1
+    KeyUp 17,1
+    Delay 500
+    //拖拽到空间站货舱
+    LeftDown 1
+    Delay 500
+    MoveTo 350 , 309
+    Delay 500
+    LeftUp 1
+    //
+Return EmptyCabin
+//
+//打开货舱
+Sub OpenCabin
+    //
+    //sLogLine = "打开货舱"
+    //Gosub WriteLogTotal
+    ////快捷键方式 ctrl + 2
+    //KeyDown 17,1
+    //500
+    //KeyPress 50,1
+    //500
+    //KeyUp 17,1
+    鼠标点击方式
+    MoveTo 458 , 408
+    Delay 1000
+    RightClick 1
+    Delay 1000
+    MoveTo 528 , 513
+    LeftClick 1
+    Delay 1000
+Return OpenCabin
+//
+//打开空间站货舱
+Sub OpenStationCabin
+    //
+    sLogLine = "打开空间站货舱"
+    Gosub WriteLogTotal
+    //
+    //快捷键方式 ctrl + 1
+    KeyDown 17,1
+    500
+    KeyPress 49,1
+    500
+    KeyUp 17,1
+    //
+    //鼠标点击方式
+    //MoveTo 18 , 672
+    //Delay 500
+    //LeftClick 1
+    //
+Return OpenStationCabin
+//
+//写log
+Sub WriteLog
+    Plugin File.WriteLine( LogFile(iIDXCurrentAcc) , sLogLine )
+Return WriteLogTotal
+//
+//写log
+Sub WriteLogTotal
+    Plugin File.WriteLine( LogFileTotal , sLogLine )
+Return WriteLogTotal
+//
+//游戏画面放到最大
+Sub ZoomToMax
+    //
+    sLogLine = "游戏画面放到最大"
+    Gosub WriteLogTotal
+    //
+    MouseWheel -200
+    Delay 500
+    MouseWheel -200
+    //
+Return ZoomToMax
+//
+//游戏画面缩到最小
+Sub ZoomToMin
+    //
+    sLogLine = "游戏画面缩到最小"
+    Gosub WriteLogTotal
+    //
+    MouseWheel 200
+    Delay 500
+    MouseWheel 200
+    //
+Return ZoomToMin
+//
+//检查当前所有状态
+Sub chkAllStatus
+    //
+    sLogLine = "检查当前所有状态"
+    Gosub WriteLogTotal
+    //
+    bCabinFull(iIDXCurrentAcc)                 = 0
+    bCabinEmpty(iIDXCurrentAcc)                = 0
+    bRedSubtractionFound(iIDXCurrentAcc)       = 1
+    bRedStarFound(iIDXCurrentAcc)              = 1
+    bNothingHere(iIDXCurrentAcc)               = 0
+    bTargetFound(iIDXCurrentAcc)               = 0
+    bTargetLocked(iIDXCurrentAcc)              = 0
+    bTargetCanAttack(iIDXCurrentAcc)           = 0
+    bSpaceStationDocked(iIDXCurrentAcc)        = 0
+    bInSpace(iIDXCurrentAcc)                   = 0
+    bFindYellowStarGate(iIDXCurrentAcc)        = 0
+    bJumping(iIDXCurrentAcc)                   = 0
+    bOnLine(iIDXCurrentAcc)                    = 0
+    //
+    Gosub CloseInfoWindow
+    Gosub chkOnlineStatus
+    Gosub FindRedSar
+    Gosub FindRedSubtraction
+    Gosub chkInSpace
+    Gosub chkInSpaceStation
+    //
+    If bRedSubtractionFound(iIDXCurrentAcc) = 1 or bRedStarFound(iIDXCurrentAcc) = 1
+        Goto exit-chkAllStatus
+    EndIf 
+    //
+    If bInSpace(iIDXCurrentAcc) = 1 and bShouldSpaceStationDocked(iIDXCurrentAcc) = 0
+        Gosub chkJumping
+        Gosub FindYellowStarGate
+        //
+    EndIf 
+    //
+    If bFindYellowStarGate(iIDXCurrentAcc)  = 1 or bJumping(iIDXCurrentAcc)  = 1
+        Goto exit-chkAllStatus
+    EndIf 
+    //
+    If bInSpace(iIDXCurrentAcc) = 1 and bJumping(iIDXCurrentAcc)=0 and bFindYellowStarGate( iIDXCurrentAcc ) = 0
+        Gosub chkTargetLocked
+    EndIf 
+    //
+    If bTargetLocked(iIDXCurrentAcc) = 0 and bInSpace(iIDXCurrentAcc) = 1 and bJumping(iIDXCurrentAcc)=0 and bFindYellowStarGate( iIDXCurrentAcc ) = 0
+        Gosub FindTarget
+    EndIf 
+    //
+    Rem exit-chkAllStatus
+    Gosub chkInSpace
+    Gosub chkInSpaceStation
+    Gosub chkCabinEmpty
+    Gosub chkCabinFull
+Return chkAllStatus
+//
+//检查在线状态
+Sub chkOnlineStatus
+    //
+    sLogLine = "检查在线状态"
+    Gosub WriteLogTotal
+    //
+    x = -1
+    y = -1
+    bOnLine(iIDXCurrentAcc) = 0
+    //
+    //VBSCall FindPic( 1 , 1 , 1024 , 768 , sPicFilePath + "\g公共匹配图片\EVE.bmp" , 1 , x , y )
+    ////
+    //If x <> 22 and y <> 7
+    //    bOnLine(iIDXCurrentAcc) = 0
+    //    x = -1
+    //    y = -1
+    //    VBSCall FindPic( 1 , 1 , 1024 , 768 , sPicFilePath + "\g公共匹配图片\EVE_Gray.bmp" , 1 , x , y )
+    //EndIf
+    ////
+    //If x = 22 and y = 7
+    //    bOnLine(iIDXCurrentAcc) = 1
+    //EndIf
+    ////
+    //If x > 22 and y > 7
+    //    bOnLine(iIDXCurrentAcc) = 0
+    //EndIf
+    ////
+    VBSCall FindPic( 1 , 1 , 1024 , 768 , sPicFilePath + "\g公共匹配图片\EVE.bmp" , 1 , x , y )
+    //
+    If x = 22 and y = 7
+        bOnLine(iIDXCurrentAcc) = 1
+    EndIf 
+    //
+    If x > 22 and y > 7
+        bOnLine(iIDXCurrentAcc) = 0
+    EndIf 
+Return chkOnlineStatus
+//
+//登录动作
+Sub SignIn
+    //
+    sLogLine = "登录动作"
+    Gosub WriteLogTotal
+    //
+    Plugin x = GetSysInfo.GetScreenResolutionX()
+    Plugin y = GetSysInfo.GetScreenResolutionY()
+    //
+    x = x / 2
+    y = y / 2
+    //
+    MoveTo x , y
+    LeftClick 1
+    //
+    Gosub SetWindowPosition
+    //
+    x = -1
+    y = -1
+    //
+    While x < 0 and y < 0
+        //鼠标点击 用户名 输入框
+        MoveTo 484 , 708
+        Delay 200
+        LeftClick 1
+        Delay 200
+        //
+        //清除原来的帐号内容
+        KeyDown 17,1
+        Delay 100
+        KeyPress 65,1
+        Delay 100
+        KeyUp 17,1
+        Delay 100
+        KeyPress 8,1
+        Delay 100
+        KeyPress 27,1
+        Delay 200
+        //
+        //输入用户名
+        SayExpression sUserName(iIDXCurrentAcc)
+        //
+        //鼠标点击 密码 输入框
+        MoveTo 503 , 729
+        Delay 200
+        LeftClick 1
+        Delay 200
+        //
+        //清除原来的密码内容
+        KeyDown 17,1
+        Delay 100
+        KeyPress 65,1
+        Delay 100
+        KeyUp 17,1
+        Delay 100
+        KeyPress 8,1
+        Delay 100
+        //
+        //输入密码
+        SayExpression sPassWord(iIDXCurrentAcc)
+        //
+        Delay 300
+        KeyPress 13,1
+        //
+        x = -1
+        y = -1
+        iTmp = 0
+        //
+        While x < 0 and y < 0 and iTmp < 13
+            VBSCall FindPic( 255 , 95 , 393 , 139 , sPicFilePath + "\g公共匹配图片\选择人物.bmp" , 0.9 , x , y )
+            iTmp = iTmp + 1
+            Delay 10000
+        EndWhile 
+        //
+        If x> 0 and y > 0
+            MoveTo 344 , 275
+            Delay 3000
+            LeftClick 1
+        EndIf 
+        //
+        If x < 0 and y < 0
+            KeyPress 13,1
+            Delay 1000
+        EndIf 
+        //
+    EndWhile 
+    //
+    bOnLine = 1
+Return SignIn
+//
+//加载弹药
+Sub ReloadAmmo
+    //
+    sLogLine = "加载弹药"
+    Gosub WriteLogTotal
+    //
+    KeyDown 17,1
+    KeyPress 82,1
+    KeyUp 17,1
+    //
+    Delay 500
+Return ReloadAmmo
+//
+//接近目标
+Sub CloseToTarget
+    //
+    sLogLine = "接近目标"
+    Gosub WriteLogTotal
+    //
+    VBSCall FindPic( 756 , 61 , 1015 , 131 , sPicFilePath + "\g公共匹配图片\J接近目标_Small.bmp" , 0.9 , x , y )
+    //
+    If x < 0 and y<0
+        VBSCall FindPic( 756 , 61 , 1015 , 131 , sPicFilePath + "\g公共匹配图片\J接近目标_Big.bmp" , 0.9 , x , y )
+    EndIf 
+    //
+    If x > 0 and y >0
+        x = x + 2
+        y = y + 2
+        MoveTo x,y
+        Delay 200
+        LeftClick 1
+    EndIf 
+Return 
+//
+//打开残骸货舱
+Sub OpenWreckageCabin
+    //
+    sLogLine = "打开残骸货舱"
+    Gosub WriteLogTotal
+    //
+Return OpenWreckageCabin
+//
+//检查是否已经打开残骸货舱
+Sub ChkWreckageCabinOpened
+    //
+    sLogLine = "检查是否已经打开残骸货舱"
+    Gosub WriteLogTotal
+    //
+Return ChkWreckageCabinOpened
+//
+//切换窗口
+Sub SwitchWin
+    //
+    sLogLine = "切换窗口"
+    Gosub WriteLogTotal
+    //
+    Delay 2000
+    //
+    MoveTo iaWinPosX(iIDXCurrentAcc) , iaWinPosY
+    LeftClick 1
+    //
+    Delay 2000
+Return SwitchWin
+//-----------------------------框架 end ----------------------------------------------//
+//
+//-----------------------------用户自定流程 begin ---------------------------------------//
+//麦基诺-采冰
+Sub 麦基诺-采冰-事件方式
+    sLogLine = "麦基诺-采冰-事件方式"
+    Gosub WriteLogTotal
+    //
+    Gosub SwitchWin
+    //切换窗口
+    //状态自检
+    Gosub chkAllStatus
+    //
+    //状态判断
+    //如果处于下线状态,执行登陆过程
+    If bOnLine( iIDXCurrentAcc ) = 0
+        Gosub SignIn
+        Goto exit-麦基诺-采冰-事件方式
+    EndIf 
+    //
+    //在星站而且有红星 ， 什么也不做，等
+    If bRedStarFound(iIDXCurrentAcc) = 1 and bSpaceStationDocked(iIDXCurrentAcc) = 1
+        Goto exit-麦基诺-采冰-事件方式
+    EndIf 
+    //
+    //如果没有红星，而且在太空站，而且船舱未清空，则清空船舱
+    If bRedStarFound(iIDXCurrentAcc) = 0 and bSpaceStationDocked(iIDXCurrentAcc) = 1 and bCabinEmpty(iIDXCurrentAcc) = 0
+        Gosub EmptyCabin
+        Goto exit-麦基诺-采冰-事件方式
+    EndIf 
+    //
+    //如果没有红星，而且在太空站，而且船舱清空，则出站
+    If bRedStarFound(iIDXCurrentAcc) = 0 and bSpaceStationDocked(iIDXCurrentAcc) = 1 and bCabinEmpty(iIDXCurrentAcc) = 1
+        Gosub LeftSpaceStation
+        Goto exit-麦基诺-采冰-事件方式
+    EndIf 
+    //
+    //如果在太空，而且 有红星 或者 满仓 ，则回星站
+    If ( bRedStarFound(iIDXCurrentAcc) = 1 or bCabinFull(iIDXCurrentAcc) = 1 ) and bInSpace(iIDXCurrentAcc) = 1
+        Gosub DockToSpaceStation
+        Goto exit-麦基诺-采冰-事件方式
+    EndIf 
+    //
+    //如果找到目标 , 未锁定目标, 重置总览排序,锁定
+    If bTargetFound(iIDXCurrentAcc) = 1 and bTargetLocked(iIDXCurrentAcc) = 0 and bHighSlotActived(iIDXCurrentAcc) = 0
+        Gosub ResetOrder
+        Delay 200
+        Gosub FindTarget
+        Delay 200
+        Gosub LockTarget
+        Delay 2000
+        Gosub ActiveHighSlot
+        Goto exit-麦基诺-采冰-事件方式
+    EndIf 
+    //
+    //如果锁定,没激活高槽,激活高槽
+    //sLogLine = "如果锁定,没激活高槽,激活高槽"
+    //Gosub WriteLogTotal
+    If bTargetLocked(iIDXCurrentAcc) = 1 and bHighSlotActived( iIDXCurrentAcc )  = 0
+        Gosub ActiveHighSlot
+        Goto exit-麦基诺-采冰-事件方式
+    EndIf 
+    //
+    //如果在太空，而且没找到目标，则跃迁到矿区
+    //sLogLine = "如果在太空，而且没找到目标，则跃迁到矿区"
+    //Gosub WriteLogTotal
+    If bInSpace(iIDXCurrentAcc) = 1 and bTargetFound(iIDXCurrentAcc) = 0 and bCabinFull(iIDXCurrentAcc) = 0 and bJumping(iIDXCurrentAcc) = 0
+        Gosub JumpToMineField
+        Goto exit-麦基诺-采冰-事件方式
+    EndIf 
+    //
+    //如果在太空而且未激活防御，则激活防御
+    //sLogLine = "如果在太空而且未激活防御，则激活防御"
+    //Gosub WriteLogTotal
+    If bInSpace(iIDXCurrentAcc) = 1 and bMidSlotActived( iIDXCurrentAcc )  = 0
+        Gosub ActiveMidSlot
+        Goto exit-麦基诺-采冰-事件方式
+    EndIf 
+    //
+    //如果找到目标，并锁定了，并已经激活高槽，则什么不做，等等待仓满
+    //sLogLine = "如果找到目标，并锁定了，并已经激活高槽，则什么不做，等等待仓满"
+    //Gosub WriteLogTotal
+    If bRedStarFound(iIDXCurrentAcc) = 1 and bTargetLocked(iIDXCurrentAcc) = 1 and bHighSlotActived( iIDXCurrentAcc )  = 1
+        Goto exit-麦基诺-采冰-事件方式
+    EndIf 
+    //
+    Rem exit-麦基诺-采冰-事件方式
+    //
+Return 麦基诺-采冰-事件方式
+//
+//通用打怪-事件方式
+Sub 通用打怪-事件方式
+    //
+    sLogLine = "通用打怪-事件方式"
+    Gosub WriteLogTotal
+    //状态自检
+    Gosub chkAllStatus
+    Delay 1000
+    //如果在跃迁中，直接退出该过程
+    If bJumping(iIDXCurrentAcc) = 1
+        Goto exit-通用打怪-事件方式
+    EndIf 
+    //如果在太空，发现红减，或者红星，则跳安全点，下线
+    If bInSpace(iIDXCurrentAcc) = 1 and (bRedSubtractionFound(iIDXCurrentAcc) = 1 or bRedStarFound(iIDXCurrentAcc) = 1)
+        Gosub JumpToSafePoint
+        Gosub QuitGame
+        Goto exit-通用打怪-事件方式
+    EndIf 
+    //
+    //如果找到黄色星门，这做过星门动作
+    If bInSpace( iIDXCurrentAcc ) = 1 and bFindYellowStarGate(iIDXCurrentAcc) = 1
+        //
+        Gosub GoThroughYellowStarGate
+        Goto exit-通用打怪-事件方式
+    EndIf 
+    //如果船舱空，就停靠空间站
+    If bInSpace( iIDXCurrentAcc ) = 1 and bCabinEmpty(iIDXCurrentAcc) = 1
+        Gosub DockToSpaceStation
+        Goto exit-通用打怪-事件方式
+    EndIf 
+    //
+    //如果发现目标，又没锁定，则加载弹药，锁定目标
+    If bTargetFound(iIDXCurrentAcc) = 1 and bTargetLocked(iIDXCurrentAcc) = 0 and  bInSpace(iIDXCurrentAcc) = 1
+        //
+        Gosub ResetOrder
+        Gosub ReloadAmmo
+        Delay 100
+        //Gosub FindTarget
+        Gosub LockTarget
+        Goto exit-通用打怪-事件方式
+    EndIf 
+    //
+    //如果锁定了目标，而且没有激活高槽，则激活高槽
+    If bTargetLocked(iIDXCurrentAcc) = 1 and bHighSlotActived(iIDXCurrentAcc) = 0 and  bInSpace(iIDXCurrentAcc) = 1
+        Gosub ActiveHighSlot
+        Goto exit-通用打怪-事件方式
+    EndIf 
+    //
+    //如果在太空中没找到目标，而且不是在跃迁，就跳到下一个矿区
+    If bTargetFound(iIDXCurrentAcc) = 0 and bInSpace( iIDXCurrentAcc ) = 1 and bJumping( iIDXCurrentAcc ) = 0
+        //
+        Gosub JumpToMineField
+        iaMineFieldCursor(iIDXCurrentAcc) = iaMineFieldCursor(iIDXCurrentAcc) + 1
+        //
+        sLogLine = "saMineField = " + saMineField(iIDXCurrentAcc , iaMineFieldCursor(iIDXCurrentAcc) )
+        Gosub WriteLogTotal
+        //
+        If saMineField(iIDXCurrentAcc , iaMineFieldCursor(iIDXCurrentAcc) ) = ""
+            iaMineFieldCursor(iIDXCurrentAcc) = 0
+            sLogLine = "iaMineFieldCursor = " + cstr(iaMineFieldCursor(iIDXCurrentAcc) )
+            Gosub WriteLogTotal
+            //
+        EndIf 
+        //
+        Goto exit-通用打怪-事件方式
+    EndIf 
+    //
+    //如果在空间站，而且船舱空，则把弹药装满船舱
+    If bCabinEmpty(iIDXCurrentAcc) = 1 and bSpaceStationDocked(iIDXCurrentAcc) = 1
+        Gosub LoadAmmoToCabin
+        Goto exit-通用打怪-事件方式
+    EndIf 
+    //
+    //如果在空间站，而且船舱满，则离站
+    If bCabinFull(iIDXCurrentAcc) = 1 and bSpaceStationDocked(iIDXCurrentAcc) = 1
+        Gosub LeftSpaceStation
+        Goto exit-通用打怪-事件方式
+    EndIf 
+    //
+    Rem exit-通用打怪-事件方式
+Return 通用打怪-事件方式
+//
+//通用捡垃圾-事件方式
+Sub 通用捡垃圾-事件方式
+    //
+    sLogLine = "通用打怪-事件方式"
+    Gosub WriteLogTotal
+    //状态自检
+    Gosub chkAllStatus
+    Delay 1000
+    //如果在跃迁中，直接退出该过程
+    If bJumping(iIDXCurrentAcc) = 1
+        Goto exit-通用捡垃圾-事件方式
+    EndIf 
+    //如果在太空，发现红减，或者红星，则跳安全点，下线
+    If bInSpace(iIDXCurrentAcc) = 1 and (bRedSubtractionFound(iIDXCurrentAcc) = 1 or bRedStarFound(iIDXCurrentAcc) = 1)
+        Gosub JumpToSafePoint
+        Gosub QuitGame
+        Goto exit-通用捡垃圾-事件方式
+    EndIf 
+    //
+    //如果找到黄色星门，这做过星门动作
+    If bInSpace( iIDXCurrentAcc ) = 1 and bFindYellowStarGate(iIDXCurrentAcc) = 1
+        //
+        Gosub GoThroughYellowStarGate
+        Goto exit-通用捡垃圾-事件方式
+    EndIf 
+    //如果船舱满，就停靠空间站
+    If bInSpace( iIDXCurrentAcc ) = 1 and bCabinFull(iIDXCurrentAcc) = 1
+        Gosub DockToSpaceStation
+        Goto exit-通用捡垃圾-事件方式
+    EndIf 
+    //
+    //如果发现目标，又没锁定，则锁定目标
+    If bTargetFound(iIDXCurrentAcc) = 1 and bTargetLocked(iIDXCurrentAcc) = 0 and  bInSpace(iIDXCurrentAcc) = 1
+        //
+        Gosub ResetOrder
+        Delay 100
+        Gosub LockTarget
+        Goto exit-通用捡垃圾-事件方式
+    EndIf 
+    //
+    //如果锁定了目标，而且目标不是怪，则尝试打开残骸
+    If bTargetLocked(iIDXCurrentAcc) = 1 and  bInSpace(iIDXCurrentAcc) = 1 and bTargetCanAttack(iIDXCurrentAcc) = 0
+        Gosub OpenWreckageCabin
+        Gosub ChkWreckageCabinOpened
+        //
+        //如果没打开，则接近目标，激活高槽(牵引)
+        If bWreckageCabinOpened(iIDXCurrentAcc) = 0
+            Gosub CloseToTarget
+            iHSlotBegin(iIDXCurrentAcc) = 8
+            iHSlotEnd(iIDXCurrentAcc)   = 8
+            Gosub ActiveHighSlot
+            Goto exit-通用捡垃圾-事件方式
+        EndIf 
+        //如果打开了，则捡舱里的东西，打捞
+        If bWreckageCabinOpened(iIDXCurrentAcc) = 1
+            //捡舱里的东西（和装满弹药的动作一致）
+            Gosub LoadAmmoToCabin
+            //打捞
+            iHSlotBegin(iIDXCurrentAcc) = 1
+            iHSlotEnd(iIDXCurrentAcc)   = 4
+            Gosub ActiveHighSlot
+            Goto exit-通用捡垃圾-事件方式
+        EndIf 
+    EndIf 
+    //
+    //如果在太空中没找到目标，而且不是在跃迁，就跳到下一个矿区
+    If bTargetFound(iIDXCurrentAcc) = 0 and bInSpace( iIDXCurrentAcc ) = 1 and bJumping( iIDXCurrentAcc ) = 0
+        //
+        Gosub JumpToMineField
+        iaMineFieldCursor(iIDXCurrentAcc) = iaMineFieldCursor(iIDXCurrentAcc) + 1
+        //
+        sLogLine = "saMineField = " + saMineField(iIDXCurrentAcc , iaMineFieldCursor(iIDXCurrentAcc) )
+        Gosub WriteLogTotal
+        //
+        If saMineField(iIDXCurrentAcc , iaMineFieldCursor(iIDXCurrentAcc) ) = ""
+            iaMineFieldCursor(iIDXCurrentAcc) = 0
+            sLogLine = "iaMineFieldCursor = " + cstr(iaMineFieldCursor(iIDXCurrentAcc) )
+            Gosub WriteLogTotal
+            //
+        EndIf 
+        //
+        Goto exit-通用捡垃圾-事件方式
+    EndIf 
+    //
+    //如果在空间站，而且船舱满，则船舱清空到空间站
+    If bCabinFull(iIDXCurrentAcc) = 1 and bSpaceStationDocked(iIDXCurrentAcc) = 1
+        Gosub EmptyCabin
+        Goto exit-通用打怪-事件方式
+    EndIf 
+    //
+    //如果在空间站，而且船舱满，则离站
+    If bCabinEmpty(iIDXCurrentAcc) = 1 and bSpaceStationDocked(iIDXCurrentAcc) = 1
+        Gosub LeftSpaceStation
+        Goto exit-通用打怪-事件方式
+    EndIf 
+    //
+    //如果船舱满，就停靠空间站
+    If bInSpace( iIDXCurrentAcc ) = 1 and bCabinFull(iIDXCurrentAcc) = 1
+        Gosub DockToSpaceStation
+        Goto exit-通用打怪-事件方式
+    EndIf 
+    //
+    Rem exit-通用捡垃圾-事件方式
+Return 通用捡垃圾-事件方式
+//-----------------------------用户自定流程 end ---------------------------------------//

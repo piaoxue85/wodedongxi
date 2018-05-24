@@ -1,0 +1,36 @@
+import json, urllib.request, urllib.parse, urllib.error
+from urllib.parse import urlencode
+import pandas as pd
+
+#获取当年的假期列表
+def get_holiday_yearly(appkey="419925bb58e7879c11e597d23a7f958d",year="2017", m="GET"):
+    url = "http://v.juhe.cn/calendar/year"
+    params = {
+        "key"  : appkey, #您申请的appKey
+        "year" : year  , #指定年份,格式为YYYY,如:2015
+ 
+    }
+    params = urlencode(params)
+    if m =="GET":
+        f = urllib.request.urlopen("%s?%s" % (url, params))
+    else:
+        f = urllib.request.urlopen(url, params)
+ 
+    content = f.read()
+    res = json.loads(content)
+    print(res)    
+    if res:
+        error_code = res["error_code"]
+        if error_code == 0:
+            #成功请求
+            df = pd.DataFrame( eval(res["result"]["data"]["holidaylist"]) )
+            print(df)            
+        else:
+            print("%s:%s" % (res["error_code"],res["reason"]))
+    else:
+        print("request api error")
+
+    return res["error_code"],res["reason"],df
+        
+get_holiday_yearly(year="2017") 
+        

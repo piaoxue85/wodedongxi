@@ -1,0 +1,45 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<BorlandProject>
+	<Transactions>
+    <Transaction>2015/07/11 15:35:01.000.391,=C:\Users\Moonlit\Documents\RAD Studio\Projects\Unit1.pas</Transaction>
+    <Transaction>2015/07/11 15:35:27.000.687,X:\stock\main.dfm=C:\Users\Moonlit\Documents\RAD Studio\Projects\Unit1.dfm</Transaction>
+    <Transaction>2015/07/11 15:35:27.000.687,X:\stock\main.pas=C:\Users\Moonlit\Documents\RAD Studio\Projects\Unit1.pas</Transaction>
+    <Transaction>2015/07/11 15:35:40.000.799,X:\stock\stock.dproj=C:\Users\Moonlit\Documents\RAD Studio\Projects\Project1.dproj</Transaction>
+    <Transaction>2015/07/11 15:35:52.000.388,=X:\stock\Unit1.pas</Transaction>
+    <Transaction>2015/07/11 15:36:10.000.554,X:\stock\stockDaily.pas=X:\stock\Unit1.pas</Transaction>
+    <Transaction>2015/07/11 15:59:16.000.764,=X:\stock\Unit1.pas</Transaction>
+    <Transaction>2015/07/11 15:59:38.000.354,X:\stock\stockDailyTotal.pas=X:\stock\Unit1.pas</Transaction>
+    <Transaction>2015/07/11 16:02:43.000.162,=X:\stock\DelphiFunc\ADO.pas</Transaction>
+    <Transaction>2015/07/11 16:05:54.000.081,=X:\stock\DelphiFunc\Hashtable.pas</Transaction>
+    <Transaction>2015/07/11 16:06:09.000.866,=X:\stock\DelphiFunc\Unit_StrFuncs.pas</Transaction>
+    <Transaction>2015/07/11 16:06:09.000.854,=X:\stock\DelphiFunc\Unit_FileFuncs.pas</Transaction>
+    <Transaction>2015/07/11 16:08:19.000.681,=X:\stock\DelphiFunc\adodb_tlb.pas</Transaction>
+    <Transaction>2015/07/17 11:19:45.000.351,=D:\Projects\j金融\g股票数据分析系统\sourceCode\stock\Unit1.pas</Transaction>
+    <Transaction>2015/07/17 11:19:54.000.533,D:\Projects\j金融\g股票数据分析系统\sourceCode\stock\Unit1.pas=D:\Projects\j金融\g股票数据分析系统\sourceCode\stock\MA.pas</Transaction>
+    <Transaction>2015/07/17 16:35:40.000.321,D:\Projects\j金融\g股票数据分析系统\sourceCode\stock\MA.pas=</Transaction>
+    <Transaction>2015/07/20 15:33:52.000.858,=D:\Projects\j金融\g股票数据分析系统\sourceCode\stock\Unit1.pas</Transaction>
+    <Transaction>2015/07/20 15:34:20.000.497,D:\Projects\j金融\g股票数据分析系统\sourceCode\stock\DelphiFunc\Unit_MathFuncs.pas=D:\Projects\j金融\g股票数据分析系统\sourceCode\stock\Unit1.pas</Transaction>
+    <Transaction>2015/07/31 15:51:06.000.629,=D:\Projects\j金融\g股票数据分析系统\sourceCode\stock\Unit1.pas</Transaction>
+    <Transaction>2015/07/31 15:51:40.000.509,D:\Projects\j金融\g股票数据分析系统\sourceCode\stock\Unit1.pas=D:\Projects\j金融\g股票数据分析系统\sourceCode\stock\stockImportNameAndCode.pas</Transaction>
+    <Transaction>2015/08/03 16:27:26.000.791,=D:\Projects\j金融\g股票数据分析系统\sourceCode\stock\Unit1.pas</Transaction>
+    <Transaction>2015/08/03 16:27:45.000.932,D:\Projects\j金融\g股票数据分析系统\sourceCode\stock\stockImportDaily.pas=D:\Projects\j金融\g股票数据分析系统\sourceCode\stock\Unit1.pas</Transaction>
+    <Transaction>2015/08/04 17:28:25.000.205,D:\Projects\j金融\g股票数据分析系统\sourceCode\stock\DelphiFunc\Unit_StrFuncs.pas=</Transaction>
+    <Transaction>2015/08/04 17:28:25.000.174,D:\Projects\j金融\g股票数据分析系统\sourceCode\stock\DelphiFunc\Hashtable.pas=</Transaction>
+    <Transaction>2015/08/04 17:28:25.000.184,D:\Projects\j金融\g股票数据分析系统\sourceCode\stock\DelphiFunc\Unit_FileFuncs.pas=</Transaction>
+    <Transaction>2015/08/04 17:28:25.000.195,D:\Projects\j金融\g股票数据分析系统\sourceCode\stock\DelphiFunc\Unit_MathFuncs.pas=</Transaction>
+    <Transaction>2015/08/04 17:28:25.000.126,D:\Projects\j金融\g股票数据分析系统\sourceCode\stock\DelphiFunc\ADO.pas=</Transaction>
+    <Transaction>2015/08/04 17:28:25.000.164,D:\Projects\j金融\g股票数据分析系统\sourceCode\stock\DelphiFunc\adodb_tlb.pas=</Transaction>
+    <Transaction>2015/08/04 17:30:29.000.870,=D:\Projects\MyFunc\DelphiFunc\ADO.pas</Transaction>
+    <Transaction>2015/08/04 17:30:29.000.898,=D:\Projects\MyFunc\DelphiFunc\adodb_tlb.pas</Transaction>
+    <Transaction>2015/08/04 17:30:29.000.912,=D:\Projects\MyFunc\DelphiFunc\Unit_FileFuncs.pas</Transaction>
+    <Transaction>2015/08/04 17:30:29.000.932,=D:\Projects\MyFunc\DelphiFunc\Unit_StrFuncs.pas</Transaction>
+    <Transaction>2015/08/04 17:33:39.000.158,=D:\Projects\MyFunc\DelphiFunc\Unit_MathFuncs.pas</Transaction>
+    <Transaction>2015/08/04 17:33:39.000.130,=D:\Projects\MyFunc\DelphiFunc\Hashtable.pas</Transaction>
+    <Transaction>2015/09/01 11:41:53.000.386,=D:\Projects\j金融\g股票数据分析系统\sourceCode\stock\Unit1.pas</Transaction>
+    <Transaction>2015/09/01 11:42:40.000.706,D:\Projects\j金融\g股票数据分析系统\sourceCode\stock\stockRecommend.pas=D:\Projects\j金融\g股票数据分析系统\sourceCode\stock\Unit1.pas</Transaction>
+    <Transaction>2016/04/26 15:52:55.000.998,=D:\Projects\j金融\g股票数据分析系统\sourceCode\stock\Unit1.pas</Transaction>
+    <Transaction>2016/04/26 15:53:31.000.699,D:\Projects\j金融\g股票数据分析系统\sourceCode\stock\TestCases.pas=D:\Projects\j金融\g股票数据分析系统\sourceCode\stock\Unit1.pas</Transaction>
+    <Transaction>2016/04/29 15:51:51.000.899,=D:\Projects\j金融\g股票数据分析系统\sourceCode\stock\Unit1.pas</Transaction>
+    <Transaction>2016/04/29 15:52:28.000.254,D:\Projects\j金融\g股票数据分析系统\sourceCode\stock\MarkovChains.pas=D:\Projects\j金融\g股票数据分析系统\sourceCode\stock\Unit1.pas</Transaction>
+  </Transactions>
+</BorlandProject>

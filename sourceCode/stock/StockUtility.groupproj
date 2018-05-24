@@ -1,0 +1,96 @@
+﻿<Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+    <PropertyGroup>
+        <ProjectGuid>{DCC2022B-61D6-4130-87FE-A2D493AEBA2C}</ProjectGuid>
+    </PropertyGroup>
+    <ItemGroup>
+        <Projects Include="stock.dproj">
+            <Dependencies/>
+        </Projects>
+        <Projects Include="..\dataImport\dataImportor.dproj">
+            <Dependencies/>
+        </Projects>
+        <Projects Include="..\recommend\recommendStock.dproj">
+            <Dependencies/>
+        </Projects>
+        <Projects Include="..\stockFinder\stockFinder.dproj">
+            <Dependencies/>
+        </Projects>
+        <Projects Include="..\stcoTenLevelMonitor\stcokTenLevelMonitor.dproj">
+            <Dependencies/>
+        </Projects>
+        <Projects Include="..\MLDLGenTrainTestData\MLDLGenTrainTestData.dproj">
+            <Dependencies/>
+        </Projects>
+    </ItemGroup>
+    <ProjectExtensions>
+        <Borland.Personality>Default.Personality.12</Borland.Personality>
+        <Borland.ProjectType/>
+        <BorlandProject>
+            <Default.Personality/>
+        </BorlandProject>
+    </ProjectExtensions>
+    <Target Name="stock">
+        <MSBuild Projects="stock.dproj"/>
+    </Target>
+    <Target Name="stock:Clean">
+        <MSBuild Projects="stock.dproj" Targets="Clean"/>
+    </Target>
+    <Target Name="stock:Make">
+        <MSBuild Projects="stock.dproj" Targets="Make"/>
+    </Target>
+    <Target Name="dataImportor">
+        <MSBuild Projects="..\dataImport\dataImportor.dproj"/>
+    </Target>
+    <Target Name="dataImportor:Clean">
+        <MSBuild Projects="..\dataImport\dataImportor.dproj" Targets="Clean"/>
+    </Target>
+    <Target Name="dataImportor:Make">
+        <MSBuild Projects="..\dataImport\dataImportor.dproj" Targets="Make"/>
+    </Target>
+    <Target Name="recommendStock">
+        <MSBuild Projects="..\recommend\recommendStock.dproj"/>
+    </Target>
+    <Target Name="recommendStock:Clean">
+        <MSBuild Projects="..\recommend\recommendStock.dproj" Targets="Clean"/>
+    </Target>
+    <Target Name="recommendStock:Make">
+        <MSBuild Projects="..\recommend\recommendStock.dproj" Targets="Make"/>
+    </Target>
+    <Target Name="stockFinder">
+        <MSBuild Projects="..\stockFinder\stockFinder.dproj"/>
+    </Target>
+    <Target Name="stockFinder:Clean">
+        <MSBuild Projects="..\stockFinder\stockFinder.dproj" Targets="Clean"/>
+    </Target>
+    <Target Name="stockFinder:Make">
+        <MSBuild Projects="..\stockFinder\stockFinder.dproj" Targets="Make"/>
+    </Target>
+    <Target Name="stcokTenLevelMonitor">
+        <MSBuild Projects="..\stcoTenLevelMonitor\stcokTenLevelMonitor.dproj"/>
+    </Target>
+    <Target Name="stcokTenLevelMonitor:Clean">
+        <MSBuild Projects="..\stcoTenLevelMonitor\stcokTenLevelMonitor.dproj" Targets="Clean"/>
+    </Target>
+    <Target Name="stcokTenLevelMonitor:Make">
+        <MSBuild Projects="..\stcoTenLevelMonitor\stcokTenLevelMonitor.dproj" Targets="Make"/>
+    </Target>
+    <Target Name="MLDLGenTrainTestData">
+        <MSBuild Projects="..\MLDLGenTrainTestData\MLDLGenTrainTestData.dproj"/>
+    </Target>
+    <Target Name="MLDLGenTrainTestData:Clean">
+        <MSBuild Projects="..\MLDLGenTrainTestData\MLDLGenTrainTestData.dproj" Targets="Clean"/>
+    </Target>
+    <Target Name="MLDLGenTrainTestData:Make">
+        <MSBuild Projects="..\MLDLGenTrainTestData\MLDLGenTrainTestData.dproj" Targets="Make"/>
+    </Target>
+    <Target Name="Build">
+        <CallTarget Targets="stock;dataImportor;recommendStock;stockFinder;stcokTenLevelMonitor;MLDLGenTrainTestData"/>
+    </Target>
+    <Target Name="Clean">
+        <CallTarget Targets="stock:Clean;dataImportor:Clean;recommendStock:Clean;stockFinder:Clean;stcokTenLevelMonitor:Clean;MLDLGenTrainTestData:Clean"/>
+    </Target>
+    <Target Name="Make">
+        <CallTarget Targets="stock:Make;dataImportor:Make;recommendStock:Make;stockFinder:Make;stcokTenLevelMonitor:Make;MLDLGenTrainTestData:Make"/>
+    </Target>
+    <Import Project="$(BDS)\Bin\CodeGear.Group.Targets" Condition="Exists('$(BDS)\Bin\CodeGear.Group.Targets')"/>
+</Project>

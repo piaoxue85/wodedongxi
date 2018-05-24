@@ -1,0 +1,15 @@
+program MLDLGenTrainTestData;
+
+uses
+  Vcl.Forms,
+  main in 'main.pas' {fMain},
+  ThreadGen in 'ThreadGen.pas';
+
+{$R *.res}
+
+begin
+  Application.Initialize;
+  Application.MainFormOnTaskbar := True;
+  Application.CreateForm(TfMain, fMain);
+  Application.Run;
+end.

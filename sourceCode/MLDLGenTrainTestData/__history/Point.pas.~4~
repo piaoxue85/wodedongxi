@@ -1,0 +1,25 @@
+unit Point;
+
+interface
+
+uses
+  SysUtils ,
+  Controls ,
+  Classes
+  ;
+
+type
+  TPoint = class(TObject)
+
+  private
+
+
+  public
+    { Public declarations }
+
+  end;
+
+implementation
+
+
+end.

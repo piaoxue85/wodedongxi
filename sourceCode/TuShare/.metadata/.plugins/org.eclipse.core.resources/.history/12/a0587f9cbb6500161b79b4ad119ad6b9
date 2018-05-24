@@ -1,0 +1,18 @@
+# from click._compat import raw_input
+# name = raw_input("what is your name?")
+# if name.endswith('tank'):
+#     print ('hello tank')
+# elif name.endswith('xiao'):
+#     print( 'hello xiao')
+# else:
+#     print ('hello strange')
+
+import tushare as ts
+df = ts.get_stock_basics()
+print(df)
+print(df.count())
+print(len(df))
+
+
+
+

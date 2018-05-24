@@ -1,0 +1,25 @@
+unit MA;
+
+interface
+
+uses
+  Controls ,
+  System.SysUtils, System.Variants, System.Classes ;
+
+type
+  TstockDailyTotal = class(TObject)
+    MaVal : double ;
+    dayNum : integer ;
+  private
+  public
+
+    constructor Create(pMaVal : double ; pDayNum : integer );
+    Destructor  Destroy ;
+  end;
+
+
+implementation
+
+
+
+end.

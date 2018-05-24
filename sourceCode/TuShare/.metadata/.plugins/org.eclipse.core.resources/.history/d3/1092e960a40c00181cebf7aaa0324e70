@@ -1,0 +1,147 @@
+'''
+Created on 2017年6月3日
+
+@author: moonlit
+
+select * from c##tushare.tb_stock_profit_data where     
+    code in    
+    (
+        select code from 
+        (
+            select * from tb_stock_list where 
+             pe < 30 
+              and 
+             pe >0 
+              and 
+             code not in 
+             (
+                     select code from tb_stock_data_daily group by code having count(*)<125
+             )
+               and 
+             code in 
+             (
+                     select distinct(code) from tb_stock_data_daily where shi_jian>=sysdate-3
+             )
+               and 
+             name not like '%银行%'
+              and
+             name not like '%保险%'
+            order by total_assets asc
+        ) 
+        where
+            rownum<=100
+    ) 
+    and 
+  YEAR ||QUARTER >= 20173
+order by eps desc ;
+
+select * from 
+(
+    select * from tb_stock_list where 
+     pe < 30 
+      and 
+     pe >0 
+      and 
+     code not in 
+     (
+             select code from tb_stock_data_daily group by code having count(*)<250
+     )
+       and 
+     code in 
+     (
+             select distinct(code) from tb_stock_data_daily where shi_jian>=sysdate-3
+     )
+       and 
+     name not like '%银行%'
+      and
+     name not like '%保险%'
+    order by total_assets asc
+) 
+where
+    rownum<=100
+order by pe asc
+; 
+
+'''
+
+from BigQuantTrade import TradeSmallMarketValue
+import BigQuantImportRank as importR
+import numpy as np
+
+def getRank(rank , buy_black):
+    rank_new = []
+    for r in rank:
+        if r in buy_black :
+            continue
+        rank_new.append(r)
+    
+    return rank_new
+
+stockCount = 20
+weights = []
+for i in range(stockCount):
+    weights.append(1/stockCount)
+    
+buy_black   = [
+            "000004.SZA" ,    #国农科技 证监会停牌 退市风险
+#             "300029.SZA" ,    #天龙光电 预计2017年1-6月归属于上市公司股东的净利润亏损:2000万元-2500万元
+            "300330.SZA" ,  
+            "002633.SZA" ,  
+            ]      
+
+print("#-------------------------------------------------------------------庄华-----------------------------------------------------------------------------------------------")        
+rank = ["300226",
+"600583",
+"600648",
+"600582",
+"600307",
+"000552",
+"600789",
+"601808",
+"600023",
+]
+rank = getRank(rank = rank , buy_black=buy_black)
+sell_black = []
+T = TradeSmallMarketValue(user_name = "庄华",start_date = "2017-08-01" , op_date = "" ,weights = weights)     
+T.can_buy_GEM = True  
+# shi_jian  ="2017-08-02"
+shi_jian  = T.get_op_date() 
+T.op_date = shi_jian
+
+importR.importRank(prank = rank, shi_jian = shi_jian)
+print(T.user)
+sell_list = T.sell(sell_black)
+print(sell_list)
+buy = T.buy(buy_black)
+print(buy)
+
+print("#---------------------------------------------------------------龚雯-----------------------------------------------------------------------------------------------------")
+rank = ["300226",
+"600583",
+"600648",
+"600582",
+"600307",
+"000552",
+"600789",
+"601808",
+"600023",
+]
+rank = getRank(rank = rank , buy_black=buy_black)
+sell_black = [
+              "002307",
+              "600419",
+              ]
+
+w = list(np.array(weights)/1) 
+
+T = TradeSmallMarketValue(user_name = "龚雯",start_date = "2017-08-01" , op_date = shi_jian ,weights = w)
+T.can_buy_GEM = False   
+T.op_date = shi_jian
+
+importR.importRank(prank = rank, shi_jian = shi_jian)
+print(T.user)
+sell_list = T.sell(sell_black)
+print(sell_list)
+buy = T.buy(buy_black)
+print(buy)
+

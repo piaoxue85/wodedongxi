@@ -1,0 +1,17 @@
+'''
+Created on 2017年7月26日
+
+@author: moonlit
+'''
+import logging 
+import os.path 
+import sys 
+import re 
+import jieba 
+import json
+
+with f = open('D:/Competition/src/data/AnnouncementsTrainSample.json','r',encoding="utf_8_sig") as f:
+    data = json.load(f)
+    
+    
+space = " "     

@@ -1,0 +1,87 @@
+unit MarkovChains;
+
+interface
+uses
+  ado ,
+  Controls ,
+  System.SysUtils, System.Variants, System.Classes ;
+
+type
+  TMarkovChains = class(TObject)
+    matrix : array of array of double;
+    states : array of double ;
+  private
+    db : txlsado ;
+    connstr : string ;
+    res : integer ;
+    resmsg : string ;
+
+    sql : string ;
+
+    x , y : integer ;
+
+  public
+    constructor Create;
+    Destructor  Destroy ;
+
+    procedure getmatrix ;
+  end;
+
+implementation
+
+{ TstockDaily }
+
+constructor TMarkovChains.Create;
+begin
+  inherited Create;
+  connstr :='Provider=OraOLEDB.Oracle.1;Password=didierg160;Persist Security Info=True;User ID=c##stock;Data Source=myoracle';
+  db := TXLSAdo.Create ;
+  res := db.Connect(connstr , resmsg);
+end;
+
+destructor TMarkovChains.Destroy;
+begin
+  inherited Destroy ;
+end;
+
+procedure TMarkovChains.getmatrix;
+begin
+  setlength(matrix , 20 , 20 );
+  setlength(states , 20 ) ;
+
+  sql := 'select COUNTER from tb_stock_state_counter order by STATE asc';
+
+  res := db.OpenSql(sql,resmsg);
+
+  db.RS.MoveFirst ;
+
+  x := 0 ;
+  while not db.RS.EOF do
+  begin
+    states[x] :=  db.RS.Fields['COUNTER'].Value ;
+    db.RS.MoveNext ;
+    inc(x);
+  end;
+
+  db.RS.Close ;
+
+  sql := 'select * from tb_stock_state_change_counter';
+  res := db.OpenSql(sql,resmsg);
+  db.RS.MoveFirst ;
+
+  while not db.RS.EOF do
+  begin
+    x :=  db.RS.Fields['state_start'].Value ;
+    y :=  db.RS.Fields['state_end'].Value ;
+    x := x-1;
+    y := y-1;
+    matrix[x][y] := db.RS.Fields['counter'].Value ;
+    matrix[x][y] := matrix[x][y]/states[x] ;
+    db.RS.MoveNext ;
+    inc(x);
+  end;
+
+
+end;
+
+end.

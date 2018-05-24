@@ -1,0 +1,57 @@
+unit MA;
+
+interface
+
+uses
+  Controls ,
+  System.SysUtils, System.Variants, System.Classes ;
+
+type
+  TstockDailyTotal = class(TObject)
+    MaVal : double ;
+    dayNum : integer ;
+  private
+  public
+
+    constructor Create(pMaVal : double ; pDayNum : integer );
+    Destructor  Destroy ;
+  end;
+
+
+implementation
+
+{ TstockDailyTotal }
+{
+constructor TstockDailyTotal.Create(dailyTotal, MASetting: TStringList);
+var
+  iLoopMA,iLoopEachMA,sumCount : integer ;
+  priceSum : double ;
+begin
+  for iLoopMa := 0 to MASetting.count -1 do
+  begin
+    for iLoopEachMA := 0 to dailyTotal.count - 1 do
+    begin
+      if iLoopEachMA < MASetting.Strings[iLoopMa].ToInteger() -1 then
+        continue ;
+
+      for sumCount := 0 to MASetting.Strings[iLoopMa].ToInteger() -1 do
+      begin
+        priceSum = priceSum + TStockDaily(dailyTotal.Objects[iLoopEachMA-1 -sumCount ]).price;
+      end;
+
+      priceSum
+
+    end;
+  end;
+
+
+
+end;
+
+destructor TstockDailyTotal.Destroy;
+begin
+
+end;
+}
+
+end.

@@ -1,0 +1,13 @@
+'''
+Created on 2017年7月28日
+
+@author: moonlit
+'''
+   
+import testRQAlphaLittleMarketCap as ma8    
+
+
+pos =["","",""]
+
+alldate = ma8.getListToBuy(pos,ma8.get_stock_data_daily_rqalpha_lmc_all('2007-10-08'))
+    

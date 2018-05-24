@@ -1,0 +1,16 @@
+from sqlalchemy import create_engine
+import tushare as ts
+import time 
+
+df = ts.get_h_data('000002',
+                   '1990-12-19' ,
+                   time.strftime('%Y-%m-%d',time.localtime(time.time())),
+                   'qfq',
+                   False,
+                   3,
+                   1
+                  )
+
+
+engine = create_engine('oracle://c##stock:didierg160@moonlit77.gicp.net/myoracle?charset=ZHS16GBK')
+df.to_sql('tick_data',engine,if_exists='append')

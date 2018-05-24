@@ -1,0 +1,26 @@
+unit Point;
+
+interface
+
+uses
+  SysUtils ,
+  Controls ,
+  Classes
+  ;
+
+type
+  TPoint = class(TObject)
+    shi_jian : int ;
+    max_price :
+  private
+
+
+  public
+    { Public declarations }
+
+  end;
+
+implementation
+
+
+end.

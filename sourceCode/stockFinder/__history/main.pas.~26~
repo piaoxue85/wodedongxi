@@ -1,0 +1,58 @@
+unit main;
+
+interface
+
+uses
+  Winapi.Windows, Winapi.Messages, System.SysUtils, System.Variants, System.Classes, Vcl.Graphics,
+  Vcl.Controls, Vcl.Forms, Vcl.Dialogs, Vcl.Menus, Vcl.StdCtrls;
+
+type
+  TfMain = class(TForm)
+    MainMenu1: TMainMenu;
+    N1: TMenuItem;
+    N2: TMenuItem;
+    Memo1: TMemo;
+    procedure N1Click(Sender: TObject);
+    procedure FormCreate(Sender: TObject);
+    procedure N2Click(Sender: TObject);
+  private
+    { Private declarations }
+  public
+    { Public declarations }
+    bFinderRun : boolean ;
+  end;
+
+var
+  fMain: TfMain;
+
+implementation
+uses
+  ThreadFinder ;
+
+{$R *.dfm}
+
+procedure TfMain.FormCreate(Sender: TObject);
+begin
+  self.bFinderRun := false ;
+  self.bFinderRun := true ;
+  self.N1.Enabled := not self.bFinderRun  ;
+  self.Memo1.Lines.Clear ;
+end;
+
+procedure TfMain.N1Click(Sender: TObject);
+var
+  Finder : TThreadFinder ;
+begin
+  self.bFinderRun := true ;
+  self.N1.Enabled := not self.bFinderRun  ;
+  Finder := TThreadFinder.Create(false);
+end;
+
+procedure TfMain.N2Click(Sender: TObject);
+begin
+  self.Memo1.Lines.Add(datetimetostr(now) + ':等待结束工作');
+  self.N2.Enabled :=  bFinderRun ;
+  self.bFinderRun := false ;
+end;
+
+end.

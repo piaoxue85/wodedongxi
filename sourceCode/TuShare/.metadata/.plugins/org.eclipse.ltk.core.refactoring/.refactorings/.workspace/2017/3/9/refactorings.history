@@ -1,0 +1,4 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<session version="1.0">
+<refactoring comment="Delete resource &apos;test/deep_recommend_system-master/sparse_classifier.py&apos;" deleteContents="false" description="Delete resource &apos;test/deep_recommend_system-master/sparse_classifier.py&apos;" element1="/test/deep_recommend_system-master/sparse_classifier.py" flags="7" id="org.eclipse.ltk.core.refactoring.delete.resources" resources="1" stamp="1488339252966"/>
+</session>

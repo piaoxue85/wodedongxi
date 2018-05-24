@@ -1,0 +1,25 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<BorlandProject>
+	<Transactions>
+    <Transaction>2016/05/10 15:53:21.000.536,=C:\Users\moonlit\Documents\Embarcadero\Studio\Projects\Unit1.pas</Transaction>
+    <Transaction>2016/10/27 11:58:57.000.060,=C:\Users\moonlit\Documents\Embarcadero\Studio\Projects\Unit1.pas</Transaction>
+    <Transaction>2017/02/07 11:24:55.000.716,=C:\Users\moonlit\Documents\Embarcadero\Studio\Projects\Unit4.pas</Transaction>
+    <Transaction>2017/02/07 11:25:21.000.557,C:\Users\moonlit\Documents\Embarcadero\Studio\Projects\Project1.dproj=C:\Users\moonlit\Documents\Embarcadero\Studio\Projects\MLDLGenTrainTestData.dproj</Transaction>
+    <Transaction>2017/02/07 11:27:15.000.587,C:\Users\moonlit\Documents\Embarcadero\Studio\Projects\Unit4.pas=D:\Projects\j金融\g股票数据分析系统\sourceCode\MLDLGenTrainTestData\main.pas</Transaction>
+    <Transaction>2017/02/07 11:27:15.000.587,C:\Users\moonlit\Documents\Embarcadero\Studio\Projects\Unit4.dfm=D:\Projects\j金融\g股票数据分析系统\sourceCode\MLDLGenTrainTestData\main.dfm</Transaction>
+    <Transaction>2017/02/07 11:30:14.000.664,C:\Users\moonlit\Documents\Embarcadero\Studio\Projects\MLDLGenTrainTestData.dproj=D:\Projects\j金融\g股票数据分析系统\sourceCode\MLDLGenTrainTestData\MLDLGenTrainTestData.dproj</Transaction>
+    <Transaction>2017/02/07 11:34:51.000.527,=D:\Projects\j金融\g股票数据分析系统\sourceCode\MLDLGenTrainTestData\Unit1.pas</Transaction>
+    <Transaction>2017/02/07 11:35:09.000.003,D:\Projects\j金融\g股票数据分析系统\sourceCode\MLDLGenTrainTestData\Unit1.pas=D:\Projects\j金融\g股票数据分析系统\sourceCode\MLDLGenTrainTestData\ThreadGen.pas</Transaction>
+    <Transaction>2017/02/07 11:35:36.000.788,=D:\Projects\MyFunc\DelphiFunc\adodb_tlb.pas</Transaction>
+    <Transaction>2017/02/07 11:35:36.000.744,=D:\Projects\MyFunc\DelphiFunc\ADO.pas</Transaction>
+    <Transaction>2017/02/07 11:36:15.000.832,=D:\Projects\MyFunc\DelphiFunc\Global_Setting.pas</Transaction>
+    <Transaction>2017/02/07 11:36:16.000.262,=D:\Projects\MyFunc\DelphiFunc\Unit_StrFuncs.pas</Transaction>
+    <Transaction>2017/02/07 11:36:16.000.195,=D:\Projects\MyFunc\DelphiFunc\Unit_FileFuncs.pas</Transaction>
+    <Transaction>2017/02/07 11:36:16.000.159,=D:\Projects\MyFunc\DelphiFunc\Unit_DateTimeFuncs.pas</Transaction>
+    <Transaction>2017/02/07 11:36:16.000.227,=D:\Projects\MyFunc\DelphiFunc\Unit_MathFuncs.pas</Transaction>
+    <Transaction>2017/02/07 11:48:26.000.734,D:\Projects\MyFunc\DelphiFunc\Global_Setting.pas=</Transaction>
+    <Transaction>2017/02/07 11:52:05.000.004,=D:\Projects\MyFunc\DelphiFunc\Hashtable.pas</Transaction>
+    <Transaction>2017/03/03 15:03:06.000.639,=D:\Projects\j金融\g股票数据分析系统\sourceCode\MLDLGenTrainTestData\Unit1.pas</Transaction>
+    <Transaction>2017/03/03 15:03:37.000.771,D:\Projects\j金融\g股票数据分析系统\sourceCode\MLDLGenTrainTestData\Point.pas=D:\Projects\j金融\g股票数据分析系统\sourceCode\MLDLGenTrainTestData\Unit1.pas</Transaction>
+  </Transactions>
+</BorlandProject>

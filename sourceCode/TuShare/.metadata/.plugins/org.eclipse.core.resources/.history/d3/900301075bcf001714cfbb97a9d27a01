@@ -1,0 +1,39 @@
+'''
+Created on 2017年11月22日
+
+@author: moonlit
+'''
+import numpy as np
+import pandas as pd
+import cx_Oracle
+from math import ceil
+from sqlalchemy import create_engine
+from sklearn.utils import shuffle  
+import getStockData as gsd
+import tushare as ts
+
+def importStockList():
+    df = ts.get_stock_basics()
+    df["code"] = df.index
+    df = df.reset_index(drop=True)
+    
+    db=cx_Oracle.connect('c##stock','didierg160','myoracle')  #创建连接  
+    cr=db.cursor()
+    
+    sql = "delete tb_stock_list"
+    cr.execute(sql)    
+    
+    
+    db.commit()        
+    cr.close ()  
+    db.close ()  
+    
+    
+
+def importStockDataDaily():
+    pass
+
+#是否除权
+def isXR(code=""):
+    pass
+

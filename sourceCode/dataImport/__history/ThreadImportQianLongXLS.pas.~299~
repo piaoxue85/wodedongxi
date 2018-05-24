@@ -1,0 +1,199 @@
+unit ThreadImportQianLongXLS;
+
+interface
+
+uses
+  unit_strfuncs,
+  Winapi.ShellApi ,
+  Winapi.Windows ,
+  System.SysUtils,
+  Types, 
+  IOUtils ,
+  ado ,
+  ThreadImportDaily ,
+  stockImportNameAndCode ,
+  Unit_FileFuncs ,
+  stockImportDaily,
+  System.Classes;
+
+type
+  TThreadImportQianLongXLS = class(TThread)
+  private
+    { Private declarations }
+    aList : array of TStringList ;
+    sLine : string ;    
+    procedure addMemo ;
+    procedure deleteXlsFile ;
+  protected
+    procedure Execute; override;
+  end;
+
+implementation
+uses
+  main;
+
+{ 
+  Important: Methods and properties of objects in visual components can only be
+  used in a method called using Synchronize, for example,
+
+      Synchronize(UpdateCaption);  
+
+  and UpdateCaption could look like,
+
+    procedure TThreadImportQianLongXLS.UpdateCaption;
+    begin
+      Form1.Caption := 'Updated in a thread';
+    end; 
+    
+    or 
+    
+    Synchronize( 
+      procedure 
+      begin
+        Form1.Caption := 'Updated in thread via an anonymous method' 
+      end
+      )
+    );
+    
+  where an anonymous method is passed.
+  
+  Similarly, the developer can call the Queue method with similar parameters as 
+  above, instead passing another TThread class as the first parameter, putting
+  the calling thread in a queue with the other thread.
+    
+}
+
+{ TThreadImportQianLongXLS }
+
+procedure TThreadImportQianLongXLS.addMemo;
+begin
+  mainform.Memo1.Lines.Add(sline );
+end;
+
+procedure TThreadImportQianLongXLS.deleteXlsFile;
+var
+  scmd : pAnsiChar;
+  stmp : string ;
+begin
+  //del \\10.0.0.1\i\data\*.xls
+  stmp := 'cmd.exe /c del ' +  mainForm.dataDir + '\*.xls' ;
+  //stmp := 'notepad.exe';
+  scmd := PAnsiChar(AnsiString(stmp));
+  //winexec(scmd ,SW_Hide) ;
+  winexec(scmd,SW_HIDE) ;
+  mainForm.Memo1.Lines.Add(datetimetostr(now) + ':删除所有xls文件  ' + stmp );
+end;
+
+procedure TThreadImportQianLongXLS.Execute;
+var
+  fileList : TStringList ;
+  iLoopTime : integer ;
+  res : integer ;
+  resMsg : string ;
+  icur : integer ;
+  import : TThreadImportDaily ;
+  //db :TXLSAdo ;
+  sql : string ;
+  ire : integer ;
+  Err  : Exception;
+  stmp : string ;
+  timeSplit : Tstringlist
+begin
+  { Place thread code here }
+  try
+    try
+      fileList := TStringList.Create;
+      fileList.Clear ;
+
+      //正式环境建议4线程
+      setlength( aList , 1) ;
+      MainForm.finished := length(aList) ;
+
+      for iLoopTime := 0 to length(aList) -1 do
+      begin
+        aList[iLoopTime] := TStringList.Create ;
+        aList[iLoopTime].Clear ;
+      end;
+
+      //db := TXLSAdo.Create ;
+      //db.sConnStr := mainform.connstr ;
+
+      while mainform.start do
+      begin
+        fileList.Destroy ;
+        // fileList:= MakeFileList('D:\Projects\j金融\g股票数据分析系统\sourceCode\data','.xls');
+        fileList:=MakeFileList(mainForm.dataDir,'.txt');
+
+        if (fileList.Count < 1) or (MainForm.finished < length(aList)) then
+        begin
+          sTmp := datetimetostr(now);
+//          sTmp := StringReplace(copy(sTmp,10,length(sTmp)-9),':','', [rfReplaceAll]);
+          SplitStr( timeSplit , sTmp , ' ');
+          sTmp = timeSplit[1]
+
+          if (strtoint(sTmp)>=140000) and (strtoint(sTmp)<=140002) then
+          //if (strtoint(sTmp)>=95500) and (strtoint(sTmp)<=140002) then
+          begin
+            deleteXlsFile ;
+          end;
+
+          sleep(1000);
+          continue ;
+        end;
+
+        fileList.Destroy ;
+        // fileList:= MakeFileList('D:\Projects\j金融\g股票数据分析系统\sourceCode\data','.xls');
+        fileList:=MakeFileList(mainForm.dataDir,'.txt');
+        sleep( 1000 ) ;
+        {
+        sql := 'truncate table tb_stock_data_daily';
+        res := db.Connect(mainform.connstr , resmsg);
+        res := db.ExecuteSql(sql , false , ire , resmsg);
+        db.Disconnect(resmsg);
+        }
+        for iLoopTime := 0 to length(aList) -1 do
+        begin
+          aList[iLoopTime].Clear ;
+        end;
+
+        MainForm.finished := 0 ;
+        icur := 0 ;
+
+        for iLoopTime := 0 to fileList.Count - 1 do
+        begin
+          aList[icur].Add(fileList.Strings[iLoopTime]);
+
+          if icur < length(alist) - 1 then
+            inc(icur)
+          else
+            icur := 0;
+        end;
+
+        fileList.Clear ;
+
+        for iLoopTime := 0 to length(alist)-1 do
+        begin
+          import := TThreadImportDaily.Create(alist[ilooptime]);
+        end;
+
+      end;    
+    except
+      Err   := Exception(ExceptObject);
+      sline := datetimetostr(now) +'出错:' + err.Message ;
+      Synchronize(addmemo);
+    end;
+  finally
+    for iLoopTime := 0 to length(aList) -1 do
+    begin
+      aList[iLoopTime].Destroy  ;
+    end;
+    setlength(aList , 0) ;
+    fileList.Clear ;
+  end;
+
+
+
+
+end;
+
+end.

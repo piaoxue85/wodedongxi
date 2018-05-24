@@ -1,0 +1,35 @@
+unit recommend;
+
+interface
+
+uses
+  stockDaily,
+  stockDailyTotal ,
+  Winapi.Windows, Winapi.Messages, System.SysUtils, System.Variants, System.Classes, Vcl.Graphics,
+  Vcl.Controls, Vcl.Forms, Vcl.Dialogs, Vcl.StdCtrls, Vcl.Menus;
+
+type
+  Tmain = class(TForm)
+    MainMenu1: TMainMenu;
+    N1: TMenuItem;
+    Memo1: TMemo;
+    procedure FormCreate(Sender: TObject);
+  private
+    { Private declarations }
+  public
+    { Public declarations }
+  end;
+
+var
+  main: Tmain;
+
+implementation
+
+{$R *.dfm}
+
+procedure Tmain.FormCreate(Sender: TObject);
+begin
+  self.Memo1.Clear;
+end;
+
+end.

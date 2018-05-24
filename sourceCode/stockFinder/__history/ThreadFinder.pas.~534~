@@ -1,0 +1,904 @@
+unit ThreadFinder;
+
+interface
+
+uses
+  system.variants,
+  Unit_StrFuncs ,
+  IdMessage,
+  IdBaseComponent, IdComponent, IdTCPConnection, IdTCPClient,
+  IdExplicitTLSClientServerBase, IdMessageClient, IdSMTPBase, IdSMTP ,
+  System.SysUtils,
+  main,
+  ado,
+  adodb_tlb,
+  System.Classes;
+
+type
+  TThreadFinder = class(TThread)
+  private
+    { Private declarations }
+    res : integer ;
+    resmsg: string ;
+    ire : integer ;
+    slMailMsg  : TstringList;
+    slWhatDone : TStringList ;
+
+    db : TXlsADO ;
+    sql : string ;
+
+    sconnStr : string ;
+
+    function findWeek         (var pResList : TStringList ;var presMsg : string ) : integer ;
+    function findMonth        (var pResList : TStringList ;var presMsg : string ) : integer ;
+    function findQuarter      (var pResList : TStringList ;var presMsg : string ) : integer ;
+    function findHalfYear     (var pResList : TStringList ;var presMsg : string ) : integer ;
+    function findYear         (var pResList : TStringList ;var presMsg : string ) : integer ;
+    function findNewStock     (var pResList : TStringList ;var presMsg : string ) : integer ;
+    function findRQAlphaKdjWM (var pResList : TStringList ;var presMsg : string ) : integer ;
+    function sendMail         (pContent     : TStringList ) : integer ;
+  protected
+    procedure Execute; override;
+  end;
+
+implementation
+
+{ 
+  Important: Methods and properties of objects in visual components can only be
+  used in a method called using Synchronize, for example,
+
+      Synchronize(UpdateCaption);  
+
+  and UpdateCaption could look like,
+
+    procedure TThreadFinder.UpdateCaption;
+    begin
+      Form1.Caption := 'Updated in a thread';
+    end; 
+    
+    or 
+    
+    Synchronize( 
+      procedure 
+      begin
+        Form1.Caption := 'Updated in thread via an anonymous method' 
+      end
+      )
+    );
+    
+  where an anonymous method is passed.
+  
+  Similarly, the developer can call the Queue method with similar parameters as 
+  above, instead passing another TThread class as the first parameter, putting
+  the calling thread in a queue with the other thread.
+    
+}
+
+{ TThreadFinder }
+
+procedure TThreadFinder.Execute;
+begin
+  sconnStr := 'Provider=OraOLEDB.Oracle.1;Password=didierg160;Persist Security Info=True;User ID=c##stock;Data Source=myoracle';
+  { Place thread code here }
+  fmain.Memo1.Lines.Add(datetimetostr(now()) + ':开始工作');
+  db := TXlsADO.Create ;
+  self.slMailMsg := TStringList.Create ;
+  self.slMailMsg.Clear ;
+
+  self.slWhatDone := TStringList.Create ;
+  self.slWhatDone.Clear ;
+
+  while fMain.bFinderRun do
+  begin
+
+    try
+
+      res := db.Connect(sconnstr,resmsg) ;
+
+      sql := 'select distinct(what_done) what_done from tb_stock_job_done';
+
+      res := db.OpenSql(sql , resmsg );
+
+      if db.RS.EOF then
+      begin
+        db.RS.Close ;
+        res := db.Disconnect(resmsg) ;
+        fmain.Memo1.Lines.Add(datetimetostr(now) + ':没有可处理的数据,休眠30分钟') ;
+        sleep(1800000);
+        continue ;
+      end;
+
+      db.RS.MoveFirst ;
+
+      while not db.RS.EOF do
+      begin
+        self.slWhatDone.Add(db.RS.Fields['what_done'].Value);
+        db.RS.MoveNext ;
+      end;
+
+      db.RS.close;
+
+      try
+        fmain.Memo1.Lines.Add(datetimetostr(now) + ' : 开始处理' );
+
+        //if self.slWhatDone.Find('week',i) then
+        if pos('week',self.slWhatDone.Text)>0 then
+        begin
+          fmain.Memo1.Lines.Add(datetimetostr(now) + ' : 找周线' );
+          res := self.findWeek( slMailMsg , resmsg ) ;
+          fmain.Memo1.Lines.Add(datetimetostr(now) + ' : 周线 res=' + inttostr(res) + ' resmsg=' + resmsg );
+          res:=db.ExecuteSql('delete tb_stock_job_done where what_done=''week''',false,ire , resmsg);
+        end;
+
+        //if self.slWhatDone.Find('month',i) then
+        if pos('month',self.slWhatDone.Text)>0 then
+        begin
+          fmain.Memo1.Lines.Add(datetimetostr(now) + ' : 找月线' );
+          res := self.findMonth   ( slMailMsg , resmsg ) ;
+          fmain.Memo1.Lines.Add(datetimetostr(now) + ' : 月线 res=' + inttostr(res) + ' resmsg=' + resmsg );
+          res:=db.ExecuteSql('delete tb_stock_job_done where what_done=''month''',false,ire , resmsg);
+        end;
+
+        //if self.slWhatDone.Find('quarter',i) then
+        if pos('quarter',self.slWhatDone.Text)>0 then
+        begin
+          fmain.Memo1.Lines.Add(datetimetostr(now) + ' : 找季线' );
+          res := self.findQuarter ( slMailMsg , resmsg ) ;
+          fmain.Memo1.Lines.Add(datetimetostr(now) + ' : 季线 res=' + inttostr(res) + ' resmsg=' + resmsg );
+          res:=db.ExecuteSql('delete tb_stock_job_done where what_done=''quarter''',false,ire , resmsg);
+        end;
+
+        //if self.slWhatDone.Find('halfyear',i) then
+        if pos('halfyear',self.slWhatDone.Text)>0 then
+        begin
+          fmain.Memo1.Lines.Add(datetimetostr(now) + ' : 找半年线' );
+          res := self.findHalfYear( slMailMsg , resmsg ) ;
+          fmain.Memo1.Lines.Add(datetimetostr(now) + ' : 半年线 res=' + inttostr(res) + ' resmsg=' + resmsg );
+          res:=db.ExecuteSql('delete tb_stock_job_done where what_done=''halfyear''',false,ire , resmsg);
+        end;
+
+        //if self.slWhatDone.Find('year',i) then
+        if pos('year',self.slWhatDone.Text)>0 then
+        begin
+          fmain.Memo1.Lines.Add(datetimetostr(now) + ' : 找年线' );
+          res := self.findYear    ( slMailMsg , resmsg ) ;
+          fmain.Memo1.Lines.Add(datetimetostr(now) + ' : 年线 res=' + inttostr(res) + ' resmsg=' + resmsg );
+          res:=db.ExecuteSql('delete tb_stock_job_done where what_done=''year''',false,ire , resmsg);
+        end;
+
+        if pos('new_stock',self.slWhatDone.Text)>0 then
+        begin
+          fmain.Memo1.Lines.Add(datetimetostr(now) + ' : 找新股6日破板' );
+          res := self.findNewStock ( slMailMsg , resmsg ) ;
+          fmain.Memo1.Lines.Add(datetimetostr(now) + ' : 找新股6日破板 res=' + inttostr(res) + ' resmsg=' + resmsg );
+          res:=db.ExecuteSql('delete tb_stock_job_done where what_done=''new_stock''',false,ire , resmsg);
+        end;
+
+        if pos('RQAlphaKdjWM',self.slWhatDone.Text)>0 then
+        begin
+          fmain.Memo1.Lines.Add(datetimetostr(now) + ' : 找rqalpha kdj_k' );
+          res := self.findRQAlphaKdjWM ( slMailMsg , resmsg ) ;
+          fmain.Memo1.Lines.Add(datetimetostr(now) + ' : 找rqalpha kdj_k res=' + inttostr(res) + ' resmsg=' + resmsg );
+          res:=db.ExecuteSql('delete tb_stock_job_done where what_done=''rqalpha_kdj''',false,ire , resmsg);
+        end;
+
+        if self.slMailMsg.Count >0 then
+        begin
+          fmain.Memo1.Lines.Add(datetimetostr(now) + ' : 有结果，发送邮件' );
+          fmain.Memo1.Lines.Add(datetimetostr(now) + ' : 内容：' );
+          fmain.Memo1.Lines.AddStrings(self.slMailMsg);
+          res := self.sendMail(self.slMailMsg) ;
+          slMailMsg.Clear ;
+          fmain.Memo1.Lines.Add(datetimetostr(now) + ' : 发送结束，结果： res = ' + inttostr(res) );
+        end
+        else
+          fmain.Memo1.Lines.Add(datetimetostr(now) + ' : 本次没结果' );
+
+      except
+
+      end;
+
+    finally
+      slWhatDone.Clear ;
+      slMailMsg.Clear ;
+      res := db.Disconnect(resmsg) ;
+    end;
+  end;
+  slWhatDone.Destroy ;
+  slMailMsg.Destroy ;
+  fmain.Memo1.Lines.Add(datetimetostr(now) + ':结束工作');
+end;
+
+function TThreadFinder.findHalfYear(var pResList: TStringList;
+  var presMsg : string ): integer;
+var
+  ldb : TXlSADO ;
+  k : double ;
+  d : double ;
+  j : double ;
+
+  bFirst : boolean ;
+  //iloop : integer;
+begin
+
+  bFirst := true ;
+  try
+    ldb := TXlSADO.Create ;
+    res := ldb.Connect('Provider=OraOLEDB.Oracle.1;Password=didierg160;Persist Security Info=True;User ID=c##stock;Data Source=myoracle',self.resmsg);
+
+   sql := 'select code                                                      '+
+          ' from tb_stock_data_halfyearly where                             '+
+          '   shi_jian = (select max(shi_jian) from tb_stock_data_Quarterly)'+
+          '     and                                                         '+
+          '   kdj_j>=kdj_k                                                  '+
+          '     and                                                         '+
+          '   kdj_k>=kdj_d                                                  ';
+    res := ldb.OpenSql(sql , presmsg) ;
+
+    if ldb.RS.EOF then
+    begin
+      result := res ;
+      exit ;
+    end;
+
+    ldb.RS.MoveFirst ;
+
+    //for iloop := 0 to db.RS.RecordCount - 1 do
+    while not ldb.RS.EOF do
+    begin
+      sql := 'select * from                                   '+
+             '(                                               '+
+             '  select code ,                                 '+
+             '         name ,                                 '+
+             '         to_char(shi_jian ,''yyyymmddhh24miss'') shi_jian,'+
+             '         to_char(kdj_k) kdj_k,                  '+
+             '         to_char(kdj_d) kdj_d,                  '+
+             '         to_char(kdj_j) kdj_j                   '+
+             '  from tb_stock_data_halfyearly where           '+
+             '    code = ''' + ldb.RS.Fields['code'].Value+ ''''+
+             '  order by shi_jian desc                        '+
+             ')                                               '+
+             'where                                           '+
+             '  rownum < 3 ';
+
+      res := db.OpenSql(sql , presmsg);
+
+      if db.RS.RecordCount < 2 then
+      begin
+        db.RS.Close ;
+        ldb.RS.MoveNext ;
+        continue ;
+      end;
+
+      db.RS.MoveFirst ;
+      db.RS.MoveNext ;
+
+      if varisnull(db.RS.Fields['kdj_k'].Value) or
+         varisnull(db.RS.Fields['kdj_d'].Value) or
+         varisnull(db.RS.Fields['kdj_j'].Value)
+      then
+      begin
+        db.RS.Close ;
+        ldb.RS.MoveNext ;
+        continue ;
+      end;
+
+      k := db.RS.Fields['kdj_k'].Value ;
+      d := db.RS.Fields['kdj_d'].Value ;
+      j := db.RS.Fields['kdj_j'].Value ;
+
+      if (k<=20) and (d<=20) and (j<=20) then
+      begin
+        if bFirst then
+        begin
+          pResList.Add('----------------------------------------------------------------------------------');
+          pResList.Add('半年线：');
+          bFirst := false ;
+        end;
+        sql := 'insert into tb_stock_found '+
+               '(                          '+
+               '  seq  ,                   '+
+               '  type ,                   '+
+               '  shi_jian ,               '+
+               '  code ,                   '+
+               '  name ,                   '+
+               '  reason                   '+
+               ')                          '+
+               'values                     '+
+               '(                          '+
+               '	 seq_stock_found.nextval,'+
+               '	 ''halfyear'','+
+               '	 to_date(''' + db.RS.Fields['shi_jian'].Value + ''',''yyyymmddhh24miss''),'+
+               '	 ''' + db.RS.Fields['code'].Value + ''','+
+               '	 ''' + db.RS.Fields['name'].Value + ''','+
+               '   ''上上半年k,d,j都小于20,上半年kdj低位金叉'''+
+               ')	';
+
+        res := db.ExecuteSql(sql , false , ire , presmsg) ;
+
+        pResList.Add(db.RS.Fields['code'].Value + '             ' + db.RS.Fields['name'].Value + '             ' +db.RS.Fields['shi_jian'].Value + '             ' +  '上上半年k,d,j都小于20,上半年kdj低位金叉');
+      end;
+
+      db.RS.Close ;
+
+      ldb.RS.MoveNext ;
+    end;
+
+    ldb.RS.Close ;
+
+    if not bfirst then
+    begin
+      pResList.Add('----------------------------------------------------------------------------------');
+    end;
+
+  finally
+    res := ldb.Disconnect(presmsg);
+    ldb.Destroy ;
+  end;
+
+  result := 0 ;
+end;
+
+function TThreadFinder.findMonth(var pResList: TStringList;
+  var presMsg : string ): integer;
+//var
+  //iloop : integer;
+begin
+
+  //月线
+  //------------------------------------------------------------------------------------------------------------------
+  sql := 'select code ,                                                 '+
+         '       name ,                                                 '+
+         '       to_char(shi_jian,''yyyymmddhh24miss'') shi_jian        '+
+         ' from tb_stock_data_monthly where                             '+
+         '  shi_jian = (select max(shi_jian) from tb_stock_data_monthly)'+
+         '    and                                                       '+
+         '  kdj_k <=20                                                  '+
+         '    and                                                       '+
+         '  kdj_j <=20                                                  '+
+         '    and                                                       '+
+         '  xstd_lshort < xstd_sshort                                   ';
+
+  res := db.OpenSql(sql , resmsg );
+
+  if not db.RS.EOF then
+  begin
+    pResList.Add('----------------------------------------------------------------------------------');
+    pResList.Add('月线：');
+
+    db.RS.MoveFirst ;
+
+    //for iloop := 0 to db.RS.RecordCount - 1 do
+    while not db.RS.EOF do
+    begin
+      sql := 'insert into tb_stock_found '+
+             '(                          '+
+             '  seq  ,                   '+
+             '  type ,                   '+
+             '  shi_jian ,               '+
+             '  code ,                   '+
+             '  name ,                   '+
+             '  reason                   '+
+             ')                          '+
+             'values                     '+
+             '(                          '+
+             '	 seq_stock_found.nextval,'+
+             '	 ''month'','+
+             '	 to_date(''' + db.RS.Fields['shi_jian'].Value + ''',''yyyymmddhh24miss''),'+
+             '	 ''' + db.RS.Fields['code'].Value + ''','+
+             '	 ''' + db.RS.Fields['name'].Value + ''','+
+             '	 ''kdj_k <=18 and kdj_j <=18 and xstd_lshort < xstd_sshort'''+
+             ')	';
+
+      res := db.ExecuteSql(sql , false , ire , presmsg) ;
+
+      pResList.Add(db.RS.Fields['code'].Value + '             ' + db.RS.Fields['name'].Value + '             ' +db.RS.Fields['shi_jian'].Value + '             ' +  'kdj_k <=18 and kdj_j <=18 and xstd_lshort < xstd_sshort');
+
+      db.RS.MoveNext ;
+    end;
+    pResList.Add('----------------------------------------------------------------------------------');
+  end;
+
+  result := 0 ;
+end;
+
+function TThreadFinder.findNewStock(var pResList: TStringList;
+  var presMsg: string): integer;
+var
+  //iloop : integer;
+  ldb : TXlSADO ;
+begin
+
+  try
+    ldb := TXlSADO.Create ;
+    res := ldb.Connect(sconnstr,self.resmsg);
+
+    sql := 'select code,name,to_char(shi_jian,''yyyy-mm-dd hh24:mi:ss'') shi_jian from tb_stock_new_stock ';
+    res := ldb.OpenSql(sql , presmsg) ;
+    if ldb.RS.EOF then
+    begin
+      result := res ;
+      exit ;
+    end;
+
+
+    ldb.RS.MoveFirst ;
+
+    pResList.Add('----------------------------------------------------------------------------------');
+    pResList.Add('新股6日内破板：');
+
+    while not ldb.RS.EOF do
+    begin
+
+      sql := 'insert into tb_stock_found '+
+             '(                          '+
+             '  seq  ,                   '+
+             '  type ,                   '+
+             '  shi_jian ,               '+
+             '  code ,                   '+
+             '  name ,                   '+
+             '  reason                   '+
+             ')                          '+
+             'values                     '+
+             '(                          '+
+             '	 seq_stock_found.nextval,'+
+             '	 ''new_stock'','+
+             '	 to_date(''' + ldb.RS.Fields['shi_jian'].Value + ''',''yyyy-mm-dd hh24:mi:ss''),'+
+             '	 ''' + ldb.RS.Fields['code'].Value + ''','+
+             '	 ''' + ldb.RS.Fields['name'].Value + ''','+
+             '   ''新股6日内破板'''+
+             ')	';
+      res := db.ExecuteSql(sql , false , ire , presmsg) ;
+
+      pResList.Add(ldb.RS.Fields['code'].Value + '             ' + ldb.RS.Fields['name'].Value + '             ' +ldb.RS.Fields['shi_jian'].Value + '             ' +  '新股6日内破板');
+
+      ldb.RS.MoveNext ;
+    end;
+
+    ldb.RS.Close ;
+
+    pResList.Add('----------------------------------------------------------------------------------');
+
+  finally
+    res := ldb.Disconnect(presmsg);
+    ldb.Destroy ;
+  end;
+  result := 0 ;
+end;
+
+function TThreadFinder.findQuarter(var pResList: TStringList;
+  var presMsg : string ): integer;
+var
+  //iloop : integer;
+  ldb : TXlSADO ;
+  k : double ;
+  d : double ;
+  j : double ;
+
+  bFirst : boolean ;
+
+begin
+
+  bFirst := true ;
+  try
+    ldb := TXlSADO.Create ;
+    res := ldb.Connect(sconnstr,self.resmsg);
+
+   sql := 'select code                                                     '+
+          ' from tb_stock_data_Quarterly where                              '+
+          '   shi_jian = (select max(shi_jian) from tb_stock_data_Quarterly)'+
+          '     and                                                         '+
+          '   kdj_j>=kdj_k                                                  '+
+          '     and                                                         '+
+          '   kdj_k>=kdj_d                                                  ';
+    res := ldb.OpenSql(sql , presmsg) ;
+
+    if ldb.RS.EOF then
+    begin
+      result := res ;
+      exit ;
+    end;
+
+
+    ldb.RS.MoveFirst ;
+
+    //for iloop := 0 to db.RS.RecordCount - 1 do
+    while not ldb.RS.EOF do
+    begin
+      sql := 'select code ,    '+
+             '       name ,    '+
+             '       shi_jian ,'+
+             '       to_char(kdj_k) k,  '+
+             '       to_char(kdj_d) d,  '+
+             '       to_char(kdj_j) j   '+
+             'from                                            '+
+             '(                                               '+
+             '  select code ,                                 '+
+             '         name ,                                 '+
+             '         to_char(shi_jian ,''yyyymmddhh24miss'') shi_jian,'+
+             '         kdj_k,                                 '+
+             '         kdj_d,                                 '+
+             '         kdj_j                                  '+
+             '  from tb_stock_data_Quarterly where   '+
+             '    code = ''' + ldb.RS.Fields['code'].Value+ ''''+
+             '  order by shi_jian desc                        '+
+             ')                                               '+
+             'where                                           '+
+             '  rownum < 3 ';
+
+      res := db.OpenSql(sql , presmsg);
+
+      if db.RS.RecordCount < 2 then
+      begin
+        db.RS.Close ;
+        ldb.RS.MoveNext ;
+        continue ;
+      end;
+
+      db.RS.MoveFirst ;
+      db.RS.MoveNext ;
+
+      if varisnull(db.RS.Fields['k'].Value) or
+         varisnull(db.RS.Fields['d'].Value) or
+         varisnull(db.RS.Fields['j'].Value)
+      then
+      begin
+        db.RS.Close ;
+        ldb.RS.MoveNext ;
+        continue ;
+      end;
+
+      k := db.RS.Fields['K'].Value ;
+      d := db.RS.Fields['d'].Value ;
+      j := db.RS.Fields['j'].Value ;
+
+      if (k<=20) and (d<=20) and (j<=20) then
+      begin
+        if bFirst then
+        begin
+          pResList.Add('----------------------------------------------------------------------------------');
+          pResList.Add('季线：');
+          bFirst := false ;
+        end;
+
+        sql := 'insert into tb_stock_found '+
+               '(                          '+
+               '  seq  ,                   '+
+               '  type ,                   '+
+               '  shi_jian ,               '+
+               '  code ,                   '+
+               '  name ,                   '+
+               '  reason                   '+
+               ')                          '+
+               'values                     '+
+               '(                          '+
+               '	 seq_stock_found.nextval,'+
+               '	 ''quarter'','+
+               '	 to_date(''' + db.RS.Fields['shi_jian'].Value + ''',''yyyymmddhh24miss''),'+
+               '	 ''' + db.RS.Fields['code'].Value + ''','+
+               '	 ''' + db.RS.Fields['name'].Value + ''','+
+               '   ''上上季k,d,j都小于20,上季kdj低位金叉'''+
+               ')	';
+
+        res := db.ExecuteSql(sql , false , ire , presmsg) ;
+
+        pResList.Add(db.RS.Fields['code'].Value + '             ' + db.RS.Fields['name'].Value + '             ' +db.RS.Fields['shi_jian'].Value + '             ' +  '上上季k,d,j都小于20,上季kdj低位金叉');
+      end;
+
+
+
+      db.RS.Close ;
+
+      ldb.RS.MoveNext ;
+    end;
+
+    ldb.RS.Close ;
+
+    if not bfirst then
+    begin
+      pResList.Add('----------------------------------------------------------------------------------');
+    end;
+
+  finally
+    res := ldb.Disconnect(presmsg);
+    ldb.Destroy ;
+  end;
+  result := 0 ;
+end;
+
+function TThreadFinder.findRQAlphaKdjWMQ(var pResList: TStringList;
+  var presMsg: string): integer;
+begin
+  //找rqalpha kdj_k
+  //------------------------------------------------------------------------------------------------------------------
+  sql := 'select code    ,                                              '+
+         '       content ,                                              '+
+         '       to_char(shi_jian,''yyyymmddhh24miss'') shi_jian        '+
+         ' from tb_stock_found_rqalpha ';
+
+  res := db.OpenSql(sql , presmsg );
+
+  if not db.RS.EOF then
+  begin
+    pResList.Add('----------------------------------------------------------------------------------');
+    pResList.Add('rqalpha kdj_k：');
+
+    db.RS.MoveFirst ;
+
+    //for iloop := 0 to db.RS.RecordCount - 1 do
+    while not db.RS.EOF do
+    begin
+      sql := 'insert into tb_stock_found '+
+             '(                          '+
+             '  seq  ,                   '+
+             '  type ,                   '+
+             '  shi_jian ,               '+
+             '  code ,                   '+
+             '  name ,                   '+
+             '  reason                   '+
+             ')                          '+
+             'values                     '+
+             '(                          '+
+             '	 seq_stock_found.nextval,'+
+             '	 ''RQAlphaKdjWMQ'','+
+             '	 to_date(''' + db.RS.Fields['shi_jian'].Value + ''',''yyyymmddhh24miss''),'+
+             '	 ''' + db.RS.Fields['code'].Value + ''','+
+             '	 ''  '','+
+             '	 ''kdj_k <=18 and kdj_j <=18 and xstd_lshort < xstd_sshort'''+
+             ')	';
+
+      res := db.ExecuteSql(sql , false , ire , presmsg) ;
+
+
+      pResList.Add(db.RS.Fields['code'].Value + '             ' + db.RS.Fields['name'].Value + '             ' +db.RS.Fields['shi_jian'].Value + '             ' +  'kdj_k <=18 and kdj_j <=18 and xstd_lshort < xstd_sshort');
+
+      db.RS.MoveNext ;
+    end;
+
+    pResList.Add('----------------------------------------------------------------------------------');
+  end;
+
+  result := 0 ;
+end;
+
+function TThreadFinder.findWeek(var pResList: TStringList; var presMsg : string ): integer;
+//var
+  //iloop : integer;
+begin
+  //周线
+  //------------------------------------------------------------------------------------------------------------------
+  sql := 'select code ,                                                 '+
+         '       name ,                                                 '+
+         '       to_char(shi_jian,''yyyymmddhh24miss'') shi_jian        '+
+         ' from tb_stock_data_weekly where                              '+
+         '  shi_jian = (select max(shi_jian) from tb_stock_data_weekly )'+
+         '    and                                                       '+
+         '  kdj_k <=20                                                  '+
+         '    and                                                       '+
+         '  kdj_j <=20                                                  '+
+         '    and                                                       '+
+         '  xstd_lshort < xstd_sshort                                   ';
+
+  res := db.OpenSql(sql , presmsg );
+
+  if not db.RS.EOF then
+  begin
+    pResList.Add('----------------------------------------------------------------------------------');
+    pResList.Add('周线：');
+
+    db.RS.MoveFirst ;
+
+    //for iloop := 0 to db.RS.RecordCount - 1 do
+    while not db.RS.EOF do
+    begin
+      sql := 'insert into tb_stock_found '+
+             '(                          '+
+             '  seq  ,                   '+
+             '  type ,                   '+
+             '  shi_jian ,               '+
+             '  code ,                   '+
+             '  name ,                   '+
+             '  reason                   '+
+             ')                          '+
+             'values                     '+
+             '(                          '+
+             '	 seq_stock_found.nextval,'+
+             '	 ''week'','+
+             '	 to_date(''' + db.RS.Fields['shi_jian'].Value + ''',''yyyymmddhh24miss''),'+
+             '	 ''' + db.RS.Fields['code'].Value + ''','+
+             '	 ''' + db.RS.Fields['name'].Value + ''','+
+             '	 ''kdj_k <=18 and kdj_j <=18 and xstd_lshort < xstd_sshort'''+
+             ')	';
+
+      res := db.ExecuteSql(sql , false , ire , presmsg) ;
+
+
+      pResList.Add(db.RS.Fields['code'].Value + '             ' + db.RS.Fields['name'].Value + '             ' +db.RS.Fields['shi_jian'].Value + '             ' +  'kdj_k <=18 and kdj_j <=18 and xstd_lshort < xstd_sshort');
+
+      db.RS.MoveNext ;
+    end;
+
+    pResList.Add('----------------------------------------------------------------------------------');
+  end;
+
+  result := 0 ;
+end;
+
+function TThreadFinder.findYear(var pResList: TStringList; var presmsg : string ): integer;
+var
+  ldb : TXlSADO ;
+  k : double ;
+  d : double ;
+  j : double ;
+
+  bFirst : boolean ;
+  //iloop : integer;
+begin
+
+  bFirst := true ;
+  try
+    ldb := TXlSADO.Create ;
+    res := ldb.Connect(sconnstr,self.resmsg);
+
+   sql := 'select code                                                      '+
+          ' from tb_stock_data_yearly where                                 '+
+          '   shi_jian = (select max(shi_jian) from tb_stock_data_Quarterly)'+
+          '     and                                                         '+
+          '   kdj_j>=kdj_k                                                  '+
+          '     and                                                         '+
+          '   kdj_k>=kdj_d                                                  ';
+    res := ldb.OpenSql(sql , presmsg) ;
+
+    if ldb.RS.EOF then
+    begin
+      result := res ;
+      exit ;
+    end;
+
+    ldb.RS.MoveFirst ;
+
+    //for iloop := 0 to db.RS.RecordCount - 1 do
+    while not ldb.RS.EOF do
+    begin
+      sql := 'select * from                                   '+
+             '(                                               '+
+             '  select code ,                                 '+
+             '         name ,                                 '+
+             '         to_char(shi_jian ,''yyyymmddhh24miss'') shi_jian,'+
+             '         to_char(kdj_k) kdj_k,                  '+
+             '         to_char(kdj_d) kdj_d,                  '+
+             '         to_char(kdj_j) kdj_j                   '+
+             '  from tb_stock_data_yearly where   '+
+             '    code = ''' + ldb.RS.Fields['code'].Value+ ''''+
+             '  order by shi_jian desc                        '+
+             ')                                               '+
+             'where                                           '+
+             '  rownum < 3 ';
+
+      res := db.OpenSql(sql , resmsg);
+
+      if db.RS.RecordCount < 2 then
+      begin
+        db.RS.Close ;
+        ldb.RS.MoveNext ;
+        continue ;
+      end;
+
+      db.RS.MoveFirst ;
+      db.RS.MoveNext ;
+
+      if varisnull(db.RS.Fields['kdj_k'].Value) or
+         varisnull(db.RS.Fields['kdj_d'].Value) or
+         varisnull(db.RS.Fields['kdj_j'].Value)
+      then
+      begin
+        db.RS.Close ;
+        ldb.RS.MoveNext ;
+        continue ;
+      end;
+
+      k := db.RS.Fields['kdj_k'].Value ;
+      d := db.RS.Fields['kdj_d'].Value ;
+      j := db.RS.Fields['kdj_j'].Value ;
+
+      if (k<=20) and (d<=20) and (j<=20) then
+      begin
+        if bFirst then
+        begin
+          pResList.Add('----------------------------------------------------------------------------------');
+          pResList.Add('年线：');
+          bFirst := false ;
+        end;
+
+        sql := 'insert into tb_stock_found '+
+               '(                          '+
+               '  seq  ,                   '+
+               '  type ,                   '+
+               '  shi_jian ,               '+
+               '  code ,                   '+
+               '  name ,                   '+
+               '  reason                   '+
+               ')                          '+
+               'values                     '+
+               '(                          '+
+               '	 seq_stock_found.nextval,'+
+               '	 ''year'','+
+               '	 to_date(''' + db.RS.Fields['shi_jian'].Value + ''',''yyyymmddhh24miss''),'+
+               '	 ''' + db.RS.Fields['code'].Value + ''','+
+               '	 ''' + db.RS.Fields['name'].Value + ''','+
+               '   ''上上年k,d,j都小于20,上年kdj低位金叉'''+
+               ')	';
+
+        res := db.ExecuteSql(sql , false , ire , presmsg) ;
+        pResList.Add(db.RS.Fields['code'].Value + '             ' + db.RS.Fields['name'].Value + '             ' +db.RS.Fields['shi_jian'].Value + '             ' +  '上上年k,d,j都小于20,上年kdj低位金叉');
+      end;
+
+      db.RS.Close ;
+
+      ldb.RS.MoveNext ;
+    end;
+
+    ldb.RS.Close ;
+
+    if not bfirst then
+    begin
+      pResList.Add('----------------------------------------------------------------------------------');
+    end;
+
+  finally
+    res := ldb.Disconnect(presmsg);
+    ldb.Destroy ;
+  end;
+  result := 0 ;
+end;
+
+function TThreadFinder.sendMail(pContent: TStringList): integer;
+var
+  SMTP       : TIdSMTP;
+  mailMessage: TIdMessage;
+begin
+  try
+    SMTP := TIdSMTP.Create(nil);
+    mailMessage := TIdMessage.Create(nil);
+
+    SMTP.AuthType := satDefault;
+    SMTP.Username := 'p33306308@163.com';
+    SMTP.Password := 'dcotzaixmyvfednf';
+    SMTP.Host     := 'smtp.163.com';
+    SMTP.Port     := 25;
+    SMTP.Connect();
+
+    if not smtp.Connected then
+    begin
+      smtp.Destroy ;
+      result := -1 ;
+      exit;
+    end;
+
+    mailMessage.Body.Clear;
+    mailMessage.CharSet:='gb2312';
+    mailMessage.ContentTransferEncoding:='BASE64';
+    mailMessage.Subject :=  datetimetostr(now) + '  找到股票';
+    //mailMessage.Body.Text := stringToWideString(self.slMailMsg.Text) ;
+    mailMessage.Body.AddStrings(self.slMailMsg);
+    mailMessage.From.Address :=  'p33306308@163.com';
+    mailMessage.Recipients.EMailAddresses := 'p33306308@163.com';
+
+    SMTP.Send(mailMessage);
+    SMTP.Disconnect;
+    SMTP.Destroy ;
+    mailMessage.Destroy ;
+    result := 0 ;
+  except
+    SMTP.Destroy ;
+    mailMessage.Destroy ;
+
+    result := -2  ;
+    exit;
+  end;
+
+  result := 0 ;
+
+end;
+
+end.

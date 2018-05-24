@@ -1,0 +1,22 @@
+'''
+Created on 2017年11月22日
+python Z:\StockAnalysis\sourceCode\TuShare\test\src\import_Stock_Data_taobao.py
+python D:\Projects\j金融\g股票数据分析系统\sourceCode\TuShare\test\src\import_Stock_Data_Daily_taobao.py
+@author: moonlit
+'''
+import numpy as np
+import pandas as pd
+import cx_Oracle
+from sqlalchemy import create_engine  
+import getStockData as gsd
+import time
+import os  
+
+path="D:/data_from_taobao"
+
+def get_file_list(path = ""):
+    for root, dirs, files in os.walk(path):  
+        print(path+"/"+files) #当前路径下所有非目录子文件  
+        
+        
+get_file_list(path)      

@@ -1,0 +1,32 @@
+program dataImportor;
+
+uses
+  Vcl.Forms,
+  Main in 'Main.pas' {MainForm},
+  ADO in '..\stock\DelphiFunc\ADO.pas',
+  ADO_Controller in '..\stock\DelphiFunc\ADO_Controller.pas',
+  ADO_Shell in '..\stock\DelphiFunc\ADO_Shell.pas',
+  adodb_tlb in '..\stock\DelphiFunc\adodb_tlb.pas',
+  CnMD5 in '..\stock\DelphiFunc\CnMD5.pas',
+  ComPersist in '..\stock\DelphiFunc\ComPersist.pas',
+  Dailog in '..\stock\DelphiFunc\Dailog.pas',
+  Global_Setting in '..\stock\DelphiFunc\Global_Setting.pas',
+  Hashtable in '..\stock\DelphiFunc\Hashtable.pas',
+  MD5 in '..\stock\DelphiFunc\MD5.pas',
+  Unit_FileFuncs in '..\stock\DelphiFunc\Unit_FileFuncs.pas',
+  Unit_MathFuncs in '..\stock\DelphiFunc\Unit_MathFuncs.pas',
+  Unit_StrFuncs in '..\stock\DelphiFunc\Unit_StrFuncs.pas',
+  stockDaily in '..\stock\stockDaily.pas',
+  stockDailyTotal in '..\stock\stockDailyTotal.pas',
+  stockImportDaily in '..\stock\stockImportDaily.pas',
+  stockImportNameAndCode in '..\stock\stockImportNameAndCode.pas',
+  ThreadImportQianLongXLS in 'ThreadImportQianLongXLS.pas';
+
+{$R *.res}
+
+begin
+  Application.Initialize;
+  Application.MainFormOnTaskbar := True;
+  Application.CreateForm(TMainForm, MainForm);
+  Application.Run;
+end.

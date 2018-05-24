@@ -1,0 +1,23 @@
+from sqlalchemy import create_engine
+import tushare as ts
+import time 
+
+# df = ts.get_h_data(
+#                     code        =  '000002',    
+#                     start       =  '2015-12-19',
+#                     end         =  time.strftime('%Y-%m-%d',time.localtime(time.time())),
+#                     autype      =  'None',      
+#                     index       =  False,       
+#                     retry_count =  3 ,           
+#                     pause       =  1            
+#                   )
+ 
+
+df = ts.get_h_data('002337')
+df['code']='002337'
+df['trading_date']=df.index
+df.ix[0][0]
+print(df.ix[0])
+print(df.ix[0][5])
+# engine = create_engine('oracle://c##stock:didierg160@myoracle')
+# df.to_sql('tick_data',engine,if_exists='append')

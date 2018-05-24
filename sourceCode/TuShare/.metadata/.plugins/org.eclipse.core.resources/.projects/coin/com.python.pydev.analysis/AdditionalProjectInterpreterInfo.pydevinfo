@@ -1,0 +1,75 @@
+-- VERSION_4
+-- START DISKCACHE_2
+D:\Projects\j金融\g股票数据分析系统\sourceCode\TuShare\.metadata\.plugins\org.eclipse.core.resources\.projects\coin\com.python.pydev.analysis\v2_indexcache
+okex|1518492712330392000|D:\Projects\j金融\g股票数据分析系统\sourceCode\coin\src\okex.py
+otcbtc|1518426912076625000|D:\Projects\j金融\g股票数据分析系统\sourceCode\coin\src\otcbtc.py
+huobipro|1518485267076049000|D:\Projects\j金融\g股票数据分析系统\sourceCode\coin\src\huobipro.py
+zb|1518743653067971000|D:\Projects\j金融\g股票数据分析系统\sourceCode\coin\src\zb.py
+trade|1518622207169027000|D:\Projects\j金融\g股票数据分析系统\sourceCode\coin\src\trade.py
+maps|1518621422245054000|D:\Projects\j金融\g股票数据分析系统\sourceCode\coin\src\maps.py
+localbitcoins|1518505453816506000|D:\Projects\j金融\g股票数据分析系统\sourceCode\coin\src\localbitcoins.py
+bitstampapi|1518512078099537000|D:\Projects\j金融\g股票数据分析系统\sourceCode\coin\src\bitstampapi.py
+bitfinexapi|1518622058101981000|D:\Projects\j金融\g股票数据分析系统\sourceCode\coin\src\bitfinexapi.py
+-- END DISKCACHE
+-- START DICTIONARY
+13
+4=okex
+7=huobipro
+2=zb
+3=trade
+13=zb_api.__init__
+9=zb_api
+1=localbitcoins
+6=bitstampapi
+5=bitfinexapi
+10=LocalBitcoin
+11=LocalBitcoin.__init__
+8=maps
+12=zb_api.__api_call
+-- END DICTIONARY
+-- START TREE 1
+16
+acc|4|access_key!11@access_key!19@access_secret!19@access_secret!11@
+add|1|add_act_log!26@
+api|1|apikey!35@
+buy|7|buy!18@buy!26@buy!10@buy!42@buy!50@buy!58@buy!34@
+cli|2|client!51@client!43@
+coi|1|coin_type!67@
+con|1|conn_coin!67@
+get|9|get_bid_asks!10@get_match!26@get_bid_asks!42@get_bid_asks!18@get_bid_asks!50@get_bids_asks!26@get_bid_asks!58@get_act_id!26@get_bid_asks!34@
+loc|1|LocalBitcoin!9@
+mai|1|main!26@
+okc|2|okcoinRESTURL!35@okcoinSpot!35@
+par|1|parameters!43@
+que|2|query_depth!58@query_depth!34@
+sec|1|secretkey!35@
+sel|7|sell!42@sell!34@sell!50@sell!58@sell!18@sell!26@sell!10@
+zb_|1|zb_api!17@
+-- END TREE
+-- START TREE 2
+24
+__a|1|__api_call!9&18@
+__d|3|__digest!9&18@__doXOr!9&18@__data_api_call!9&18@
+__f|1|__fill!9&18@
+__h|1|__hmacSign!9&18@
+__i|2|__init__!10&10@__init__!9&18@
+bas|1|baseurl!10&11@
+can|1|cancelContact!10&10@
+che|1|checkPinCode!10&10@
+con|2|contactRelease!10&10@contactReleasePin!10&10@
+cre|1|createContact!10&10@
+deb|1|debug!11&11@
+fun|1|fundContact!10&10@
+get|14|getDashboardClosed!10&10@getContactInfo!10&10@getDashboardReleased!10&10@getDashboardCanceled!10&10@getWalletAddress!10&10@getContactMessages!10&10@getContactsInfo!10&10@getDashboard!10&10@getMyself!10&10@getOwnAds!10&10@getRecentMessages!10&10@getAccountInfo!10&10@getWallet!10&10@getWalletBallance!10&10@
+hma|2|hmac_auth_key!11&11@hmac_auth_secret!11&11@
+jm|2|jm!12&19@jm!13&19@
+log|1|logout!10&10@
+mar|1|markContactAsPaid!10&10@
+myk|1|mykey!13&19@
+mys|1|mysecret!13&19@
+pos|2|postFeedbackToUser!10&10@postMessageToContact!10&10@
+que|2|query_account!9&18@query_depth!9&18@
+sen|1|sendRequest!10&10@
+sta|1|startDispute!10&10@
+wal|2|walletSendWithPin!10&10@walletSend!10&10@
+-- END TREE

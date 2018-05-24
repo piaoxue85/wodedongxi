@@ -1,0 +1,13 @@
+'''
+Created on 2017年11月22日
+
+@author: moonlit
+'''
+import tushare as ts
+
+#获取连接备用
+cons = ts.get_apis()
+#复权行情, adj=qfq(前复权)， hfq（后复权），默认None不复权
+
+df = ts.bar('600000', conn=cons, adj='qfq', start_date='2016-01-01', end_date='')
+df.head(5)

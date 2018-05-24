@@ -1,0 +1,135 @@
+unit ThreadRecommand;
+
+interface
+
+uses
+  stockDaily ,
+  ado ,
+  stockdailytotal ,
+  System.SysUtils,
+  System.Classes;
+
+type
+  TThreadRecommand = class(TThread)
+  private
+    { Private declarations }
+  public
+    function find(var pResMsg )          : tstringlist ;
+    function kdj ( pdaily : TStockDaily ) : boolean ;
+    function xstd( pdaily : TStockDaily ) : boolean ;
+    function MA  ( pdaily : TStockDaily ) : boolean ;
+  protected
+    procedure Execute; override;
+  end;
+
+implementation
+
+{ 
+  Important: Methods and properties of objects in visual components can only be
+  used in a method called using Synchronize, for example,
+
+      Synchronize(UpdateCaption);  
+
+  and UpdateCaption could look like,
+
+    procedure TThreadRecommand.UpdateCaption;
+    begin
+      Form1.Caption := 'Updated in a thread';
+    end; 
+    
+    or 
+    
+    Synchronize( 
+      procedure 
+      begin
+        Form1.Caption := 'Updated in thread via an anonymous method' 
+      end
+      )
+    );
+    
+  where an anonymous method is passed.
+  
+  Similarly, the developer can call the Queue method with similar parameters as 
+  above, instead passing another TThread class as the first parameter, putting
+  the calling thread in a queue with the other thread.
+    
+}
+
+{ TThreadRecommand }
+
+procedure TThreadRecommand.Execute;
+begin
+  { Place thread code here }
+
+end;
+
+function TThreadRecommand.find(var pResMsg): TStringList;
+var
+  stock : TStockDailyTotal ;
+  MASetting : TStringList ;
+  KDJSetting : TStringList ;
+
+  codes:TStringList ;
+
+  i : integer ;
+
+  stockDaily : TStockDaily ;
+
+  reslist : Tstringlist;
+begin
+  MASetting := TStringList.Create ;
+  MASetting.Clear ;
+  MASetting.Add('6');
+  MASetting.Add('12');
+  MASetting.Add('20');
+  MASetting.Add('30');
+  MASetting.Add('45');
+  MASetting.Add('60');
+  MASetting.Add('125');
+  MASetting.Add('250');
+
+  KDJSetting := TStringList.Create ;
+  KDJSetting.Clear ;
+  KDJSetting.Add('9');   //kdj天参数
+  KDJSetting.Add('2');   //k
+  KDJSetting.Add('3');   //d
+  KDJSetting.Add('2');   //j形态参数
+
+  stock := TStockDailyTotal.Create('',MASetting , KDJSetting);
+
+  codes := stock.getCodeList ;
+
+  reslist := tstringlist.Create ;
+  reslist.Clear ;
+
+  for i := 0 to codes.Count -1 do
+  begin
+    stock.getDay(codes.Strings[i]);
+    stockDaily := TStockDaily( stock.dailyTotal.Objects[i]) ;
+    if xstd(stockDaily) then
+    begin
+      reslist.Add(codes.Strings[i]) ;
+    end;
+  end;
+
+  reslist := reslist ;
+end;
+
+
+
+function TThreadRecommand.kdj(pdaily: TStockDaily): boolean;
+begin
+
+end;
+
+function TThreadRecommand.MA(pdaily: TStockDaily): boolean;
+begin
+
+end;
+
+function TThreadRecommand.xstd(pdaily: TStockDaily): boolean;
+begin
+  result := ( strtoint( pdaily.XSTDValues[3] )< strtoint(pdaily.XSTDValues[1])) ;
+end;
+
+end.

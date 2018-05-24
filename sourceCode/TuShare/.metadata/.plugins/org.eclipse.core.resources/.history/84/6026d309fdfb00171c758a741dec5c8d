@@ -1,0 +1,20 @@
+'''
+Created on 2016年9月6日
+
+@author: moonlit
+'''
+import importUtility as imp
+# from WindPy import *
+from datetime import datetime 
+from datetime import timedelta 
+import time
+import pandas as pd
+import talib as tb
+# import Analysis as ana
+import numpy as np
+
+print('start')
+for year in range(1997,2050) :
+    if time.strftime('%Y-%m-%d',time.localtime(time.time())):
+
+print('end----------------------------------------------------------------------------------')

@@ -1,0 +1,49 @@
+unit stockDaily;
+
+interface
+uses
+  Controls ,
+  System.SysUtils, System.Variants, System.Classes ;
+
+type
+  TstockDaily = class(TObject)
+    name                :string ;
+    code                :string ;
+    price               :double ;
+    price_last_day      :double ;
+    price_today_open    :double ;
+    max_price           :double ;
+    min_price           :double ;
+    shi_jian            :string  ;
+    MAValues            :TStringList;
+    KDJValues           :TStringList;
+    XSTDValues          :TStringList ;
+  private
+
+  public
+    constructor Create;
+    Destructor  Destroy ;
+  end;
+
+implementation
+
+{ TstockDaily }
+
+constructor TstockDaily.Create;
+begin
+  inherited Create;
+  MAValues := TStringList.Create ;
+  KDJValues := TStringList.Create ;
+  XSTDValues := TStringList.Create ;
+
+  MAValues.Clear ;
+  KDJValues.Clear ;
+  XSTDValues.Clear ;
+end;
+
+destructor TstockDaily.Destroy;
+begin
+  inherited Destroy ;
+end;
+
+end.

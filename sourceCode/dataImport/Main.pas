@@ -1,0 +1,89 @@
+unit Main;
+
+interface
+
+uses
+  IniFiles ,
+  ThreadImportQianLongXLS ,
+  Winapi.Windows, Winapi.Messages, System.SysUtils, System.Variants, System.Classes, Vcl.Graphics,
+  Vcl.Controls, Vcl.Forms, Vcl.Dialogs, Vcl.Menus, Vcl.StdCtrls, Vcl.ExtCtrls,
+  Vcl.FileCtrl;
+
+type
+  TMainForm = class(TForm)
+    Memo1: TMemo;
+    MainMenu1: TMainMenu;
+    N1: TMenuItem;
+    N2: TMenuItem;
+    Timer1: TTimer;
+    N3: TMenuItem;
+    procedure N1Click(Sender: TObject);
+    procedure N2Click(Sender: TObject);
+    procedure FormCreate(Sender: TObject);
+    procedure Timer1Timer(Sender: TObject);
+    procedure N3Click(Sender: TObject);
+  private
+    { Private declarations }
+  public
+    { Public declarations }
+    finished : integer ;
+    start : boolean ;
+    connstr : string ;
+    dataDir : string ;
+  end;
+
+var
+  MainForm: TMainForm;
+
+implementation
+
+{$R *.dfm}
+
+procedure TMainForm.FormCreate(Sender: TObject);
+var
+  ini : TIniFile ;
+begin
+  self.Memo1.Clear ;
+  Ini := TIniFile.Create( '.\Config.ini' );
+  ConnStr := ini.ReadString('DB','ConnStr','Read Failed') ;
+  dataDir := ini.ReadString('DIR','Data','Read Failed') ;
+  self.Memo1.Lines.Add(ConnStr);
+  self.Memo1.Lines.Add(dataDir);
+  //connstr :='Provider=OraOLEDB.Oracle.1;Password=didierg160;Persist Security Info=True;User ID=c##stock;Data Source=myoracle';
+end;
+
+procedure TMainForm.N1Click(Sender: TObject);
+var
+  threadImportXls : TThreadImportQianLongXLS;
+begin
+  self.N1.Enabled := false;
+  self.N2.Enabled := not N1.Enabled ;
+  self.start := not N1.Enabled ;
+  threadImportXls := TThreadImportQianLongXLS.Create(false ) ;
+  memo1.Lines.Add(datetimetostr(now) + ':开始') ;
+end;
+
+procedure TMainForm.N2Click(Sender: TObject);
+begin
+  self.N1.Enabled := true;
+  self.N2.Enabled := not N1.Enabled ;
+  self.start := not N1.Enabled ;
+  memo1.Lines.Add(datetimetostr(now) + ':已进行结束动作，但要等待已工作的线程结束工作') ;
+
+end;
+
+procedure TMainForm.N3Click(Sender: TObject);
+begin
+  self.Memo1.Clear ;
+end;
+
+procedure TMainForm.Timer1Timer(Sender: TObject);
+begin
+  if memo1.Lines.Count > 10000 then
+    memo1.Clear ;
+
+  if not timer1.Enabled  then
+    timer1.Enabled := true;
+end;
+
+end.

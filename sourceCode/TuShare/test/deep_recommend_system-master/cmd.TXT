@@ -1,0 +1,36 @@
+python dense_classifier.py --optmizier sgd 
+python dense_classifier.py --optmizier adadelta 
+python dense_classifier.py --optmizier adagrad 
+python dense_classifier.py --optmizier adam 
+python dense_classifier.py --optimizer ftrl 
+python dense_classifier.py --optmizier rmsprop 
+       
+       
+       
+python dense_classifier.py --mode inference
+
+python sparse_classifier.py --mode inference
+
+python cnn_dense_classifier.py --mode inference
+python cnn_dense_classifier.1.0.py --mode inference
+
+python tf_upgrade.py --infile dnn_dense_classifier.py --outfile dnn_dense_classifier.1.0.py
+python tf_upgrade.py --infile cnn_dense_classifier.py --outfile cnn_dense_classifier.1.0.py
+python tf_upgrade.py --infile sparse_classifier.py --outfile sparse_classifier.1.0.py
+
+python tf_upgrade.py --infile D:\Projects\j金融\g股票数据分析系统\sourceCode\TuShare\test\src\wide_n_deep_tutorial.py --outfile D:\Projects\j金融\g股票数据分析系统\sourceCode\TuShare\test\src\wide_n_deep_tutorial.py
+
+
+python tf_upgrade.py --infile D:\Projects\j金融\g股票数据分析系统\sourceCode\TuShare\test\src\testTFMNIST入门.py --outfile D:\Projects\j金融\g股票数据分析系统\sourceCode\TuShare\test\src\testTFMNIST入门.py
+tensorboard --logdir D:\deep_recommend_system-master\tensorboard\
+
+python tf_upgrade.py --infile D:\Projects\j金融\g股票数据分析系统\sourceCode\TuShare\test\src\ptb_word_lm.py --outfile D:\Projects\j金融\g股票数据分析系统\sourceCode\TuShare\test\src\ptb_word_lm.py
+python tf_upgrade.py --infile D:\Projects\j金融\g股票数据分析系统\sourceCode\TuShare\test\src\reader.py --outfile D:\Projects\j金融\g股票数据分析系统\sourceCode\TuShare\test\src\reader.py
+
+
+dnn + ftrl
+
+jupyter notebook
+
+
+python tf_upgrade.py --infile D:\edu_tf_research\src\src\kmeans_tflearn.py --outfile D:\edu_tf_research\src\src\kmeans_tflearn.py

@@ -1,0 +1,38 @@
+object fMain: TfMain
+  Left = 0
+  Top = 0
+  Caption = 'fMain'
+  ClientHeight = 387
+  ClientWidth = 643
+  Color = clBtnFace
+  Font.Charset = DEFAULT_CHARSET
+  Font.Color = clWindowText
+  Font.Height = -11
+  Font.Name = 'Tahoma'
+  Font.Style = []
+  Menu = MainMenu1
+  OldCreateOrder = False
+  PixelsPerInch = 96
+  TextHeight = 13
+  object Memo1: TMemo
+    Left = 0
+    Top = 0
+    Width = 643
+    Height = 387
+    Align = alClient
+    Lines.Strings = (
+      'Memo1')
+    TabOrder = 0
+  end
+  object MainMenu1: TMainMenu
+    Left = 592
+    Top = 16
+    object N1: TMenuItem
+      Caption = #36864#20986
+    end
+    object CSV1: TMenuItem
+      Caption = #29983#25104'CSV'
+      OnClick = CSV1Click
+    end
+  end
+end

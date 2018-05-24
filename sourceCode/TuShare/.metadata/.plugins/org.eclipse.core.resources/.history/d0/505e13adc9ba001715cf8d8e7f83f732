@@ -1,0 +1,92 @@
+'''
+Created on 2017年9月30日
+
+@author: moonlit
+'''
+import xgboost as xgb 
+
+def get_data(train_begin="",train_end="", test_begin="", test_end=""):
+    import getStockData as gsd
+        
+    train_data = gsd.get_101_data_test(start=train_begin, end = train_end)
+    test_data  = gsd.get_101_data_test(start=test_begin , end = test_end )
+    return train_data , test_data
+
+# 基础参数配置
+class conf:
+
+    train_begin  = '2017-09-04'
+    train_end    = '2017-09-05'
+    test_begin   = '2017-09-08'
+    test_end     = '2017-09-11'
+    batch        = 200000 
+    FILE_PATH    = 'd:\model_1.h5'
+
+train_data , test_data = get_data(train_begin=conf.train_begin,
+                                  train_end  =conf.train_end, 
+                                  test_begin =conf.test_begin, 
+                                  test_end   =conf.test_end ) 
+
+train_x        = train_data["data_101"]
+train_y        = train_data["CodeRetStd"] 
+train_return   = train_data["CodeReturn"]
+train_shi_jian = train_data["shi_jian"]
+train_code     = train_data["code"    ]
+
+# train_y = train_return
+
+# print(train_x)
+# print(train_y)
+# print(train_return)
+# print(train_shi_jian)
+# print(train_code)
+
+test_x        = test_data["data_101"]
+test_y        = test_data["CodeRetStd"] 
+test_return   = test_data["CodeReturn"]
+test_shi_jian = test_data["shi_jian"]
+test_code     = test_data["code"    ]
+
+#模型参数设置
+xlf = xgb.XGBRegressor(max_depth=100, 
+                        learning_rate=0.0001, 
+                        n_estimators=50000, 
+                        silent=False, 
+                        objective='reg:linear', 
+                        nthread=-1, 
+                        gamma=0,
+                        min_child_weight=1, 
+                        max_delta_step=0, 
+                        subsample=0.85, 
+                        colsample_bytree=0.7, 
+                        colsample_bylevel=1, 
+                        reg_alpha=0, 
+                        reg_lambda=1, 
+                        scale_pos_weight=1, 
+                        seed=1440, 
+                        missing=None)
+
+# xlf.fit(train_x, train_y, eval_metric='rmse', verbose = True, eval_set = [(test_x, test_y)],early_stopping_rounds=10000)
+xlf.fit(train_x, train_y, eval_metric='rmse',  eval_set = [(train_x, train_y)],verbose = True,early_stopping_rounds=10000)
+
+# 计算 auc 分数、预测
+predictions = xlf.predict(test_x)
+
+# import matplotlib.pyplot as plt
+# # 预测值和真实值的关系
+# data1 = test_y
+# data2 = predictions
+# fig, ax = plt.subplots(figsize=(8, 6))
+# ax.plot(data2,data1, 'o', label="data")
+# #ax.legend(loc='best')    
+
+f = open('d:/test.csv','w')
+for pre , test_y_ , test_code_ ,test_shi_jian_,test_return_ in zip(predictions , test_y , test_code ,test_shi_jian,test_return):
+    f.writelines(str(test_return_) +"," + str(pre) +","+ str(test_y_) +","+test_code_ +","+test_shi_jian_ + "\n")
+#     print(pre[0] , test_y_ , test_code_ ,test_shi_jian_)
+    
+f.close()    
+print("finished")
+
+
+    

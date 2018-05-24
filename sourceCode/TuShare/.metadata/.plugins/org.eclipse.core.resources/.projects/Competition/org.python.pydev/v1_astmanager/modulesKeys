@@ -1,0 +1,7 @@
+MODULES_MANAGER_V2
+c_preprocess|D:\Competition\src\c_preprocess.py
+test|D:\Competition\src\test.py
+train|D:\Competition\src\train.py
+train_word2vec_model|D:\Competition\src\train_word2vec_model.py
+wordVecAndKeras|D:\Competition\src\wordVecAndKeras.py
+word_segment|D:\Competition\src\word_segment.py

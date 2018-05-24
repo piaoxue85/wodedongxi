@@ -1,0 +1,42 @@
+object fMain: TfMain
+  Left = 0
+  Top = 0
+  Caption = #24320#22987#21518#27599#22825#23450#26102#36816#34892#19968#27425#65292#25214#21040#30446#26631#23558#20250#21457#37038#20214
+  ClientHeight = 430
+  ClientWidth = 603
+  Color = clBtnFace
+  Font.Charset = DEFAULT_CHARSET
+  Font.Color = clWindowText
+  Font.Height = -11
+  Font.Name = 'Tahoma'
+  Font.Style = []
+  Menu = MainMenu1
+  OldCreateOrder = False
+  PixelsPerInch = 96
+  TextHeight = 13
+  object Memo1: TMemo
+    Left = 0
+    Top = 0
+    Width = 603
+    Height = 430
+    Align = alClient
+    Lines.Strings = (
+      'Memo1')
+    ReadOnly = True
+    ScrollBars = ssBoth
+    TabOrder = 0
+    ExplicitLeft = 8
+    ExplicitTop = 8
+  end
+  object MainMenu1: TMainMenu
+    Left = 480
+    Top = 280
+    object N1: TMenuItem
+      Caption = #24320#22987
+      OnClick = N1Click
+    end
+    object N2: TMenuItem
+      Caption = #32467#26463
+    end
+  end
+end

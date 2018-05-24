@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<projectDescription>
+	<name>test</name>
+	<comment></comment>
+	<projects>
+	</projects>
+	<buildSpec>
+		<buildCommand>
+			<name>org.python.pydev.PyDevBuilder</name>
+			<arguments>
+			</arguments>
+		</buildCommand>
+	</buildSpec>
+	<natures>
+		<nature>org.python.pydev.pythonNature</nature>
+	</natures>
+	<linkedResources>
+		<link>
+			<name>BossSensor</name>
+			<type>2</type>
+			<location>D:/BossSensor</location>
+		</link>
+		<link>
+			<name>LSTM-Neural-Network-for-Time-Series-Prediction</name>
+			<type>2</type>
+			<location>D:/LSTM-Neural-Network-for-Time-Series-Prediction</location>
+		</link>
+		<link>
+			<name>StockPricePredict</name>
+			<type>2</type>
+			<location>D:/StockPricePredict</location>
+		</link>
+	</linkedResources>
+</projectDescription>

@@ -1,0 +1,86 @@
+'''
+Created on 2017年11月22日
+
+@author: moonlit
+'''
+import numpy as np
+import pandas as pd
+import cx_Oracle
+from math import ceil
+from sqlalchemy import create_engine
+from sklearn.utils import shuffle  
+import getStockData as gsd
+import tushare as ts
+
+def importStockList():
+    df = ts.get_stock_basics()
+    df["code"] = df.index
+    df = df.reset_index(drop=True)
+    
+    db=cx_Oracle.connect('c##stock','didierg160','myoracle')  #创建连接  
+    cr=db.cursor()
+    
+    sql = "delete tb_stock_list"
+    cr.execute(sql) 
+    
+    for row in df.itertuples(): 
+        if getattr(row,"timeToMarket"    ) == 0 :
+            continue
+        
+        sql = "insert into tb_stock_list values (" 
+        sql += "'" + str(getattr(row,"code"            )) + "',"            
+        sql += "'" + str(getattr(row,"name"            )) + "',"        
+        sql += "'" + str(getattr(row,"industry"        )) + "',"        
+        sql += "'" + str(getattr(row,"area"            )) + "',"        
+        sql += "'" + str(getattr(row,"pe"              )) + "',"        
+        sql += "'" + str(getattr(row,"outstanding"     )) + "',"        
+        sql += "'" + str(getattr(row,"totals"          )) + "',"        
+        sql += "'" + str(getattr(row,"totalAssets"     )) + "',"        
+        sql += "'" + str(getattr(row,"liquidAssets"    )) + "',"        
+        sql += "'" + str(getattr(row,"fixedAssets"     )) + "',"        
+        sql += "'" + str(getattr(row,"reserved"        )) + "',"        
+        sql += "'" + str(getattr(row,"reservedPerShare")) + "',"        
+        sql += "'" + str(getattr(row,"esp"             )) + "',"        
+        sql += "'" + str(getattr(row,"bvps"            )) + "',"        
+        sql += "'" + str(getattr(row,"pb"              )) + "',"        
+        sql += "'" + str(getattr(row,"timeToMarket"    )) + "',"        
+        sql += "'" + str(getattr(row,"undp"            )) + "',"        
+        sql += "'" + str(getattr(row,"perundp"         )) + "',"        
+        sql += "'" + str(getattr(row,"rev"             )) + "',"        
+        sql += "'" + str(getattr(row,"profit"          )) + "',"        
+        sql += "'" + str(getattr(row,"gpr"             )) + "',"        
+        sql += "'" + str(getattr(row,"npr"             )) + "',"        
+        sql += "'" + str(getattr(row,"holders"         )) + "' "
+        sql += ")"        
+        cr.execute(sql)    
+        
+    db.commit()        
+    cr.close ()  
+    db.close ()  
+    return df["code"].values 
+    
+    
+
+def importStockDataDaily(codes= [] , timeToMarket=[]):
+    db=cx_Oracle.connect('c##stock','didierg160','myoracle')  #创建连接  
+    cr=db.cursor()
+    
+    start_date = ""
+    end_date   = ""
+    
+    for code in codes :      
+        if isXR(code=code) :
+            sql = "delete tb_stock_data_daily where code = '" + code + "'"
+            cr.execute(sql)
+            
+        
+        df = ts.bar(code, conn=cons, adj='qfq', start_date='', end_date='')
+    
+
+#是否除权
+def isXR(code=""):
+    df = ts.bar(code, conn=cons, adj='qfq', start_date='', end_date='')
+    pass
+
+#获取连接备用
+cons = ts.get_apis()

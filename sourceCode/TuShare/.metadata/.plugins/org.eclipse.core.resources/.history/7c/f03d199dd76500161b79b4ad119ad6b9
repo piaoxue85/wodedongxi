@@ -1,0 +1,37 @@
+# from click._compat import raw_input
+# name = raw_input("what is your name?")
+# if name.endswith('tank'):
+#     print ('hello tank')
+# elif name.endswith('xiao'):
+#     print( 'hello xiao')
+# else:
+#     print ('hello strange')
+from sqlalchemy import create_engine
+import tushare as ts
+import time 
+
+df = ts.get_h_data('000002',
+                   '1990-12-19' ,
+                   time.strftime('%Y-%m-%d',time.localtime(time.time())),
+                   'qfq',
+                   False,
+                   3,
+                   1
+                  )
+print(df)
+print(df.count())
+print(len(df))
+
+engine = create_engine('oracle://c##stock:didierg160@moonlit77.gicp.net/myoracle?charset=utf8')
+
+#存入数据库
+#df.to_sql('tick_data',engine)
+
+#追加数据到现有表
+df.to_sql('tick_data',engine,if_exists='append')
+
+# df =ts.get_hist_data('000002')
+# print(df)
+# print(df.count())
+# print(len(df))
+

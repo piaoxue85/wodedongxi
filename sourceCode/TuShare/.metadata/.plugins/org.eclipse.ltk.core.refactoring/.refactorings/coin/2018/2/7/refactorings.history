@@ -1,0 +1,4 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<session version="1.0">
+<refactoring comment="Rename resource &apos;coin/src/okex&apos; to &apos;okexapi&apos;" description="Rename resource &apos;okex&apos;" flags="7" id="org.eclipse.ltk.core.refactoring.rename.resource" input="src/okex" name="okexapi" stamp="1518488459282" updateReferences="true"/>
+</session>

@@ -1,0 +1,12 @@
+'''
+Created on 2016年9月6日
+
+@author: moonlit
+'''
+import importUtility as imp
+import time 
+
+print('start')
+imp.fImportHData('600048','保利地产', '2016-08-01', time.strftime("%Y-%m-%d",time.localtime(time.time())))
+#imp.fImportStockBasicsAll();
+print('end')

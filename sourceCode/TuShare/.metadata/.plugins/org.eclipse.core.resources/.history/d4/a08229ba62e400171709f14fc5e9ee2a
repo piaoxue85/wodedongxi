@@ -1,0 +1,18 @@
+'''
+Created on 2017年11月22日
+python Z:\StockAnalysis\sourceCode\TuShare\test\src\import_Stock_Data_Daily.py
+@author: moonlit
+'''
+# import numpy as np
+import pandas as pd
+import cx_Oracle
+# from math import ceil
+from sqlalchemy import create_engine
+# from sklearn.utils import shuffle  
+import getStockData as gsd
+
+def import_holiday():
+    for i in list(range(1990,2019)) :
+        res_code,res_msg,data = gsd.get_holiday_yearly(year=str(i))
+        
+

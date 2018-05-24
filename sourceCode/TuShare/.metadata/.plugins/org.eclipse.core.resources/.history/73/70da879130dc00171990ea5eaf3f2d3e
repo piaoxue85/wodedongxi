@@ -1,0 +1,28 @@
+import numpy as np
+from scipy.optimize import leastsq
+import pylab as pl
+import pandas as pd
+import getStockData as gsd 
+ 
+# a = {
+#       "code" :["000001","000002","000003","000004","000005","000006","000007","000008","000009","000010"],
+#       "a" : [0,1,2,3,4,np.nan,6,7,8,9] ,
+#       "b" : [9,8,7,6,5,4,3,2,1,0] ,
+#       "c" : [0,1,2,3,4,5,6,7,8,9] ,
+#       "d" : [9,8,7,6,5,4,3,2,1,0] ,
+#       "e" : [1,1,1,1,1,1,1,1,1,1] ,
+#       "f" : [1,2,3,3,3,5,6,7,7,9] ,          
+#       }
+# 
+# a = pd.DataFrame(a)
+# a = a.dropna(axis=0, how='any')
+# a=a.set_index("code")
+# a=a.rank(axis=0, method="average", numeric_only=None, na_option="keep", ascending=False, pct=True)
+# print(a)
+# a= a.reset_index()
+# # for aa in a.itertuples():
+# #     print(aa.code,aa.a,aa.b,aa.c)
+# #     print(getattr(aa, "code"),getattr(aa, "a"),getattr(aa, "b"),getattr(aa, "c"),getattr(aa, "d"),getattr(aa, "e"),getattr(aa, "f"))
+# # print(a.rank(pct=True))
+
+df = gsd.get_stock_data_daily_101()

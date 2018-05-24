@@ -1,0 +1,142 @@
+unit main;
+
+interface
+
+uses
+  MarkovChains ,
+  stockrecommend,
+  stockImportDaily ,
+  comobj ,
+  ado,
+  stockImportNameAndCode ,
+  stockDaily ,
+  stockDailytotal,
+  Winapi.Windows, Winapi.Messages, System.SysUtils, System.Variants, System.Classes, Vcl.Graphics,
+  Vcl.Controls, Vcl.Forms, Vcl.Dialogs, Vcl.StdCtrls, Data.DB, Data.Win.ADODB;
+
+type
+  TForm1 = class(TForm)
+    Memo1: TMemo;
+    Button1: TButton;
+    Button2: TButton;
+    Button3: TButton;
+    procedure Button1Click(Sender: TObject);
+    procedure Button2Click(Sender: TObject);
+    procedure Button3Click(Sender: TObject);
+  private
+    { Private declarations }
+    res : integer ;
+    resMsg : string ;
+
+    MASetting : TStringList ;
+    KDJSetting : TStringList ;
+  public
+    { Public declarations }
+  end;
+
+var
+  Form1: TForm1;
+
+implementation
+
+{$R *.dfm}
+
+procedure TForm1.Button1Click(Sender: TObject);
+var
+  total : TStockDailyTotal ;
+  top : TStringList;
+  bottom : TStringList ;
+
+
+  iLoop : integer ;
+  iloop2 : integer ;
+  daily : TStockDaily ;
+
+  sTmp : string ;
+begin
+  MASetting := TStringList.Create ;
+  MASetting.Clear ;
+  MASetting.Add('6');
+  MASetting.Add('12');
+  MASetting.Add('20');
+  MASetting.Add('30');
+  MASetting.Add('45');
+  MASetting.Add('60');
+  MASetting.Add('125');
+  MASetting.Add('250');
+
+  KDJSetting := TStringList.Create ;
+  KDJSetting.Clear ;
+  KDJSetting.Add('9');   //kdj天参数
+  KDJSetting.Add('2');   //k
+  KDJSetting.Add('3');   //d
+  KDJSetting.Add('2');   //j形态参数
+
+
+  //total := TStockDailyTotal.Create('sh000001' , MASetting , KDJSetting);
+
+  //res := total.findTopBottom(top,bottom , resMsg) ;
+
+
+  memo1.Clear ;
+  {
+  for iLoop := 0 to total.dailyTotal.Count - 1  do
+  begin
+    daily := TStockDaily(total.dailyTotal.objects[iloop])  ;
+
+    if daily.XSTDValues.count < 1 then
+      continue ;
+
+    sTmp :=  daily.shi_jian + ','  ;
+
+    for iloop2 := 0 to daily.XSTDValues.Count -1  do
+    begin
+      sTmp := sTmp + daily.XSTDValues.Strings[iloop2]+ ',';
+    end;
+      
+
+    memo1.Lines.Add(sTmp );
+  end;
+  }
+
+
+  //memo1.Lines := total.dailyTotal;
+  //memo1.Lines.AddStrings(bottom);
+
+
+end;
+
+procedure TForm1.Button2Click(Sender: TObject);
+var
+  recommend : TstockRecommend ;
+begin
+  self.memo1.lines.add(datetimetostr(now));
+  recommend := TstockRecommend.Create(self.MASetting,self.KDJSetting) ;
+  //res    := import.import( 'D:\Projects\j金融\g股票数据分析系统\sourceCode\stock\Win32\Debug\陆家嘴  --技术分析--日  线--前复权.xls', resmsg) ;
+  self.Memo1.lines := recommend.analyseWeek ;
+  self.Memo1.Lines.AddStrings(recommend.analyseYear);
+  self.memo1.lines.add(datetimetostr(now));
+end;
+
+procedure TForm1.Button3Click(Sender: TObject);
+var
+  Markov : TMarkovChains ;
+  x,y :integer ;
+  line : string ;
+begin
+  Markov := TMarkovChains.Create ;
+  Markov.getmatrix ;
+
+  for x := 0 to 19 do
+  begin
+    for y := 0 to 19 do
+    begin
+      line := line+inttostr(x)+','+inttostr(y)+'='+ floattostr(Markov.matrix[x][y])+ '  ';
+    end;
+    memo1.Lines.Add(line) ;
+    line := '';
+  end;
+
+end;
+
+end.
