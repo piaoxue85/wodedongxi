@@ -1,6 +1,6 @@
 '''
 Created on 2017年6月3日
-@author: moonlit
+@author: moonlit 
 '''
 
 from BigQuantTrade import TradeSmallMarketValue
