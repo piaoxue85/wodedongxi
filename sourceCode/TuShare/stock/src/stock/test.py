@@ -34,4 +34,7 @@ print(round(1.1))
 # imp.fImportAllTurnover()
 # imp.fImportForecastData(2017,4)
 
+df = pd.DataFrame()
+df.boxplot()
+
 print('end----------------------------------------------------------------------------------')
