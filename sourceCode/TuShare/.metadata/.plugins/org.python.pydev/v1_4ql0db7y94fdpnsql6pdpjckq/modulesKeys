@@ -8468,7 +8468,6 @@ numpy.linalg.tests.test_build|C:\Users\moonlit\Anaconda3\lib\site-packages\numpy
 numpy.linalg.tests.test_deprecations|C:\Users\moonlit\Anaconda3\lib\site-packages\numpy\linalg\tests\test_deprecations.py
 numpy.linalg.tests.test_linalg|C:\Users\moonlit\Anaconda3\lib\site-packages\numpy\linalg\tests\test_linalg.py
 numpy.linalg.tests.test_regression|C:\Users\moonlit\Anaconda3\lib\site-packages\numpy\linalg\tests\test_regression.py
-numpy.ma
 numpy.ma.__init__|C:\Users\moonlit\Anaconda3\lib\site-packages\numpy\ma\__init__.py
 numpy.ma.bench|C:\Users\moonlit\Anaconda3\lib\site-packages\numpy\ma\bench.py
 numpy.ma.core|C:\Users\moonlit\Anaconda3\lib\site-packages\numpy\ma\core.py
