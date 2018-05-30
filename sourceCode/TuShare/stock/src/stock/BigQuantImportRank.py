@@ -1,7 +1,7 @@
 '''
 Created on 2017年6月1日
 
-@author: moonlit
+@author: moonlit  
 '''
 import numpy as np
 import cx_Oracle
