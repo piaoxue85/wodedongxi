@@ -1,10 +1,16 @@
 MODULES_MANAGER_V2
 bitfinexapi|D:\Projects\j金融\g股票数据分析系统\sourceCode\coin\src\bitfinexapi.py
 bitstampapi|D:\Projects\j金融\g股票数据分析系统\sourceCode\coin\src\bitstampapi.py
+huobiapi.HuobiServices|D:\Projects\j金融\g股票数据分析系统\sourceCode\coin\src\huobiapi\HuobiServices.py
+huobiapi.Utils|D:\Projects\j金融\g股票数据分析系统\sourceCode\coin\src\huobiapi\Utils.py
 huobipro|D:\Projects\j金融\g股票数据分析系统\sourceCode\coin\src\huobipro.py
 localbitcoins|D:\Projects\j金融\g股票数据分析系统\sourceCode\coin\src\localbitcoins.py
 maps|D:\Projects\j金融\g股票数据分析系统\sourceCode\coin\src\maps.py
 okex|D:\Projects\j金融\g股票数据分析系统\sourceCode\coin\src\okex.py
+okexapi.Client|D:\Projects\j金融\g股票数据分析系统\sourceCode\coin\src\okexapi\Client.py
+okexapi.HttpMD5Util|D:\Projects\j金融\g股票数据分析系统\sourceCode\coin\src\okexapi\HttpMD5Util.py
+okexapi.OkcoinFutureAPI|D:\Projects\j金融\g股票数据分析系统\sourceCode\coin\src\okexapi\OkcoinFutureAPI.py
+okexapi.OkcoinSpotAPI|D:\Projects\j金融\g股票数据分析系统\sourceCode\coin\src\okexapi\OkcoinSpotAPI.py
 otcbtc|D:\Projects\j金融\g股票数据分析系统\sourceCode\coin\src\otcbtc.py
 trade|D:\Projects\j金融\g股票数据分析系统\sourceCode\coin\src\trade.py
 zb|D:\Projects\j金融\g股票数据分析系统\sourceCode\coin\src\zb.py
