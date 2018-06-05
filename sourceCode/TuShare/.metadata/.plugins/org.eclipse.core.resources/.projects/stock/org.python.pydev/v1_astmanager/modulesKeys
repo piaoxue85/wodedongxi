@@ -1,16 +1,2 @@
 MODULES_MANAGER_V2
-stock.Analysis|D:\Projects\j金融\g股票数据分析系统\sourceCode\TuShare\stock\src\stock\Analysis.py
-stock.BigQuantGetBuySellList|D:\Projects\j金融\g股票数据分析系统\sourceCode\TuShare\stock\src\stock\BigQuantGetBuySellList.py
-stock.BigQuantImportRank|D:\Projects\j金融\g股票数据分析系统\sourceCode\TuShare\stock\src\stock\BigQuantImportRank.py
 stock.BigQuantSmallGetBuySellList|D:\Projects\j金融\g股票数据分析系统\sourceCode\TuShare\stock\src\stock\BigQuantSmallGetBuySellList.py
-stock.BigQuantTrade|D:\Projects\j金融\g股票数据分析系统\sourceCode\TuShare\stock\src\stock\BigQuantTrade.py
-stock.BigQuant_high_low_price_GetBuySellList|D:\Projects\j金融\g股票数据分析系统\sourceCode\TuShare\stock\src\stock\BigQuant_high_low_price_GetBuySellList.py
-stock.baseInfoAnalysis|D:\Projects\j金融\g股票数据分析系统\sourceCode\TuShare\stock\src\stock\baseInfoAnalysis.py
-stock.exec|D:\Projects\j金融\g股票数据分析系统\sourceCode\TuShare\stock\src\stock\exec.py
-stock.fbprophet.test|D:\Projects\j金融\g股票数据分析系统\sourceCode\TuShare\stock\src\stock\fbprophet\test.py
-stock.getStockData|D:\Projects\j金融\g股票数据分析系统\sourceCode\TuShare\stock\src\stock\getStockData.py
-stock.importUtility|D:\Projects\j金融\g股票数据分析系统\sourceCode\TuShare\stock\src\stock\importUtility.py
-stock.import_ji_ben_mian|D:\Projects\j金融\g股票数据分析系统\sourceCode\TuShare\stock\src\stock\import_ji_ben_mian.py
-stock.test|D:\Projects\j金融\g股票数据分析系统\sourceCode\TuShare\stock\src\stock\test.py
-stock.testWind|D:\Projects\j金融\g股票数据分析系统\sourceCode\TuShare\stock\src\stock\testWind.py
-stock.testfactor|D:\Projects\j金融\g股票数据分析系统\sourceCode\TuShare\stock\src\stock\testfactor.py
