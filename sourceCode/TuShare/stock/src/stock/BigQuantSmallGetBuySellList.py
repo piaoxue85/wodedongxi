@@ -5,7 +5,7 @@ Created on 2017年6月3日
 
 from BigQuantTrade import TradeSmallMarketValue
 import BigQuantImportRank as importR
-import numpy as np
+# import numpy as np
 
 def getRank(rank , buy_black):
     rank_new = []
