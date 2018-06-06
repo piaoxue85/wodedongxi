@@ -16,25 +16,19 @@ def getRank(rank , buy_black):
     
     return rank_new
 
-def getweights(rank):
-    if len(rank) == 0 :
-        return []
+stockCount = 4
+weights = []
+for i in range(stockCount):
+    weights.append(1/stockCount)
     
-    stockCount = len(rank)
-    weights = []
-    
-    for i_ in range(stockCount):
-        weights.append(1/stockCount)
-    
-    return weights
-    
-buy_black   = []      
+buy_black   = [ 
+            ]      
 
 print("#-------------------------------------------------------------------庄华-----------------------------------------------------------------------------------------------")        
 rank = ['603788.SHA' ,'300251.SZA' ,'600332.SHA']
 rank = getRank(rank = rank , buy_black=buy_black)
 sell_black = []
-T = TradeSmallMarketValue(user_name = "庄华",start_date = "2017-08-01" , op_date = "" ,weights = getweights(rank))     
+T = TradeSmallMarketValue(user_name = "庄华",start_date = "2017-08-01" , op_date = "" ,weights = weights)     
 T.can_buy_GEM = True  
 # shi_jian  ="2017-08-02"
 shi_jian  = T.get_op_date() 
@@ -55,9 +49,10 @@ sell_black = [
               "600419",
               ]
 
-T = TradeSmallMarketValue(user_name = "龚雯",start_date = "2017-08-01" , op_date = shi_jian ,weights = getweights(rank)) 
+T = TradeSmallMarketValue(user_name = "龚雯",start_date = "2017-08-01" , op_date = shi_jian ,weights = weights)
 T.can_buy_GEM = False   
 T.op_date = shi_jian
+
 importR.importRank(prank = rank, shi_jian = shi_jian)
 print(T.user,"总市值", T.portfolio_value())
 sell_list = T.sell(sell_black)

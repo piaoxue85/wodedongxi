@@ -3668,3 +3668,6 @@ java.nio.file.NoSuchFileException: C:\Users\moonlit\Anaconda3\Lib\site-packages\
 	at org.python.pydev.shared_core.io.FileUtils.getLastModifiedTimeFromDir(FileUtils.java:881)
 	at org.python.pydev.shared_core.path_watch.EventsStackerRunnable.run(EventsStackerRunnable.java:218)
 	at org.python.pydev.shared_core.path_watch.PathWatch$PollThread.run(PathWatch.java:203)
+
+!ENTRY org.python.pydev.debug 4 4 2018-06-06 09:48:48.789
+!MESSAGE Unexpected resume reason code
