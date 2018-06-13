@@ -33,7 +33,7 @@ def importStockList():
             #获取连接备用
 #             ts.close_apis(conn=cons)            
             print("get_stock_basics ,ts soeket fail:",tsFaile,e)
-            time.sleep(5)
+            time.sleep(1)
             if tsFaile <=5  :
                 tsFaile += 1
             else:
@@ -200,12 +200,12 @@ def importStockDataDaily(codes= [],names=[],asset='E',adj='qfq'):
                 tsFaile = 0
             except Exception as e:
 #                 ts.close_apis(conn=cons)
-                time.sleep(5)
+                time.sleep(1)
                 print(code,start_date ,"importStockDataDaily fail:",tsFaile,e)
                 if tsFaile <=3  :
                     tsFaile += 1
                 else:
-                    break
+                    continue
                 
         if tsFaile > 0 :
             continue
