@@ -17,6 +17,7 @@ import time
 cons = ts.get_apis()
 
 def importStockList():
+    global cons
     df = ts.get_stock_basics()
     
     tsFaile = 1
@@ -165,6 +166,7 @@ def importStockList():
     return df["code"].values ,df["name"].values
     
 def importStockDataDaily(codes= [],names=[],asset='E',adj='qfq'):
+    global cons
     db=cx_Oracle.connect('c##stock','didierg160','myoracle')  #创建连接  
     cr=db.cursor()
     
@@ -210,10 +212,9 @@ def importStockDataDaily(codes= [],names=[],asset='E',adj='qfq'):
         
         try :                                 
             df["datetime"] = df.index
-        except e:
-            print("code:",code)
-            print(e.message)
-            break 
+        except Exception as e: 
+            print("code:",code,e)
+            continue
         
         df = df.reset_index(drop=True)
         df_shift = df.shift(-1)
@@ -292,6 +293,7 @@ def importStockDataDaily(codes= [],names=[],asset='E',adj='qfq'):
         
 #是否除权
 def isXR(code=""):
+    global cons
     shi_jian = gsd.get_code_min_shi_jian(code)
     
     if shi_jian =="None":
@@ -311,7 +313,7 @@ def isXR(code=""):
 #                 cons = ts.get_apis()          
                   
             data  = ts.bar(code, conn=cons, adj='qfq', start_date=shi_jian, end_date=shi_jian,retry_count = 2)
-#             data  = ts.bar(code, conn=cons, adj='qfq', start_date="", end_date="",retry_count = 2)
+#             data  = ts.bar(code, conn=cons, adj='qfq', start_date="1993-06-29", end_date="1995-06-30",retry_count = 2)
 #             print("data",data)
 
             '''
@@ -319,16 +321,17 @@ def isXR(code=""):
                 tsFaile += 1 
             else:
                 tsFaile = 0
-            '''
-            tsFaile = 0             
+            '''                    
             if len(data)<1 :
                 return False
+            
+            tsFaile = 0   
         except Exception as e:
             #获取连接备用
 #             ts.close_apis(conn=cons)            
 #             cons = ts.get_apis() 
             print(code,shi_jian ,"isXR fail:",tsFaile,e)
-            time.sleep(5)
+            time.sleep(1)
             if tsFaile <=3  :
                 tsFaile += 1
             else:
