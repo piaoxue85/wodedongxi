@@ -55,7 +55,7 @@ def get_wind_data(code="",start_date="",end_date=""):
                 res = w.wsd(
                             code, 
 #                             req1 + "," +req2 ,
-                            "trade_code,sec_name,west_eps_ftm" ,
+                            "trade_code,sec_name,west_eps_ftm,west_netprofit_ftm" ,
                             start_date, 
                             end_date, 
                             "year=2018;rptYear=2018;n=3;m=60;meanLine=60;N1=5;N2=10;N3=20;N4=30;upOrLow=1;shareType=1;Fill=Previous;PriceAdj=F"
@@ -375,7 +375,7 @@ def start():
 #     names = ["四川九洲"]
 #     timeToMarket = [20171215]
     #000002.SZ errcode: -40521008 start_date:1993-01-23,end_date:1993-01-26
-    codes = ["000002"]
+    codes = ["300251"]
     names = ["万科A"]
     timeToMarket = [19910102]
     print(len(codes) , len(names) , len(timeToMarket))

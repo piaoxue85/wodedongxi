@@ -20001,6 +20001,7 @@ tushare.stock.fundamental|C:\Users\moonlit\Anaconda3\lib\site-packages\tushare\s
 tushare.stock.globals|C:\Users\moonlit\Anaconda3\lib\site-packages\tushare\stock\globals.py
 tushare.stock.macro|C:\Users\moonlit\Anaconda3\lib\site-packages\tushare\stock\macro.py
 tushare.stock.macro_vars|C:\Users\moonlit\Anaconda3\lib\site-packages\tushare\stock\macro_vars.py
+tushare.stock.minsdata|C:\Users\moonlit\Anaconda3\lib\site-packages\tushare\stock\minsdata.py
 tushare.stock.news_vars|C:\Users\moonlit\Anaconda3\lib\site-packages\tushare\stock\news_vars.py
 tushare.stock.newsevent|C:\Users\moonlit\Anaconda3\lib\site-packages\tushare\stock\newsevent.py
 tushare.stock.ref_vars|C:\Users\moonlit\Anaconda3\lib\site-packages\tushare\stock\ref_vars.py

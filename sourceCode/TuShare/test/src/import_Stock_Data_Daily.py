@@ -206,8 +206,13 @@ def importStockDataDaily(codes= [],names=[],asset='E',adj='qfq'):
                 
         if tsFaile > 0 :
             continue
-                                         
-        df["datetime"] = df.index
+        try :                                 
+            df["datetime"] = df.index
+        except e:
+            print("code:",code)
+            print(e.message)
+            break 
+        
         df = df.reset_index(drop=True)
         df_shift = df.shift(-1)
                 
@@ -337,7 +342,7 @@ def isXR(code=""):
          
 # 导入个股   
 print("导入个股")      
-codes,names = importStockList()
+# codes,names = importStockList()
 # codes = ["000719"]
 # names = ["中原传媒"]
 importStockDataDaily(codes,names)
