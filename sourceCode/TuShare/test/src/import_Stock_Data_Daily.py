@@ -194,6 +194,7 @@ def importStockDataDaily(codes= [],names=[],asset='E',adj='qfq'):
                 #if tsFaile >=2 :
                 #    cons = ts.get_apis()                
                 df = ts.bar(code, conn=cons, adj=adj,asset=asset, start_date=start_date, end_date='',retry_count = 2)
+#                 df = ts.bar(code, conn=cons, adj=adj,asset=asset, start_date="", end_date="2018-06-13",retry_count = 2)
                 tsFaile = 0
             except Exception as e:
 #                 ts.close_apis(conn=cons)
@@ -206,6 +207,7 @@ def importStockDataDaily(codes= [],names=[],asset='E',adj='qfq'):
                 
         if tsFaile > 0 :
             continue
+        
         try :                                 
             df["datetime"] = df.index
         except e:
@@ -309,6 +311,7 @@ def isXR(code=""):
 #                 cons = ts.get_apis()          
                   
             data  = ts.bar(code, conn=cons, adj='qfq', start_date=shi_jian, end_date=shi_jian,retry_count = 2)
+#             data  = ts.bar(code, conn=cons, adj='qfq', start_date="", end_date="",retry_count = 2)
 #             print("data",data)
 
             '''
@@ -343,8 +346,8 @@ def isXR(code=""):
 # 导入个股   
 print("导入个股")      
 codes,names = importStockList()
-# codes = ["000719"]
-# names = ["中原传媒"]
+# codes = ["600664"]
+# names = ["哈药股份"]
 importStockDataDaily(codes,names)
 
 #导入指数
