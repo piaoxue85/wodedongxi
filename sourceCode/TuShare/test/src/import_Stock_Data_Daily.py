@@ -321,7 +321,7 @@ def isXR(code=""):
                 tsFaile = 0
             '''
             tsFaile = 0             
-            if len(data["close"].values)<1 :
+            if len(data)<1 :
                 return False
         except Exception as e:
             #获取连接备用
