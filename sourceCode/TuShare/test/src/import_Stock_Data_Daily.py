@@ -342,7 +342,7 @@ def isXR(code=""):
          
 # 导入个股   
 print("导入个股")      
-# codes,names = importStockList()
+codes,names = importStockList()
 # codes = ["000719"]
 # names = ["中原传媒"]
 importStockDataDaily(codes,names)
