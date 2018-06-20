@@ -13,16 +13,16 @@
 		<item value="false" key="casesensitive"/>
 		<item value="false" key="incremental"/>
 		<item value="false" key="wholeword"/>
-		<item value="weights" key="selection"/>
+		<item value="dest" key="selection"/>
 		<list key="findhistory">
+			<item value="dest"/>
+			<item value="except"/>
+			<item value="cons"/>
 			<item value="weights"/>
 			<item value="stockCount"/>
 			<item value="print"/>
 			<item value="os.walk"/>
 			<item value="os.wakl"/>
-			<item value="os.list"/>
-			<item value="os."/>
-			<item value="cmp"/>
 		</list>
 		<list key="replacehistory">
 			<item value="C:/Users/moonlit/Desktop"/>
