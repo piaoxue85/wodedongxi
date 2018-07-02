@@ -25,8 +25,8 @@ buy_black   = [
             ]      
 
 print("#-------------------------------------------------------------------庄华-----------------------------------------------------------------------------------------------")        
-rank = ['000028.SZA' '600809.SHA' '600741.SHA' '600729.SHA']
-rank = getRank(rank = rank , buy_black=buy_black)
+rank = ['300497', '002749' ,'603788' ,'603368']
+rank = getRank( rank = rank , buy_black = buy_black )
 sell_black = []
 T = TradeSmallMarketValue(user_name = "庄华",start_date = "2017-08-01" , op_date = "" ,weights = weights)     
 T.can_buy_GEM = True  
@@ -42,7 +42,7 @@ buy = T.buy(buy_black)
 print(buy)
 
 print("#---------------------------------------------------------------龚雯-----------------------------------------------------------------------------------------------------")
-rank = ['000028.SZA' '600809.SHA' '600741.SHA' '600729.SHA']
+rank = ['300497' ,'002749' ,'603788' ,'603368']
 rank = getRank(rank = rank , buy_black=buy_black)
 sell_black = [
               "002307",
