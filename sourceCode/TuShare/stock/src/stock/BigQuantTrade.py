@@ -10,6 +10,7 @@ import tushare as ts
 import numpy as np
 from nose.util import tolist
 import getStockData as gsd
+from  math import floor
 # from math import round
 
 
@@ -290,7 +291,7 @@ class TradeSmallMarketValue(Trade):
             if cash_balance >= cash_to_buy : 
                 #cash_balance -= cash_to_buy
                 last_price = self.get_last_price(code=code)*1.04
-                buy_vol    = round((float(cash_to_buy)/last_price)/100)*100
+                buy_vol    = floor((float(cash_to_buy)/last_price)/100)*100
                 cash_balance -= last_price * buy_vol 
             
             if cash_to_buy > 0.0 :
@@ -304,7 +305,8 @@ class TradeSmallMarketValue(Trade):
                 if last_price == 0 :
                     print(code,"price:",last_price)
                     continue                
-                buy_vol = round((float(cash_to_buy)/last_price)/100)*100
+                
+                buy_vol = floor((float(cash_to_buy)/last_price)/100)*100
                 buy_list.append([market ,code , buy_vol , last_price , cash_to_buy])
 
                 #buy_xls.append(object)
@@ -336,8 +338,8 @@ class TradeSmallMarketValue(Trade):
                 continue 
                         
             if code in buy_instruments :
-                last_price = self.get_last_price(code=code)
-                buy_vol = round((float(max_cash_per_instrument)/last_price)/100)*100
+                last_price = self.get_last_price(code=code) * 0.96 
+                buy_vol = floor((float(max_cash_per_instrument)/last_price)/100)*100
                 sell_vol= volume - buy_vol
                 
                 if sell_vol >= 100 :
@@ -428,7 +430,7 @@ class TradeHLPrice(Trade):
                     print(code,"price:",last_price)
                     continue                
                 
-                buy_vol = round((float(cash_to_buy)/last_price)/100)*100
+                buy_vol = floor((float(cash_to_buy)/last_price)/100)*100
                 buy_list.append([market ,code , buy_vol , last_price*1.0 , cash_to_buy])
 
                 #buy_xls.append(object)
