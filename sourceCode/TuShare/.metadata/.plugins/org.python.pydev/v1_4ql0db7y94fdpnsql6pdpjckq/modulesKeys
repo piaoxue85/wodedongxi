@@ -3861,14 +3861,13 @@ django.contrib.admin.templatetags.log|C:\Users\moonlit\Anaconda3\lib\site-packag
 django.contrib.admin.tests|C:\Users\moonlit\Anaconda3\lib\site-packages\django\contrib\admin\tests.py
 django.contrib.admin.utils|C:\Users\moonlit\Anaconda3\lib\site-packages\django\contrib\admin\utils.py
 django.contrib.admin.views.__init__|C:\Users\moonlit\Anaconda3\lib\site-packages\django\contrib\admin\views\__init__.py
+django.contrib.admin.views.autocomplete|C:\Users\moonlit\Anaconda3\lib\site-packages\django\contrib\admin\views\autocomplete.py
 django.contrib.admin.views.decorators|C:\Users\moonlit\Anaconda3\lib\site-packages\django\contrib\admin\views\decorators.py
 django.contrib.admin.views.main|C:\Users\moonlit\Anaconda3\lib\site-packages\django\contrib\admin\views\main.py
 django.contrib.admin.widgets|C:\Users\moonlit\Anaconda3\lib\site-packages\django\contrib\admin\widgets.py
 django.contrib.admindocs.__init__|C:\Users\moonlit\Anaconda3\lib\site-packages\django\contrib\admindocs\__init__.py
 django.contrib.admindocs.apps|C:\Users\moonlit\Anaconda3\lib\site-packages\django\contrib\admindocs\apps.py
 django.contrib.admindocs.middleware|C:\Users\moonlit\Anaconda3\lib\site-packages\django\contrib\admindocs\middleware.py
-django.contrib.admindocs.tests.__init__|C:\Users\moonlit\Anaconda3\lib\site-packages\django\contrib\admindocs\tests\__init__.py
-django.contrib.admindocs.tests.test_fields|C:\Users\moonlit\Anaconda3\lib\site-packages\django\contrib\admindocs\tests\test_fields.py
 django.contrib.admindocs.urls|C:\Users\moonlit\Anaconda3\lib\site-packages\django\contrib\admindocs\urls.py
 django.contrib.admindocs.utils|C:\Users\moonlit\Anaconda3\lib\site-packages\django\contrib\admindocs\utils.py
 django.contrib.admindocs.views|C:\Users\moonlit\Anaconda3\lib\site-packages\django\contrib\admindocs\views.py
@@ -3897,13 +3896,12 @@ django.contrib.auth.migrations.0005_alter_user_last_login_null|C:\Users\moonlit\
 django.contrib.auth.migrations.0006_require_contenttypes_0002|C:\Users\moonlit\Anaconda3\lib\site-packages\django\contrib\auth\migrations\0006_require_contenttypes_0002.py
 django.contrib.auth.migrations.0007_alter_validators_add_error_messages|C:\Users\moonlit\Anaconda3\lib\site-packages\django\contrib\auth\migrations\0007_alter_validators_add_error_messages.py
 django.contrib.auth.migrations.0008_alter_user_username_max_length|C:\Users\moonlit\Anaconda3\lib\site-packages\django\contrib\auth\migrations\0008_alter_user_username_max_length.py
+django.contrib.auth.migrations.0009_alter_user_last_name_max_length|C:\Users\moonlit\Anaconda3\lib\site-packages\django\contrib\auth\migrations\0009_alter_user_last_name_max_length.py
 django.contrib.auth.migrations.__init__|C:\Users\moonlit\Anaconda3\lib\site-packages\django\contrib\auth\migrations\__init__.py
 django.contrib.auth.mixins|C:\Users\moonlit\Anaconda3\lib\site-packages\django\contrib\auth\mixins.py
 django.contrib.auth.models|C:\Users\moonlit\Anaconda3\lib\site-packages\django\contrib\auth\models.py
 django.contrib.auth.password_validation|C:\Users\moonlit\Anaconda3\lib\site-packages\django\contrib\auth\password_validation.py
 django.contrib.auth.signals|C:\Users\moonlit\Anaconda3\lib\site-packages\django\contrib\auth\signals.py
-django.contrib.auth.tests.__init__|C:\Users\moonlit\Anaconda3\lib\site-packages\django\contrib\auth\tests\__init__.py
-django.contrib.auth.tests.utils|C:\Users\moonlit\Anaconda3\lib\site-packages\django\contrib\auth\tests\utils.py
 django.contrib.auth.tokens|C:\Users\moonlit\Anaconda3\lib\site-packages\django\contrib\auth\tokens.py
 django.contrib.auth.urls|C:\Users\moonlit\Anaconda3\lib\site-packages\django\contrib\auth\urls.py
 django.contrib.auth.validators|C:\Users\moonlit\Anaconda3\lib\site-packages\django\contrib\auth\validators.py
@@ -3914,7 +3912,9 @@ django.contrib.contenttypes.apps|C:\Users\moonlit\Anaconda3\lib\site-packages\dj
 django.contrib.contenttypes.checks|C:\Users\moonlit\Anaconda3\lib\site-packages\django\contrib\contenttypes\checks.py
 django.contrib.contenttypes.fields|C:\Users\moonlit\Anaconda3\lib\site-packages\django\contrib\contenttypes\fields.py
 django.contrib.contenttypes.forms|C:\Users\moonlit\Anaconda3\lib\site-packages\django\contrib\contenttypes\forms.py
-django.contrib.contenttypes.management|C:\Users\moonlit\Anaconda3\lib\site-packages\django\contrib\contenttypes\management.py
+django.contrib.contenttypes.management.__init__|C:\Users\moonlit\Anaconda3\lib\site-packages\django\contrib\contenttypes\management\__init__.py
+django.contrib.contenttypes.management.commands.__init__|C:\Users\moonlit\Anaconda3\lib\site-packages\django\contrib\contenttypes\management\commands\__init__.py
+django.contrib.contenttypes.management.commands.remove_stale_contenttypes|C:\Users\moonlit\Anaconda3\lib\site-packages\django\contrib\contenttypes\management\commands\remove_stale_contenttypes.py
 django.contrib.contenttypes.migrations.0001_initial|C:\Users\moonlit\Anaconda3\lib\site-packages\django\contrib\contenttypes\migrations\0001_initial.py
 django.contrib.contenttypes.migrations.0002_remove_content_type_name|C:\Users\moonlit\Anaconda3\lib\site-packages\django\contrib\contenttypes\migrations\0002_remove_content_type_name.py
 django.contrib.contenttypes.migrations.__init__|C:\Users\moonlit\Anaconda3\lib\site-packages\django\contrib\contenttypes\migrations\__init__.py
@@ -3984,9 +3984,7 @@ django.contrib.gis.db.models.aggregates|C:\Users\moonlit\Anaconda3\lib\site-pack
 django.contrib.gis.db.models.fields|C:\Users\moonlit\Anaconda3\lib\site-packages\django\contrib\gis\db\models\fields.py
 django.contrib.gis.db.models.functions|C:\Users\moonlit\Anaconda3\lib\site-packages\django\contrib\gis\db\models\functions.py
 django.contrib.gis.db.models.lookups|C:\Users\moonlit\Anaconda3\lib\site-packages\django\contrib\gis\db\models\lookups.py
-django.contrib.gis.db.models.manager|C:\Users\moonlit\Anaconda3\lib\site-packages\django\contrib\gis\db\models\manager.py
 django.contrib.gis.db.models.proxy|C:\Users\moonlit\Anaconda3\lib\site-packages\django\contrib\gis\db\models\proxy.py
-django.contrib.gis.db.models.query|C:\Users\moonlit\Anaconda3\lib\site-packages\django\contrib\gis\db\models\query.py
 django.contrib.gis.db.models.sql.__init__|C:\Users\moonlit\Anaconda3\lib\site-packages\django\contrib\gis\db\models\sql\__init__.py
 django.contrib.gis.db.models.sql.conversion|C:\Users\moonlit\Anaconda3\lib\site-packages\django\contrib\gis\db\models\sql\conversion.py
 django.contrib.gis.feeds|C:\Users\moonlit\Anaconda3\lib\site-packages\django\contrib\gis\feeds.py
@@ -4014,20 +4012,14 @@ django.contrib.gis.gdal.prototypes.raster|C:\Users\moonlit\Anaconda3\lib\site-pa
 django.contrib.gis.gdal.prototypes.srs|C:\Users\moonlit\Anaconda3\lib\site-packages\django\contrib\gis\gdal\prototypes\srs.py
 django.contrib.gis.gdal.raster.__init__|C:\Users\moonlit\Anaconda3\lib\site-packages\django\contrib\gis\gdal\raster\__init__.py
 django.contrib.gis.gdal.raster.band|C:\Users\moonlit\Anaconda3\lib\site-packages\django\contrib\gis\gdal\raster\band.py
+django.contrib.gis.gdal.raster.base|C:\Users\moonlit\Anaconda3\lib\site-packages\django\contrib\gis\gdal\raster\base.py
 django.contrib.gis.gdal.raster.const|C:\Users\moonlit\Anaconda3\lib\site-packages\django\contrib\gis\gdal\raster\const.py
 django.contrib.gis.gdal.raster.source|C:\Users\moonlit\Anaconda3\lib\site-packages\django\contrib\gis\gdal\raster\source.py
 django.contrib.gis.gdal.srs|C:\Users\moonlit\Anaconda3\lib\site-packages\django\contrib\gis\gdal\srs.py
-django.contrib.gis.geoip.__init__|C:\Users\moonlit\Anaconda3\lib\site-packages\django\contrib\gis\geoip\__init__.py
-django.contrib.gis.geoip.base|C:\Users\moonlit\Anaconda3\lib\site-packages\django\contrib\gis\geoip\base.py
-django.contrib.gis.geoip.libgeoip|C:\Users\moonlit\Anaconda3\lib\site-packages\django\contrib\gis\geoip\libgeoip.py
-django.contrib.gis.geoip.prototypes|C:\Users\moonlit\Anaconda3\lib\site-packages\django\contrib\gis\geoip\prototypes.py
 django.contrib.gis.geoip2.__init__|C:\Users\moonlit\Anaconda3\lib\site-packages\django\contrib\gis\geoip2\__init__.py
 django.contrib.gis.geoip2.base|C:\Users\moonlit\Anaconda3\lib\site-packages\django\contrib\gis\geoip2\base.py
 django.contrib.gis.geoip2.resources|C:\Users\moonlit\Anaconda3\lib\site-packages\django\contrib\gis\geoip2\resources.py
-django.contrib.gis.geometry.__init__|C:\Users\moonlit\Anaconda3\lib\site-packages\django\contrib\gis\geometry\__init__.py
-django.contrib.gis.geometry.backend.__init__|C:\Users\moonlit\Anaconda3\lib\site-packages\django\contrib\gis\geometry\backend\__init__.py
-django.contrib.gis.geometry.backend.geos|C:\Users\moonlit\Anaconda3\lib\site-packages\django\contrib\gis\geometry\backend\geos.py
-django.contrib.gis.geometry.regex|C:\Users\moonlit\Anaconda3\lib\site-packages\django\contrib\gis\geometry\regex.py
+django.contrib.gis.geometry|C:\Users\moonlit\Anaconda3\lib\site-packages\django\contrib\gis\geometry.py
 django.contrib.gis.geos.__init__|C:\Users\moonlit\Anaconda3\lib\site-packages\django\contrib\gis\geos\__init__.py
 django.contrib.gis.geos.base|C:\Users\moonlit\Anaconda3\lib\site-packages\django\contrib\gis\geos\base.py
 django.contrib.gis.geos.collections|C:\Users\moonlit\Anaconda3\lib\site-packages\django\contrib\gis\geos\collections.py
@@ -4056,13 +4048,8 @@ django.contrib.gis.management.__init__|C:\Users\moonlit\Anaconda3\lib\site-packa
 django.contrib.gis.management.commands.__init__|C:\Users\moonlit\Anaconda3\lib\site-packages\django\contrib\gis\management\commands\__init__.py
 django.contrib.gis.management.commands.inspectdb|C:\Users\moonlit\Anaconda3\lib\site-packages\django\contrib\gis\management\commands\inspectdb.py
 django.contrib.gis.management.commands.ogrinspect|C:\Users\moonlit\Anaconda3\lib\site-packages\django\contrib\gis\management\commands\ogrinspect.py
-django.contrib.gis.maps.__init__|C:\Users\moonlit\Anaconda3\lib\site-packages\django\contrib\gis\maps\__init__.py
-django.contrib.gis.maps.google.__init__|C:\Users\moonlit\Anaconda3\lib\site-packages\django\contrib\gis\maps\google\__init__.py
-django.contrib.gis.maps.google.gmap|C:\Users\moonlit\Anaconda3\lib\site-packages\django\contrib\gis\maps\google\gmap.py
-django.contrib.gis.maps.google.overlays|C:\Users\moonlit\Anaconda3\lib\site-packages\django\contrib\gis\maps\google\overlays.py
-django.contrib.gis.maps.google.zoom|C:\Users\moonlit\Anaconda3\lib\site-packages\django\contrib\gis\maps\google\zoom.py
-django.contrib.gis.maps.openlayers.__init__|C:\Users\moonlit\Anaconda3\lib\site-packages\django\contrib\gis\maps\openlayers\__init__.py
 django.contrib.gis.measure|C:\Users\moonlit\Anaconda3\lib\site-packages\django\contrib\gis\measure.py
+django.contrib.gis.ptr|C:\Users\moonlit\Anaconda3\lib\site-packages\django\contrib\gis\ptr.py
 django.contrib.gis.serializers.__init__|C:\Users\moonlit\Anaconda3\lib\site-packages\django\contrib\gis\serializers\__init__.py
 django.contrib.gis.serializers.geojson|C:\Users\moonlit\Anaconda3\lib\site-packages\django\contrib\gis\serializers\geojson.py
 django.contrib.gis.shortcuts|C:\Users\moonlit\Anaconda3\lib\site-packages\django\contrib\gis\shortcuts.py
@@ -4074,7 +4061,6 @@ django.contrib.gis.utils.layermapping|C:\Users\moonlit\Anaconda3\lib\site-packag
 django.contrib.gis.utils.ogrinfo|C:\Users\moonlit\Anaconda3\lib\site-packages\django\contrib\gis\utils\ogrinfo.py
 django.contrib.gis.utils.ogrinspect|C:\Users\moonlit\Anaconda3\lib\site-packages\django\contrib\gis\utils\ogrinspect.py
 django.contrib.gis.utils.srs|C:\Users\moonlit\Anaconda3\lib\site-packages\django\contrib\gis\utils\srs.py
-django.contrib.gis.utils.wkt|C:\Users\moonlit\Anaconda3\lib\site-packages\django\contrib\gis\utils\wkt.py
 django.contrib.gis.views|C:\Users\moonlit\Anaconda3\lib\site-packages\django\contrib\gis\views.py
 django.contrib.humanize.__init__|C:\Users\moonlit\Anaconda3\lib\site-packages\django\contrib\humanize\__init__.py
 django.contrib.humanize.apps|C:\Users\moonlit\Anaconda3\lib\site-packages\django\contrib\humanize\apps.py
@@ -4100,6 +4086,7 @@ django.contrib.postgres.aggregates.statistics|C:\Users\moonlit\Anaconda3\lib\sit
 django.contrib.postgres.apps|C:\Users\moonlit\Anaconda3\lib\site-packages\django\contrib\postgres\apps.py
 django.contrib.postgres.fields.__init__|C:\Users\moonlit\Anaconda3\lib\site-packages\django\contrib\postgres\fields\__init__.py
 django.contrib.postgres.fields.array|C:\Users\moonlit\Anaconda3\lib\site-packages\django\contrib\postgres\fields\array.py
+django.contrib.postgres.fields.citext|C:\Users\moonlit\Anaconda3\lib\site-packages\django\contrib\postgres\fields\citext.py
 django.contrib.postgres.fields.hstore|C:\Users\moonlit\Anaconda3\lib\site-packages\django\contrib\postgres\fields\hstore.py
 django.contrib.postgres.fields.jsonb|C:\Users\moonlit\Anaconda3\lib\site-packages\django\contrib\postgres\fields\jsonb.py
 django.contrib.postgres.fields.ranges|C:\Users\moonlit\Anaconda3\lib\site-packages\django\contrib\postgres\fields\ranges.py
@@ -4110,6 +4097,7 @@ django.contrib.postgres.forms.hstore|C:\Users\moonlit\Anaconda3\lib\site-package
 django.contrib.postgres.forms.jsonb|C:\Users\moonlit\Anaconda3\lib\site-packages\django\contrib\postgres\forms\jsonb.py
 django.contrib.postgres.forms.ranges|C:\Users\moonlit\Anaconda3\lib\site-packages\django\contrib\postgres\forms\ranges.py
 django.contrib.postgres.functions|C:\Users\moonlit\Anaconda3\lib\site-packages\django\contrib\postgres\functions.py
+django.contrib.postgres.indexes|C:\Users\moonlit\Anaconda3\lib\site-packages\django\contrib\postgres\indexes.py
 django.contrib.postgres.lookups|C:\Users\moonlit\Anaconda3\lib\site-packages\django\contrib\postgres\lookups.py
 django.contrib.postgres.operations|C:\Users\moonlit\Anaconda3\lib\site-packages\django\contrib\postgres\operations.py
 django.contrib.postgres.search|C:\Users\moonlit\Anaconda3\lib\site-packages\django\contrib\postgres\search.py
@@ -4162,6 +4150,7 @@ django.contrib.sites.requests|C:\Users\moonlit\Anaconda3\lib\site-packages\djang
 django.contrib.sites.shortcuts|C:\Users\moonlit\Anaconda3\lib\site-packages\django\contrib\sites\shortcuts.py
 django.contrib.staticfiles.__init__|C:\Users\moonlit\Anaconda3\lib\site-packages\django\contrib\staticfiles\__init__.py
 django.contrib.staticfiles.apps|C:\Users\moonlit\Anaconda3\lib\site-packages\django\contrib\staticfiles\apps.py
+django.contrib.staticfiles.checks|C:\Users\moonlit\Anaconda3\lib\site-packages\django\contrib\staticfiles\checks.py
 django.contrib.staticfiles.finders|C:\Users\moonlit\Anaconda3\lib\site-packages\django\contrib\staticfiles\finders.py
 django.contrib.staticfiles.handlers|C:\Users\moonlit\Anaconda3\lib\site-packages\django\contrib\staticfiles\handlers.py
 django.contrib.staticfiles.management.__init__|C:\Users\moonlit\Anaconda3\lib\site-packages\django\contrib\staticfiles\management\__init__.py
@@ -4192,8 +4181,6 @@ django.core.cache.utils|C:\Users\moonlit\Anaconda3\lib\site-packages\django\core
 django.core.checks.__init__|C:\Users\moonlit\Anaconda3\lib\site-packages\django\core\checks\__init__.py
 django.core.checks.caches|C:\Users\moonlit\Anaconda3\lib\site-packages\django\core\checks\caches.py
 django.core.checks.compatibility.__init__|C:\Users\moonlit\Anaconda3\lib\site-packages\django\core\checks\compatibility\__init__.py
-django.core.checks.compatibility.django_1_10|C:\Users\moonlit\Anaconda3\lib\site-packages\django\core\checks\compatibility\django_1_10.py
-django.core.checks.compatibility.django_1_8_0|C:\Users\moonlit\Anaconda3\lib\site-packages\django\core\checks\compatibility\django_1_8_0.py
 django.core.checks.database|C:\Users\moonlit\Anaconda3\lib\site-packages\django\core\checks\database.py
 django.core.checks.messages|C:\Users\moonlit\Anaconda3\lib\site-packages\django\core\checks\messages.py
 django.core.checks.model_checks|C:\Users\moonlit\Anaconda3\lib\site-packages\django\core\checks\model_checks.py
@@ -4204,7 +4191,6 @@ django.core.checks.security.csrf|C:\Users\moonlit\Anaconda3\lib\site-packages\dj
 django.core.checks.security.sessions|C:\Users\moonlit\Anaconda3\lib\site-packages\django\core\checks\security\sessions.py
 django.core.checks.templates|C:\Users\moonlit\Anaconda3\lib\site-packages\django\core\checks\templates.py
 django.core.checks.urls|C:\Users\moonlit\Anaconda3\lib\site-packages\django\core\checks\urls.py
-django.core.checks.utils|C:\Users\moonlit\Anaconda3\lib\site-packages\django\core\checks\utils.py
 django.core.exceptions|C:\Users\moonlit\Anaconda3\lib\site-packages\django\core\exceptions.py
 django.core.files.__init__|C:\Users\moonlit\Anaconda3\lib\site-packages\django\core\files\__init__.py
 django.core.files.base|C:\Users\moonlit\Anaconda3\lib\site-packages\django\core\files\base.py
@@ -4272,7 +4258,6 @@ django.core.servers.__init__|C:\Users\moonlit\Anaconda3\lib\site-packages\django
 django.core.servers.basehttp|C:\Users\moonlit\Anaconda3\lib\site-packages\django\core\servers\basehttp.py
 django.core.signals|C:\Users\moonlit\Anaconda3\lib\site-packages\django\core\signals.py
 django.core.signing|C:\Users\moonlit\Anaconda3\lib\site-packages\django\core\signing.py
-django.core.urlresolvers|C:\Users\moonlit\Anaconda3\lib\site-packages\django\core\urlresolvers.py
 django.core.validators|C:\Users\moonlit\Anaconda3\lib\site-packages\django\core\validators.py
 django.core.wsgi|C:\Users\moonlit\Anaconda3\lib\site-packages\django\core\wsgi.py
 django.db.__init__|C:\Users\moonlit\Anaconda3\lib\site-packages\django\db\__init__.py
@@ -4286,6 +4271,7 @@ django.db.backends.base.introspection|C:\Users\moonlit\Anaconda3\lib\site-packag
 django.db.backends.base.operations|C:\Users\moonlit\Anaconda3\lib\site-packages\django\db\backends\base\operations.py
 django.db.backends.base.schema|C:\Users\moonlit\Anaconda3\lib\site-packages\django\db\backends\base\schema.py
 django.db.backends.base.validation|C:\Users\moonlit\Anaconda3\lib\site-packages\django\db\backends\base\validation.py
+django.db.backends.ddl_references|C:\Users\moonlit\Anaconda3\lib\site-packages\django\db\backends\ddl_references.py
 django.db.backends.dummy.__init__|C:\Users\moonlit\Anaconda3\lib\site-packages\django\db\backends\dummy\__init__.py
 django.db.backends.dummy.base|C:\Users\moonlit\Anaconda3\lib\site-packages\django\db\backends\dummy\base.py
 django.db.backends.dummy.features|C:\Users\moonlit\Anaconda3\lib\site-packages\django\db\backends\dummy\features.py
@@ -4310,6 +4296,7 @@ django.db.backends.oracle.introspection|C:\Users\moonlit\Anaconda3\lib\site-pack
 django.db.backends.oracle.operations|C:\Users\moonlit\Anaconda3\lib\site-packages\django\db\backends\oracle\operations.py
 django.db.backends.oracle.schema|C:\Users\moonlit\Anaconda3\lib\site-packages\django\db\backends\oracle\schema.py
 django.db.backends.oracle.utils|C:\Users\moonlit\Anaconda3\lib\site-packages\django\db\backends\oracle\utils.py
+django.db.backends.oracle.validation|C:\Users\moonlit\Anaconda3\lib\site-packages\django\db\backends\oracle\validation.py
 django.db.backends.postgresql.__init__|C:\Users\moonlit\Anaconda3\lib\site-packages\django\db\backends\postgresql\__init__.py
 django.db.backends.postgresql.base|C:\Users\moonlit\Anaconda3\lib\site-packages\django\db\backends\postgresql\base.py
 django.db.backends.postgresql.client|C:\Users\moonlit\Anaconda3\lib\site-packages\django\db\backends\postgresql\client.py
@@ -4319,7 +4306,6 @@ django.db.backends.postgresql.introspection|C:\Users\moonlit\Anaconda3\lib\site-
 django.db.backends.postgresql.operations|C:\Users\moonlit\Anaconda3\lib\site-packages\django\db\backends\postgresql\operations.py
 django.db.backends.postgresql.schema|C:\Users\moonlit\Anaconda3\lib\site-packages\django\db\backends\postgresql\schema.py
 django.db.backends.postgresql.utils|C:\Users\moonlit\Anaconda3\lib\site-packages\django\db\backends\postgresql\utils.py
-django.db.backends.postgresql.version|C:\Users\moonlit\Anaconda3\lib\site-packages\django\db\backends\postgresql\version.py
 django.db.backends.postgresql_psycopg2.__init__|C:\Users\moonlit\Anaconda3\lib\site-packages\django\db\backends\postgresql_psycopg2\__init__.py
 django.db.backends.postgresql_psycopg2.base|C:\Users\moonlit\Anaconda3\lib\site-packages\django\db\backends\postgresql_psycopg2\base.py
 django.db.backends.postgresql_psycopg2.client|C:\Users\moonlit\Anaconda3\lib\site-packages\django\db\backends\postgresql_psycopg2\client.py
@@ -4329,7 +4315,6 @@ django.db.backends.postgresql_psycopg2.introspection|C:\Users\moonlit\Anaconda3\
 django.db.backends.postgresql_psycopg2.operations|C:\Users\moonlit\Anaconda3\lib\site-packages\django\db\backends\postgresql_psycopg2\operations.py
 django.db.backends.postgresql_psycopg2.schema|C:\Users\moonlit\Anaconda3\lib\site-packages\django\db\backends\postgresql_psycopg2\schema.py
 django.db.backends.postgresql_psycopg2.utils|C:\Users\moonlit\Anaconda3\lib\site-packages\django\db\backends\postgresql_psycopg2\utils.py
-django.db.backends.postgresql_psycopg2.version|C:\Users\moonlit\Anaconda3\lib\site-packages\django\db\backends\postgresql_psycopg2\version.py
 django.db.backends.signals|C:\Users\moonlit\Anaconda3\lib\site-packages\django\db\backends\signals.py
 django.db.backends.sqlite3.__init__|C:\Users\moonlit\Anaconda3\lib\site-packages\django\db\backends\sqlite3\__init__.py
 django.db.backends.sqlite3.base|C:\Users\moonlit\Anaconda3\lib\site-packages\django\db\backends\sqlite3\base.py
@@ -4352,6 +4337,7 @@ django.db.migrations.operations.base|C:\Users\moonlit\Anaconda3\lib\site-package
 django.db.migrations.operations.fields|C:\Users\moonlit\Anaconda3\lib\site-packages\django\db\migrations\operations\fields.py
 django.db.migrations.operations.models|C:\Users\moonlit\Anaconda3\lib\site-packages\django\db\migrations\operations\models.py
 django.db.migrations.operations.special|C:\Users\moonlit\Anaconda3\lib\site-packages\django\db\migrations\operations\special.py
+django.db.migrations.operations.utils|C:\Users\moonlit\Anaconda3\lib\site-packages\django\db\migrations\operations\utils.py
 django.db.migrations.optimizer|C:\Users\moonlit\Anaconda3\lib\site-packages\django\db\migrations\optimizer.py
 django.db.migrations.questioner|C:\Users\moonlit\Anaconda3\lib\site-packages\django\db\migrations\questioner.py
 django.db.migrations.recorder|C:\Users\moonlit\Anaconda3\lib\site-packages\django\db\migrations\recorder.py
@@ -4368,6 +4354,7 @@ django.db.models.deletion|C:\Users\moonlit\Anaconda3\lib\site-packages\django\db
 django.db.models.expressions|C:\Users\moonlit\Anaconda3\lib\site-packages\django\db\models\expressions.py
 django.db.models.fields.__init__|C:\Users\moonlit\Anaconda3\lib\site-packages\django\db\models\fields\__init__.py
 django.db.models.fields.files|C:\Users\moonlit\Anaconda3\lib\site-packages\django\db\models\fields\files.py
+django.db.models.fields.mixins|C:\Users\moonlit\Anaconda3\lib\site-packages\django\db\models\fields\mixins.py
 django.db.models.fields.proxy|C:\Users\moonlit\Anaconda3\lib\site-packages\django\db\models\fields\proxy.py
 django.db.models.fields.related|C:\Users\moonlit\Anaconda3\lib\site-packages\django\db\models\fields\related.py
 django.db.models.fields.related_descriptors|C:\Users\moonlit\Anaconda3\lib\site-packages\django\db\models\fields\related_descriptors.py
@@ -4376,6 +4363,8 @@ django.db.models.fields.reverse_related|C:\Users\moonlit\Anaconda3\lib\site-pack
 django.db.models.functions.__init__|C:\Users\moonlit\Anaconda3\lib\site-packages\django\db\models\functions\__init__.py
 django.db.models.functions.base|C:\Users\moonlit\Anaconda3\lib\site-packages\django\db\models\functions\base.py
 django.db.models.functions.datetime|C:\Users\moonlit\Anaconda3\lib\site-packages\django\db\models\functions\datetime.py
+django.db.models.functions.window|C:\Users\moonlit\Anaconda3\lib\site-packages\django\db\models\functions\window.py
+django.db.models.indexes|C:\Users\moonlit\Anaconda3\lib\site-packages\django\db\models\indexes.py
 django.db.models.lookups|C:\Users\moonlit\Anaconda3\lib\site-packages\django\db\models\lookups.py
 django.db.models.manager|C:\Users\moonlit\Anaconda3\lib\site-packages\django\db\models\manager.py
 django.db.models.options|C:\Users\moonlit\Anaconda3\lib\site-packages\django\db\models\options.py
@@ -4394,15 +4383,13 @@ django.db.transaction|C:\Users\moonlit\Anaconda3\lib\site-packages\django\db\tra
 django.db.utils|C:\Users\moonlit\Anaconda3\lib\site-packages\django\db\utils.py
 django.dispatch.__init__|C:\Users\moonlit\Anaconda3\lib\site-packages\django\dispatch\__init__.py
 django.dispatch.dispatcher|C:\Users\moonlit\Anaconda3\lib\site-packages\django\dispatch\dispatcher.py
-django.dispatch.weakref_backports|C:\Users\moonlit\Anaconda3\lib\site-packages\django\dispatch\weakref_backports.py
 django.forms.__init__|C:\Users\moonlit\Anaconda3\lib\site-packages\django\forms\__init__.py
 django.forms.boundfield|C:\Users\moonlit\Anaconda3\lib\site-packages\django\forms\boundfield.py
-django.forms.extras.__init__|C:\Users\moonlit\Anaconda3\lib\site-packages\django\forms\extras\__init__.py
-django.forms.extras.widgets|C:\Users\moonlit\Anaconda3\lib\site-packages\django\forms\extras\widgets.py
 django.forms.fields|C:\Users\moonlit\Anaconda3\lib\site-packages\django\forms\fields.py
 django.forms.forms|C:\Users\moonlit\Anaconda3\lib\site-packages\django\forms\forms.py
 django.forms.formsets|C:\Users\moonlit\Anaconda3\lib\site-packages\django\forms\formsets.py
 django.forms.models|C:\Users\moonlit\Anaconda3\lib\site-packages\django\forms\models.py
+django.forms.renderers|C:\Users\moonlit\Anaconda3\lib\site-packages\django\forms\renderers.py
 django.forms.utils|C:\Users\moonlit\Anaconda3\lib\site-packages\django\forms\utils.py
 django.forms.widgets|C:\Users\moonlit\Anaconda3\lib\site-packages\django\forms\widgets.py
 django.http.__init__|C:\Users\moonlit\Anaconda3\lib\site-packages\django\http\__init__.py
@@ -4441,7 +4428,6 @@ django.template.loaders.__init__|C:\Users\moonlit\Anaconda3\lib\site-packages\dj
 django.template.loaders.app_directories|C:\Users\moonlit\Anaconda3\lib\site-packages\django\template\loaders\app_directories.py
 django.template.loaders.base|C:\Users\moonlit\Anaconda3\lib\site-packages\django\template\loaders\base.py
 django.template.loaders.cached|C:\Users\moonlit\Anaconda3\lib\site-packages\django\template\loaders\cached.py
-django.template.loaders.eggs|C:\Users\moonlit\Anaconda3\lib\site-packages\django\template\loaders\eggs.py
 django.template.loaders.filesystem|C:\Users\moonlit\Anaconda3\lib\site-packages\django\template\loaders\filesystem.py
 django.template.loaders.locmem|C:\Users\moonlit\Anaconda3\lib\site-packages\django\template\loaders\locmem.py
 django.template.response|C:\Users\moonlit\Anaconda3\lib\site-packages\django\template\response.py
@@ -4463,6 +4449,8 @@ django.test.testcases|C:\Users\moonlit\Anaconda3\lib\site-packages\django\test\t
 django.test.utils|C:\Users\moonlit\Anaconda3\lib\site-packages\django\test\utils.py
 django.urls.__init__|C:\Users\moonlit\Anaconda3\lib\site-packages\django\urls\__init__.py
 django.urls.base|C:\Users\moonlit\Anaconda3\lib\site-packages\django\urls\base.py
+django.urls.conf|C:\Users\moonlit\Anaconda3\lib\site-packages\django\urls\conf.py
+django.urls.converters|C:\Users\moonlit\Anaconda3\lib\site-packages\django\urls\converters.py
 django.urls.exceptions|C:\Users\moonlit\Anaconda3\lib\site-packages\django\urls\exceptions.py
 django.urls.resolvers|C:\Users\moonlit\Anaconda3\lib\site-packages\django\urls\resolvers.py
 django.urls.utils|C:\Users\moonlit\Anaconda3\lib\site-packages\django\urls\utils.py
@@ -4486,7 +4474,6 @@ django.utils.encoding|C:\Users\moonlit\Anaconda3\lib\site-packages\django\utils\
 django.utils.feedgenerator|C:\Users\moonlit\Anaconda3\lib\site-packages\django\utils\feedgenerator.py
 django.utils.formats|C:\Users\moonlit\Anaconda3\lib\site-packages\django\utils\formats.py
 django.utils.functional|C:\Users\moonlit\Anaconda3\lib\site-packages\django\utils\functional.py
-django.utils.glob|C:\Users\moonlit\Anaconda3\lib\site-packages\django\utils\glob.py
 django.utils.html|C:\Users\moonlit\Anaconda3\lib\site-packages\django\utils\html.py
 django.utils.html_parser|C:\Users\moonlit\Anaconda3\lib\site-packages\django\utils\html_parser.py
 django.utils.http|C:\Users\moonlit\Anaconda3\lib\site-packages\django\utils\http.py
@@ -4508,6 +4495,7 @@ django.utils.text|C:\Users\moonlit\Anaconda3\lib\site-packages\django\utils\text
 django.utils.timesince|C:\Users\moonlit\Anaconda3\lib\site-packages\django\utils\timesince.py
 django.utils.timezone|C:\Users\moonlit\Anaconda3\lib\site-packages\django\utils\timezone.py
 django.utils.translation.__init__|C:\Users\moonlit\Anaconda3\lib\site-packages\django\utils\translation\__init__.py
+django.utils.translation.template|C:\Users\moonlit\Anaconda3\lib\site-packages\django\utils\translation\template.py
 django.utils.translation.trans_null|C:\Users\moonlit\Anaconda3\lib\site-packages\django\utils\translation\trans_null.py
 django.utils.translation.trans_real|C:\Users\moonlit\Anaconda3\lib\site-packages\django\utils\translation\trans_real.py
 django.utils.tree|C:\Users\moonlit\Anaconda3\lib\site-packages\django\utils\tree.py
@@ -20118,6 +20106,8 @@ vcomp140|C:\Users\moonlit\Anaconda3\vcomp140.dll
 vcruntime140|C:\Users\moonlit\Anaconda3\vcruntime140.dll
 venv.__init__|C:\Users\moonlit\Anaconda3\lib\venv\__init__.py
 venv.__main__|C:\Users\moonlit\Anaconda3\lib\venv\__main__.py
+virtualenv|C:\Users\moonlit\Anaconda3\lib\site-packages\virtualenv.py
+virtualenv_support.__init__|C:\Users\moonlit\Anaconda3\lib\site-packages\virtualenv_support\__init__.py
 warnings|C:\Users\moonlit\Anaconda3\lib\warnings.py
 wave|C:\Users\moonlit\Anaconda3\lib\wave.py
 wcwidth.__init__|C:\Users\moonlit\Anaconda3\lib\site-packages\wcwidth\__init__.py

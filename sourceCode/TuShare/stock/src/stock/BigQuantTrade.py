@@ -248,7 +248,7 @@ class Trade(object):
                     market = "深圳"
                     
                 last_price = self.get_last_price(code=code)
-                buy_vol = round((float(cash)/last_price)/100)*100
+                buy_vol = floor((float(cash)/last_price)/100)*100
                 buy_list.append([market ,code , buy_vol , last_price , cash])
 #                 buy_xls.append(object)
         if len(buy_list) < 1 :
@@ -290,7 +290,7 @@ class TradeSmallMarketValue(Trade):
                                          
             if cash_balance >= cash_to_buy : 
                 #cash_balance -= cash_to_buy
-                last_price = self.get_last_price(code=code)*1.04
+                last_price = round(self.get_last_price(code=code)*100*1.04)/100
                 buy_vol    = floor((float(cash_to_buy)/last_price)/100)*100
                 cash_balance -= last_price * buy_vol 
             
@@ -301,7 +301,7 @@ class TradeSmallMarketValue(Trade):
                 else :
                     market = "深圳"
                                     
-                last_price = self.get_last_price(code=code)*1.04
+                last_price = round(self.get_last_price(code=code)*100*1.04)/100
                 if last_price == 0 :
                     print(code,"price:",last_price)
                     continue                
@@ -338,7 +338,7 @@ class TradeSmallMarketValue(Trade):
                 continue 
                         
             if code in buy_instruments :
-                last_price = self.get_last_price(code=code) * 0.96 
+                last_price = round(self.get_last_price(code=code) * 0.96*100)/100 
                 buy_vol = floor((float(max_cash_per_instrument)/last_price)/100)*100
                 sell_vol= volume - buy_vol
                 
@@ -352,7 +352,7 @@ class TradeSmallMarketValue(Trade):
             else :
                 market = "深圳"
                     
-            last_price = self.get_last_price(code=code) * 0.96 
+            last_price = round(self.get_last_price(code=code) * 0.96*100)/100 
                 
             sell_list.append([market ,code , volume , last_price, volume*last_price]) 
 
@@ -425,7 +425,7 @@ class TradeHLPrice(Trade):
                 else :
                     market = "深圳"
 
-                last_price = self.get_last_price(code=code)
+                last_price = round(self.get_last_price(code=code)*100)/100
                 if last_price == 0 :
                     print(code,"price:",last_price)
                     continue                
@@ -460,7 +460,7 @@ class TradeHLPrice(Trade):
             if code in sell_black_list :
                 continue 
              
-            volume = round(volume * self.val_ratio_ /100)*100
+            volume = floor(volume * self.val_ratio_ /100)*100
             vol    = self.get_position(code = code)
             
             if volume > vol :
@@ -471,7 +471,7 @@ class TradeHLPrice(Trade):
             else :
                 market = "深圳"
                     
-            last_price = self.get_last_price(code=code) * 0.93 
+            last_price = round(self.get_last_price(code=code) * 0.96*100)/100
                 
             sell_list.append([market ,code , volume , last_price, volume*last_price]) 
 
