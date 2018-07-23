@@ -1,14 +1,13 @@
 connect c##stock/didierg160@myoracle;
 
-update tb_stock_bigquant_dict set value =  29797.33 + 55277.61 where key = '×¯»ªcash_balance';
+update tb_stock_bigquant_dict set value =  138638.46 + 69221.10 where key = '×¯»ªcash_balance';
 
 delete tb_stock_bigquant_Position ;
 --insert into tb_stock_bigquant_Position values ('002705',169    ,14.15 ,sysdate,'×¯»ª');
 
-insert into tb_stock_bigquant_Position values ('600332',1800.00,36.960,sysdate,'×¯»ª');
-insert into tb_stock_bigquant_Position values ('300251',7100   ,9.92  ,sysdate,'×¯»ª');
-insert into tb_stock_bigquant_Position values ('603788',2520   ,24.85 ,sysdate,'×¯»ª');        
---insert into tb_stock_bigquant_Position values ('',,,sysdate,'×¯»ª');        
+insert into tb_stock_bigquant_Position values ('002709',1400.00,37.580,sysdate,'×¯»ª');
+insert into tb_stock_bigquant_Position values ('002709',400    ,37.713,sysdate,'×¯»ª');        
+insert into tb_stock_bigquant_Position values ('600167',1300   ,9.994 ,sysdate,'×¯»ª');        
 --insert into tb_stock_bigquant_Position values ('',,,sysdate,'×¯»ª');
 --insert into tb_stock_bigquant_Position values ('',,,sysdate,'×¯»ª');
 --insert into tb_stock_bigquant_Position values ('',,,sysdate,'×¯»ª');  
@@ -29,13 +28,13 @@ insert into tb_stock_bigquant_Position values ('603788',2520   ,24.85 ,sysdate,'
 commit;                                                 
                                                       
 ------------------------------------------------------------------------------------------------------
-update tb_stock_bigquant_dict set value = 22602.29 where key = '¹¨ö©cash_balance';
+update tb_stock_bigquant_dict set value = 28502.14 where key = '¹¨ö©cash_balance';
                                                       
 --insert into tb_stock_bigquant_Position values ('002705',169,14.15,sysdate,'¹¨ö©');
 
-insert into tb_stock_bigquant_Position values ('603788',420,24.72,sysdate,'¹¨ö©');     
-insert into tb_stock_bigquant_Position values ('600332',300,36.82,sysdate,'¹¨ö©');     
---insert into tb_stock_bigquant_Position values ('',,,sysdate,'¹¨ö©');       
+insert into tb_stock_bigquant_Position values ('002709',200 ,37.58,sysdate,'¹¨ö©');     
+insert into tb_stock_bigquant_Position values ('600167',1000,10.49,sysdate,'¹¨ö©');     
+insert into tb_stock_bigquant_Position values ('002110',200 ,19.36,sysdate,'¹¨ö©');       
 --insert into tb_stock_bigquant_Position values ('',,,sysdate,'¹¨ö©');               
 --insert into tb_stock_bigquant_Position values ('',,,sysdate,'¹¨ö©');                                                     
 --insert into tb_stock_bigquant_Position values ('',,,sysdate,'¹¨ö©');                                                                 
