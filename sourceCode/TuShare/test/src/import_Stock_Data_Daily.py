@@ -55,7 +55,8 @@ def importStockList():
     cr.execute(sql) 
     
     db.commit() 
-    
+        
+    engine = create_engine('oracle://c##stock:didierg160@myoracle')
     for row in df.itertuples(): 
         if getattr(row,"timeToMarket"    ) == 0 :
             continue
@@ -100,7 +101,7 @@ def importStockList():
         sql += ")"        
         cr.execute(sql)          
         
-        engine = create_engine('oracle://c##stock:didierg160@myoracle')
+
         sql  = "select count(*) count from tb_stock_list_tshis where "
         sql += " CODE            = '" + str(getattr(row,"code"            )) + "' and"    
         sql += " NAME            = '" + str(getattr(row,"name"            )) + "' and"
