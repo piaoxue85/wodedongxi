@@ -7,7 +7,7 @@ delete tb_stock_bigquant_Position ;
 
 insert into tb_stock_bigquant_Position values ('002709',1400.00,30.120,sysdate,'庄华');
 insert into tb_stock_bigquant_Position values ('002709',400    ,30.120,sysdate,'庄华');            
---insert into tb_stock_bigquant_Position values ('',,,sysdate,'庄华');
+insert into tb_stock_bigquant_Position values ('600167',1300   ,10.01 ,sysdate,'庄华');
 --insert into tb_stock_bigquant_Position values ('',,,sysdate,'庄华');
 --insert into tb_stock_bigquant_Position values ('',,,sysdate,'庄华');  
 --insert into tb_stock_bigquant_Position values ('',,,sysdate,'庄华');       
