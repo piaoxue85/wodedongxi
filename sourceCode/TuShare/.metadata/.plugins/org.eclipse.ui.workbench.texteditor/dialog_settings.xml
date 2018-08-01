@@ -3,28 +3,29 @@
 	<section name="org.eclipse.ui.texteditor.FindReplaceDialog_dialogBounds">
 		<item value="273" key="DIALOG_WIDTH"/>
 		<item value="93" key="DIALOG_Y_ORIGIN"/>
-		<item value="1139" key="DIALOG_X_ORIGIN"/>
 		<item value="400" key="DIALOG_HEIGHT"/>
+		<item value="1139" key="DIALOG_X_ORIGIN"/>
 		<item value="1|Microsoft YaHei UI|9.0|0|WINDOWS|1|-12|0|0|0|400|0|0|0|1|0|0|0|0|Microsoft YaHei UI" key="DIALOG_FONT_NAME"/>
 	</section>
 	<section name="org.eclipse.ui.texteditor.FindReplaceDialog">
 		<item value="true" key="wrap"/>
-		<item value="false" key="casesensitive"/>
 		<item value="false" key="isRegEx"/>
+		<item value="false" key="casesensitive"/>
 		<item value="false" key="incremental"/>
 		<item value="false" key="wholeword"/>
-		<item value="login" key="selection"/>
+		<item value="min_func_variance" key="selection"/>
 		<list key="findhistory">
-			<item value="login"/>
-			<item value="search"/>
-			<item value="INSTALLED_APPS"/>
-			<item value="DATABASES"/>
-			<item value="TEMPLATES"/>
-			<item value="round"/>
-			<item value="TradeSmallMarketValue"/>
-			<item value="train"/>
+			<item value="min_func_variance"/>
+			<item value="252"/>
+			<item value="get_stock_data_daily_df_daysago"/>
+			<item value="time"/>
+			<item value="datetime"/>
+			<item value="create_engine"/>
+			<item value="tb_stock_list"/>
+			<item value="_list"/>
 		</list>
 		<list key="replacehistory">
+			<item value="len"/>
 			<item value="C:/Users/moonlit/Desktop"/>
 			<item value="C:\Users\moonlit\Desktop"/>
 			<item value="000016zs"/>
@@ -32,7 +33,6 @@
 			<item value="ts_rank"/>
 			<item value="importAlpha101_xgb_rqalpha_backtest"/>
 			<item value="importAlpha101_rqalpha_test.py"/>
-			<item value="1E-5"/>
 		</list>
 	</section>
 </section>

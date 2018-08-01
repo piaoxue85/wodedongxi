@@ -97,28 +97,33 @@ import matplotlib.pyplot as plt
 # import time
 import getStockData as gsd
 
-codes = gsd.get_code_list()
-codes = codes["code"].values[:5]
+# codes = gsd.get_code_list()
+# codes = codes["code"].values[:5]
+# noa = len(codes)
+# data = pd.DataFrame()
+# for code in codes :
+#     data[code] = gsd.get_stock_data_daily_df_daysago(code=code,daysago=1000)["price"]
+
+codes = ['300401', '300298', '300410' ,'603306']
 noa = len(codes)
 data = pd.DataFrame()
 for code in codes :
-    data[code] = gsd.get_stock_data_daily_df_daysago(code=code,daysago=1000)["price"]
-
-
-
+    print(gsd.get_stock_data_daily_df_time(code=code,start="2018-01-02",end="2018-02-01"))
+    data[code] = gsd.get_stock_data_daily_df_time(code=code,start="2018-01-02",end="2018-02-01")["price"]
     
-
+print(data)
 # (data/data.ix[0]*100).plot(figsize=(8,5))
 # plt.show()
 rets = np.log(data/data.shift(1))
-print(rets.mean()*252)
-print(rets.cov()*252)
+len = len(data)
+print(rets.mean()*len)
+print(rets.cov()*len)
 weights = np.random.random(noa)
 weights /= np.sum(weights)
 
-fret = np.sum(rets.mean()*weights)*252
+fret = np.sum(rets.mean()*weights)*len
 print(fret)
-fret=np.sqrt(np.dot(weights.T,np.dot(rets.cov()*252,weights)))
+fret=np.sqrt(np.dot(weights.T,np.dot(rets.cov()*len,weights)))
 print(fret)
 
 prets = []
@@ -126,8 +131,8 @@ pvols = []
 for p in range (2500) :
     weights = np.random.random(noa)
     weights /= np.sum(weights)
-    prets.append(np.sum(rets.mean()*weights)*252)
-    pvols.append(np.sqrt(np.dot(weights.T,np.dot(rets.cov()*252,weights))))
+    prets.append(np.sum(rets.mean()*weights)*len)
+    pvols.append(np.sqrt(np.dot(weights.T,np.dot(rets.cov()*len,weights))))
     
 prets = np.array(prets)
 pvols = np.array(pvols)    
@@ -135,8 +140,8 @@ pvols = np.array(pvols)
 def statistics(weights):
     '''return portfolio statistics'''
     weights = np.array(weights)
-    pret = np.sum(rets.mean()*weights)*252
-    pvol = np.sqrt(np.dot(weights,np.dot(rets.cov()*252,weights))) #夏普比率
+    pret = np.sum(rets.mean()*weights)*len
+    pvol = np.sqrt(np.dot(weights,np.dot(rets.cov()*len,weights))) #夏普比率
     return np.array([pret,pvol,pret/pvol])
 
 import scipy.optimize as sco
