@@ -295,7 +295,7 @@ def importStockDataDaily(codes= [],names=[],asset='E',adj='qfq'):
 #是否除权
 def isXR(code=""):
     global cons
-    shi_jian = gsd.get_code_min_shi_jian(code)
+    shi_jian = gsd.get_code_max_shi_jian(code)
     
     if shi_jian =="None":
         return False
