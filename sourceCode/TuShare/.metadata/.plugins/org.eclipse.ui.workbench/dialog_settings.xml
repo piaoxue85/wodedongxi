@@ -6,6 +6,7 @@
 		<item value="false" key="WizardFileSystemResourceImportPage1.STORE_OVERWRITE_EXISTING_RESOURCES_ID"/>
 		<item value="false" key="WizardFileSystemResourceImportPage1.STORE_CREATE_CONTAINER_STRUCTURE_ID"/>
 		<list key="WizardFileSystemResourceImportPage1.STORE_SOURCE_NAMES_ID">
+			<item value="D:\cmdb\liujiangblog_project_2"/>
 			<item value="D:\kaggle-web-traffic\kaggle-web-traffic"/>
 			<item value="D:\World_Quant_Alphas"/>
 			<item value="D:\LSTM-Neural-Network-for-Time-Series-Prediction"/>
