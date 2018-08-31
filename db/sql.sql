@@ -1,5 +1,8 @@
 connect c##stock/didierg160@myoracle ;
 
+select to_char(sysdate,'yyyy-mm-dd hh24:mi:ss') from dual;
+exec proc_get_all ;
+select to_char(sysdate,'yyyy-mm-dd hh24:mi:ss') from dual;
 
 select to_char(sysdate,'hh24:mi:ss') ,count(1) from tb_stock_data_daily ;
 
