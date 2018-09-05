@@ -1,22 +1,20 @@
 -- VERSION_4
 -- START DISKCACHE_2
 D:\Projects\j金融\g股票数据分析系统\sourceCode\TuShare\.metadata\.plugins\org.eclipse.core.resources\.projects\stock\com.python.pydev.analysis\v2_indexcache
-stock.BigQuantSmallGetBuySellList|1533171313884156000|D:\Projects\j金融\g股票数据分析系统\sourceCode\TuShare\stock\src\stock\BigQuantSmallGetBuySellList.py
 -- END DISKCACHE
 -- START DICTIONARY
-1
-1=stock.BigQuantSmallGetBuySellList
+0
 -- END DICTIONARY
 -- START TREE 1
 8
-T|1|T!11@
-buy|1|buy_black!11@
-get|1|getRank!10@
-ran|1|rank!11@
-sel|1|sell_black!11@
-shi|1|shi_jian!11@
-sto|1|stockCount!11@
-wei|1|weights!11@
+T|0|
+buy|0|
+get|0|
+ran|0|
+sel|0|
+shi|0|
+sto|0|
+wei|0|
 -- END TREE
 -- START TREE 2
 0

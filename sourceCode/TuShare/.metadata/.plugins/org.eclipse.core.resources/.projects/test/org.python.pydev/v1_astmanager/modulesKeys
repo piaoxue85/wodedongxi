@@ -155,6 +155,7 @@ testTushare_pledged|D:\Projects\j金融\g股票数据分析系统\sourceCode\TuShare\test\
 testVGG|D:\Projects\j金融\g股票数据分析系统\sourceCode\TuShare\test\src\testVGG.py
 test_getstockData|D:\Projects\j金融\g股票数据分析系统\sourceCode\TuShare\test\src\test_getstockData.py
 test_resnet_v2|D:\Projects\j金融\g股票数据分析系统\sourceCode\TuShare\test\src\test_resnet_v2.py
+testmonthly|D:\Projects\j金融\g股票数据分析系统\sourceCode\TuShare\test\src\testmonthly.py
 tests.__init__|D:\BossSensor\tests\__init__.py
 train|D:\Projects\j金融\g股票数据分析系统\sourceCode\TuShare\test\src\train.py
 trainer|D:\Projects\j金融\g股票数据分析系统\sourceCode\TuShare\test\src\trainer.py
