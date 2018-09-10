@@ -352,6 +352,7 @@ as
   dmin_Week       date ;
   dcursor         date ;
   nlast_price     number ; 
+  nzhang_die_rate number ;  
   
   nTmp            number ;
   dTmp            date ;
@@ -532,6 +533,12 @@ begin
     --if rtweekdata.shi_jian = to_date('1994-02-04 15:00:00','yyyy-mm-dd hh24:mi:ss') then
     --  sTmp := '' ;
     --end if ;        
+    
+		if nlast_price is null then
+			nzhang_die_rate := null ;
+		else
+			nzhang_die_rate := rtweekdata.price/nlast_price - 1 ;
+		end if ;    
 
     insert into tb_stock_data_weekly 
     (
@@ -543,7 +550,8 @@ begin
       amount           ,
       shi_jian         , 
       price_today_open ,
-      price           
+      price            ,
+      zhang_die_rate         
     )
     values
     (
@@ -555,7 +563,8 @@ begin
       rtweekdata.amount           ,
       rtweekdata.shi_jian         ,
       rtweekdata.price_today_open ,
-      rtweekdata.price                   
+      rtweekdata.price            ,
+      nzhang_die_rate                    
     ) ;    
     
     proc_stock_get_week_kdj( pcode    , 
@@ -953,7 +962,8 @@ as
   dmax_month  date ;
   dmin_month  date ;
   dcursor     date ;
-  nlast_price number ; 
+  nlast_price     number ; 
+  nzhang_die_rate number ;
               
   nTmp        number ;
   dTmp        date ;
@@ -1122,6 +1132,12 @@ begin
     --  sTmp := '' ;
     --end if ;        
 
+		if nlast_price is null then
+			nzhang_die_rate := null ;
+		else
+			nzhang_die_rate := rtmonthdata.price/nlast_price - 1 ;
+		end if ;
+
     insert into tb_stock_data_monthly 
     (
       name             ,
@@ -1132,19 +1148,21 @@ begin
       amount           ,
       shi_jian         , 
       price_today_open ,
-      price           
+      price            ,
+      zhang_die_rate
     )
     values
     (
-      pname                       ,
-      pcode                       ,
+      pname                        ,
+      pcode                        ,
       rtmonthdata.max_price        ,
       rtmonthdata.min_price        ,
       rtmonthdata.vol              ,
       rtmonthdata.amount           ,
       rtmonthdata.shi_jian         ,
       rtmonthdata.price_today_open ,
-      rtmonthdata.price                   
+      rtmonthdata.price            ,
+      nzhang_die_rate             
     ) ;    
     
     proc_stock_get_month_kdj( 
@@ -1518,8 +1536,6 @@ begin
 end ;
 /
 
-
-
 create or replace procedure proc_stock_get_Quarter
 (
   pCode in varchar2 ,
@@ -1528,8 +1544,9 @@ create or replace procedure proc_stock_get_Quarter
 as
   dmax_Quarter  date ;
   dmin_Quarter  date ;
-  dcursor     date ;
-  nlast_price number ; 
+  dcursor       date ;
+  nlast_price     number ; 
+  nzhang_die_rate number ;
               
   nTmp        number ;
   dTmp        date ;
@@ -1697,7 +1714,13 @@ begin
     
     --if rtQuarterdata.shi_jian = to_date('1994-02-04 15:00:00','yyyy-mm-dd hh24:mi:ss') then
     --  sTmp := '' ;
-    --end if ;        
+    --end if ;
+    
+		if nlast_price is null then
+			nzhang_die_rate := null ;
+		else
+			nzhang_die_rate := rtQuarterdata.price/nlast_price - 1 ;
+		end if ;            
 
     insert into tb_stock_data_Quarterly 
     (
@@ -1709,7 +1732,8 @@ begin
       amount           ,
       shi_jian         , 
       price_today_open ,
-      price           
+      price            ,
+      zhang_die_rate         
     )
     values
     (
@@ -1721,7 +1745,8 @@ begin
       rtQuarterdata.amount           ,
       rtQuarterdata.shi_jian         ,
       rtQuarterdata.price_today_open ,
-      rtQuarterdata.price                   
+      rtQuarterdata.price            ,
+      nzhang_die_rate                     
     ) ;    
     
     proc_stock_get_Quarter_kdj( 
@@ -2106,8 +2131,9 @@ create or replace procedure proc_stock_get_HalfYear
 as
   dmax_HalfYear  date ;
   dmin_HalfYear  date ;
-  dcursor     date ;
-  nlast_price number ; 
+  dcursor        date ;
+  nlast_price     number ; 
+  nzhang_die_rate number ;  
               
   nTmp        number ;
   dTmp        date ;
@@ -2274,7 +2300,13 @@ begin
     
     --if rtHalfYeardata.shi_jian = to_date('1994-02-04 15:00:00','yyyy-mm-dd hh24:mi:ss') then
     --  sTmp := '' ;
-    --end if ;        
+    --end if ;     
+
+		if nlast_price is null then
+			nzhang_die_rate := null ;
+		else
+			nzhang_die_rate := rtHalfYeardata.price/nlast_price - 1 ;
+		end if ;       
 
     insert into tb_stock_data_HalfYearly 
     (
@@ -2286,7 +2318,8 @@ begin
       amount           ,
       shi_jian         , 
       price_today_open ,
-      price           
+      price            ,
+      zhang_die_rate         
     )
     values
     (
@@ -2298,7 +2331,8 @@ begin
       rtHalfYeardata.amount           ,
       rtHalfYeardata.shi_jian         ,
       rtHalfYeardata.price_today_open ,
-      rtHalfYeardata.price                   
+      rtHalfYeardata.price            ,
+      nzhang_die_rate                  
     ) ;    
     
     proc_stock_get_HalfYear_kdj( 
@@ -2676,7 +2710,6 @@ end ;
 /
 
 
-
 create or replace procedure proc_stock_get_Year
 (
   pCode in varchar2 ,
@@ -2685,8 +2718,9 @@ create or replace procedure proc_stock_get_Year
 as
   dmax_Year  date ;
   dmin_Year  date ;
-  dcursor     date ;
-  nlast_price number ; 
+  dcursor    date ;
+  nlast_price     number ; 
+  nzhang_die_rate number ;
               
   nTmp        number ;
   dTmp        date ;
@@ -2853,7 +2887,13 @@ begin
     
     --if rtYeardata.shi_jian = to_date('1994-02-04 15:00:00','yyyy-mm-dd hh24:mi:ss') then
     --  sTmp := '' ;
-    --end if ;        
+    --end if ;      
+
+		if nlast_price is null then
+			nzhang_die_rate := null ;
+		else
+			nzhang_die_rate := rtYeardata.price/nlast_price - 1 ;
+		end if ;      
 
     insert into tb_stock_data_Yearly 
     (
@@ -2865,7 +2905,8 @@ begin
       amount           ,
       shi_jian         , 
       price_today_open ,
-      price           
+      price            ,
+      zhang_die_rate          
     )
     values
     (
@@ -2877,7 +2918,8 @@ begin
       rtYeardata.amount           ,
       rtYeardata.shi_jian         ,
       rtYeardata.price_today_open ,
-      rtYeardata.price                   
+      rtYeardata.price            ,
+      nzhang_die_rate               
     ) ;    
     
     proc_stock_get_Year_kdj( 
