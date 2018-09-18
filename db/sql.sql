@@ -1,8 +1,5 @@
 connect c##stock/didierg160@myoracle ;
 
-select to_char(sysdate,'yyyy-mm-dd hh24:mi:ss') from dual;
-exec proc_get_all ;
-select to_char(sysdate,'yyyy-mm-dd hh24:mi:ss') from dual;
 
 select to_char(sysdate,'hh24:mi:ss') ,count(1) from tb_stock_data_daily ;
 
@@ -601,29 +598,3 @@ delete tb_stock_data_weekly     where code in ('000598','000719','000620');
 delete tb_stock_data_monthly    where code in ('000598','000719','000620');
 delete tb_stock_data_Quarterly  where code in ('000598','000719','000620');
                                                                                                                                                    
-                                                                                                                                                   
-                                                                                                                                                   
-                                                                                                                                                   select * from 
-(
-select shi_jiana ,zhang/(zhang+die)*100 rate from
-(select to_char(shi_jian,'yyyy-mm') shi_jiana,count(*) zhang from tb_stock_data_monthly where zhang_die_rate >0 group by to_char(shi_jian,'yyyy-mm')) a
-inner join 
-(select to_char(shi_jian,'yyyy-mm') shi_jianb,count(*) die from tb_stock_data_monthly where zhang_die_rate <=0 group by to_char(shi_jian,'yyyy-mm')) b
-on a.shi_jiana=b.shi_jianb
-)
-where 
-  rate >=20
-order by shi_jiana desc ;
-
-select substr(shi_jiana,1,4) ,count(1) from 
-(
-select shi_jiana ,zhang/(zhang+die)*100 rate from
-(select to_char(shi_jian,'yyyy-mm') shi_jiana,count(*) zhang from tb_stock_data_monthly where zhang_die_rate >0 group by to_char(shi_jian,'yyyy-mm')) a
-inner join 
-(select to_char(shi_jian,'yyyy-mm') shi_jianb,count(*) die from tb_stock_data_monthly where zhang_die_rate <=0 group by to_char(shi_jian,'yyyy-mm')) b
-on a.shi_jiana=b.shi_jianb
-)
-where 
-  rate >=20
-group by   substr(shi_jiana,1,4)
-order by substr(shi_jiana,1,4) desc ;

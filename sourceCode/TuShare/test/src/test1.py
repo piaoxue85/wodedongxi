@@ -14,9 +14,3 @@ print(df)
 
 df = pro.daily(ts_code='002230.SZ', start_date='', end_date='')
 print(df)
-
-aa=[]
-bb=[5,6,7]
-
-aa = aa + bb 
-print(aa)
