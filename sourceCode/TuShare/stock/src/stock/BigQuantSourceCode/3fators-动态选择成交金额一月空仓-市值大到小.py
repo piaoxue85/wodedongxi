@@ -1,3 +1,8 @@
+'''
+Created on 2018年7月27日
+
+@author: moonlit
+'''
 #上次你提到 回测结果显示中 显示最大回撤的时间段 
 #m6.pyfolio_full_tear_sheet()   这个接口可以满足你的需求
 
@@ -8,14 +13,10 @@ from sklearn import preprocessing
 # 获取股票代码
 instruments = D.instruments()
 # # 确定起始时间
-start_date = '2018-01-01' 
-# start_date = '2016-01-01'
-start_date = '2018-04-10'
-# start_date = '2014-01-01'
-# start_date = '2005-01-01'
-
+start_date = '2017-01-01' 
+# start_date = '2006-01-01' 
 # 确定结束时间
-end_date = '2018-09-04'
+end_date = '2018-07-25'
 
 # # 确定起始时间
 # start_date = '2007-01-01' 
@@ -42,18 +43,14 @@ def get_data(date="",portfolio_value=0.0):
 #     get_codes(date)
 #     df = D.history_data(instruments, date, date, fields=['market_cap'  , 'fs_eps','amount',"st_status","pe_ttm","volatility_$i_0"])
     #,"beta_industry_5_0"
-    fields = ["list_board_0","list_days_0",'market_cap_0',"amount_0","st_status_0","pe_ttm_0","fs_roe_0","fs_eps_0","west_eps_ftm_0"]
-#     fields = ["list_board_0","list_days_0",'market_cap_0',"amount_0","st_status_0","pe_ttm_0","fs_roe_0","fs_eps_0"]
+    fields = ["list_days_0",'market_cap_0',"amount_0","st_status_0","pe_ttm_0","fs_roe_0","fs_eps_0","west_eps_ftm_0"]
     df = D.features(    instruments, date, date, fields=fields, groupped_by_instrument=False, frequency='daily')
 #     print(df)
-#     剔除创业板
-#     df = df[ (df['list_board_0'] != 3)]
     df = df[ (df['list_days_0'] >= 365*2)]
     #4 0.5 5674.42% 41.36%
     df = df[  df['fs_eps_0'] >= 0.5 ]
     df = df[  df['st_status_0'] == 0 ]
-    daily_buy_stock = df[df['amount_0'] >= ((portfolio_value/4)/0.025) ]
-#     daily_buy_stock = df[df['amount_0'] >= ((portfolio_value/4)/0.05) ]
+    daily_buy_stock = df[df['amount_0'] >= ((portfolio_value/4)/0.05) ]
     daily_buy_stock = daily_buy_stock.dropna()
 #     print(daily_buy_stock)
     return daily_buy_stock
@@ -183,13 +180,12 @@ m = M.trade.v3(
     # 卖出订单以开盘价成交
     order_price_field_sell='close',
     # 策略本金    
-    capital_base= 295056.07,
+    capital_base= 288548.95999999996,
     # 比较基准：沪深300
     benchmark='000300.INDX',
     # 传入数据给回测模块，所有回测函数里用到的数据都要从这里传入，并通过 context.options 使用，否则可能会遇到缓存问题
     m_cached=False,
     volume_limit=0,    
-#     price_type  = "真实价格" ,
 #     options={'selected_data': None, 'rebalance_period': None}
 )
 m.pyfolio_full_tear_sheet()

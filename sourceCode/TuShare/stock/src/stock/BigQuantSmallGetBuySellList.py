@@ -17,7 +17,7 @@ def getRank(rank , buy_black):
     return rank_new
 
 stockCount = 4
-weights = []
+weights = [] 
 for i in range(stockCount):
     weights.append(1/stockCount)
     
