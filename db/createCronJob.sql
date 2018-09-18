@@ -81,16 +81,3 @@ begin
   dbms_job.submit(:job,'proc_stock_new_stock       ;',sysdate + 10/(24*60), 'trunc(sysdate)+1+ 8.5/24');    
   commit;
 end;
-
-
---´´½¨job
-variable job number;
-begin
-  dbms_job.submit(:job,'proc_stock_get_week_all    ;',sysdate + 0.6, 'to_date(to_char(trunc(sysdate + 9,''d'')-1,''yyyymmdd'')||120000,''yyyymmddhh24miss'')');   
-  dbms_job.submit(:job,'proc_stock_get_month_all   ;',sysdate + 0.6, 'to_date(to_char(add_months(trunc(sysdate,''month''),1 ),''yyyymmdd'')||150000,''yyyymmddhh24miss'')'); 
-  dbms_job.submit(:job,'proc_stock_get_Quarter_all ;',sysdate + 0.6, 'to_date(to_char(add_months(trunc(sysdate,''q''    ),3 ),''yyyymmdd'')||150000,''yyyymmddhh24miss'')');   
-  dbms_job.submit(:job,'proc_stock_get_HalfYear_all;',sysdate + 0.6, 'to_date(to_char(f_truncHalfYear(add_months(sysdate,6 )),''yyyymmdd'')||150000,''yyyymmddhh24miss'')');  
-  dbms_job.submit(:job,'proc_stock_get_Year_all    ;',sysdate + 0.6, 'to_date(to_char(add_months(trunc(sysdate,''year'' ),12),''yyyymmdd'')||150000,''yyyymmddhh24miss'')');    
-  dbms_job.submit(:job,'proc_stock_new_stock       ;',sysdate + 10/(24*60), 'trunc(sysdate)+1+ 8.5/24');    
-  commit;
-end;
