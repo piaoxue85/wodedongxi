@@ -12791,3 +12791,17 @@ Caused by: java.io.IOException: CreateProcess error=2, ϵͳÕҲ»µ½ָ¶
 	at java.lang.ProcessImpl.<init>(Unknown Source)
 	at java.lang.ProcessImpl.start(Unknown Source)
 	... 15 more
+
+!ENTRY org.python.pydev.shared_core 4 4 2018-09-18 10:36:13.111
+!MESSAGE Interpreter: D:\Anaconda3\python.exe not found
+!STACK 0
+org.python.pydev.core.MisconfigurationException: Interpreter: D:\Anaconda3\python.exe not found
+	at org.python.pydev.ui.interpreters.AbstractInterpreterManager.getInterpreterInfo(AbstractInterpreterManager.java:477)
+	at org.python.pydev.ui.interpreters.AbstractInterpreterManager.getInterpreterInfo(AbstractInterpreterManager.java:1)
+	at org.python.pydev.plugin.nature.PythonNature.getProjectInterpreter(PythonNature.java:1224)
+	at org.python.pydev.plugin.nature.PythonPathNature.getVariableSubstitution(PythonPathNature.java:521)
+	at org.python.pydev.plugin.nature.PythonPathNature.getVariableSubstitution(PythonPathNature.java:504)
+	at org.python.pydev.core.docutils.StringSubstitution.<init>(StringSubstitution.java:42)
+	at org.python.pydev.plugin.nature.PythonPathNature.getOnlyProjectPythonPathStr(PythonPathNature.java:167)
+	at org.python.pydev.plugin.nature.PythonNature$RebuildPythonNatureModules.run(PythonNature.java:135)
+	at org.eclipse.core.internal.jobs.Worker.run(Worker.java:54)
