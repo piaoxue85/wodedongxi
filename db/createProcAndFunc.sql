@@ -342,7 +342,7 @@ begin
 end ;
 /
 
-create or replace procedure proc_stock_get_week
+create or replace procedure proc_stock_get_week 
 (
   pCode in varchar2 ,
   pName in varchar2
