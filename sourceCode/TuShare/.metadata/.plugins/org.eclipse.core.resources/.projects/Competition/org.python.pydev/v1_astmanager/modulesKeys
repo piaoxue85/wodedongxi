@@ -1,10 +1,4 @@
 MODULES_MANAGER_V2
-bot2017Fin.Examples.submit1_scoring|D:\Competition\src\bot2017Fin\Examples\submit1_scoring.py
-bot2017Fin.news_submission|D:\Competition\src\bot2017Fin\news_submission.py
-bot2017Fin.pyword2vec.__init__|D:\Competition\src\bot2017Fin\pyword2vec\__init__.py
-bot2017Fin.pyword2vec.word2vec|D:\Competition\src\bot2017Fin\pyword2vec\word2vec.py
-bot2017Fin.scoring|D:\Competition\src\bot2017Fin\scoring.py
-bot2017Fin.transform|D:\Competition\src\bot2017Fin\transform.py
 c_preprocess|D:\Competition\src\c_preprocess.py
 test|D:\Competition\src\test.py
 train|D:\Competition\src\train.py
