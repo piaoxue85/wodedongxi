@@ -1,0 +1,6 @@
+projectKey=test
+serverUrl=http://172.24.18.219:8082
+serverVersion=7.3.0.15553
+dashboardUrl=http://172.24.18.219:8082/dashboard?id=test
+ceTaskId=AWXMxam07EEp_FHiCX8Z
+ceTaskUrl=http://172.24.18.219:8082/api/ce/task?id=AWXMxam07EEp_FHiCX8Z
