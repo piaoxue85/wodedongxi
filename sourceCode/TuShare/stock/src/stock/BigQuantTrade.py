@@ -338,7 +338,7 @@ class TradeSmallMarketValue(Trade):
                 continue 
                         
             if code in buy_instruments :
-                last_price = round(self.get_last_price(code=code) * 0.98*100)/100 
+                last_price = round(self.get_last_price(code=code) * 0.99*100)/100 
                 buy_vol = floor((float(max_cash_per_instrument)/last_price)/100)*100
                 sell_vol= volume - buy_vol
                 
@@ -352,7 +352,7 @@ class TradeSmallMarketValue(Trade):
             else :
                 market = "深圳"
                     
-            last_price = round(self.get_last_price(code=code) * 0.98*100)/100 
+            last_price = round(self.get_last_price(code=code) * 0.99*100)/100 
                 
             sell_list.append([market ,code , volume , last_price, volume*last_price]) 
 
