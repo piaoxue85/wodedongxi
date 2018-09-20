@@ -1,7 +1,0 @@
-import jqdatasdk as jq
-
-jq.auth('13600069823','didierg160')
-
-res = jq.get_security_info(code="000001.XSHE")
-print(res)
-jq.

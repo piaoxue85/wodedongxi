@@ -1,9 +1,0 @@
-import jqdatasdk as jq
-
-jq.auth('13600069823','didierg160')
-
-res = jq.get_security_info(code="000001.XSHE")
-print(res)
-
-res = jq.get_price('000300.XSHG')
-print(res)

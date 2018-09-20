@@ -1,3 +1,0 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<session version="1.0">&#x0A;<refactoring comment="Delete resource &apos;test/src/import_my_f_days_Auto_ML_wind.py&apos;" deleteContents="false" description="Delete resource &apos;test/src/import_my_f_days_Auto_ML_wind.py&apos;" element1="/test/src/import_my_f_days_Auto_ML_wind.py" flags="7" id="org.eclipse.ltk.core.refactoring.delete.resources" resources="1" stamp="1514185023988"/>&#x0A;<refactoring comment="Delete resource &apos;test/src/投资组合优化.py&apos;" deleteContents="false" description="Delete resource &apos;test/src/投资组合优化.py&apos;" element1="/test/src/投资组合优化.py" flags="7" id="org.eclipse.ltk.core.refactoring.delete.resources" resources="1" stamp="1514448554904"/>
-</session>

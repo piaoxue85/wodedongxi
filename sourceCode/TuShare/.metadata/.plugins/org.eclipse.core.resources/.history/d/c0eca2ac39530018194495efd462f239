@@ -1,2 +1,0 @@
-from jqdatasdk import *
-auth('13600069823','didierg160')
