@@ -1,379 +1,216 @@
-#上次你提到 回测结果显示中 显示最大回撤的时间段 
-#m6.pyfolio_full_tear_sheet()   这个接口可以满足你的需求
+'''
+投资程序：
+霍华．罗斯曼强调其投资风格在于为投资大众建立均衡、且以成长为导向的投资组合。选股方式偏好大型股，
+管理良好且为领导产业趋势，以及产生实际报酬率的公司；不仅重视公司产生现金的能力，也强调有稳定成长能力的重要。
+总市值大于等于50亿美元。
+良好的财务结构。
+较高的股东权益报酬。
+拥有良好且持续的自由现金流量。
+稳定持续的营收成长率。
+优于比较指数的盈余报酬率。
+'''
 
 import pandas as pd
 import numpy as np
-from sklearn import preprocessing
-import matplotlib.pyplot as plt 
-
-import xgboost as xgb 
-
-#模型参数设置XGBRegressor
-xlf = xgb.XGBRegressor(learning_rate=0.5, 
-                        n_estimators=20000,
-                        max_depth=100,  
-                        min_child_weight=3, 
-                        silent=True, 
-                        objective='reg:linear', 
-                        nthread=-1, 
-                        gamma=0.3,                        
-                        max_delta_step=0, 
-                        subsample= 0.7, 
-                        colsample_bytree= 0.8, 
-                        colsample_bylevel=1, 
-                        reg_alpha=0.0001, 
-                        reg_lambda= 0.2,   
-                        scale_pos_weight=0, 
-                        seed=1024, 
-                        missing=None)
-
-# 获取股票代码
-instruments = D.instruments()
-# # 确定起始时间
-start_date = '2018-01-01' 
-# start_date = '2006-01-01' 
-# 确定结束时间
-end_date = '2018-05-22' 
-
-last_month_date = ""
-
-# # 确定起始时间
-# start_date = '2007-01-01' 
-# # 确定结束时间
-# end_date = '2018-01-17' 
-
-# # 确定起始时间
-# start_date = '2005-01-01 ' 
-# # 确定结束时间
-# end_date = '2007-11-01'  
-
-# 起始日期
-# start_date = '2006-01-01'
-# # 结束日期
-# end_date = '2007-01-08'
-
-# def get_codes(date=""):
-#     df = D.history_data(instruments,start_date = "1990-12-31",end_date =date,fields=['amount'])
-#     df = df.groupby(by=['instrument']).size()
-#     print(df.columns )
-
-# 获取股票总市值数据，返回DataFrame数据格式
-def get_data(date="", codes = instruments):
-#     get_codes(date)
-#     df = D.history_data(instruments, date, date, fields=['market_cap'  , 'fs_eps','amount',"st_status","pe_ttm","volatility_$i_0"])
-    #,"beta_industry_5_0"
-    fields = ["list_days_0",'market_cap_0',"amount_0","st_status_0","pe_ttm_0","fs_roe_0","fs_eps_0","west_eps_ftm_0"]
-    df = D.features(codes, date, date, fields=fields, groupped_by_instrument=False, frequency='daily')
-
-    df = df[ (df['list_days_0'] >= 365*2)]
-    #4 0.5 5674.42% 41.36%
-    df = df[  df['fs_eps_0'] >= 0.5 ]
-    df = df[  df['st_status_0'] == 0 ]
-    daily_buy_stock = df[df['amount_0'] > 0 ]
-    daily_buy_stock = daily_buy_stock.dropna()
-
-    return daily_buy_stock
-
-
-def get_data_y(instruments=[],begin = "" , end = ""):
-    if begin == "" or end == "" :
-        return []
-    
-    fields = ["close_0"]
-    print(begin , end)
-    df_begin = D.features(instruments, begin, begin, fields=fields, groupped_by_instrument=False, frequency='daily')
-    df_end   = D.features(instruments, end  , end  , fields=fields, groupped_by_instrument=False, frequency='daily')
-    
-    df_begin = df_begin.reset_index(drop=True)
-    df_end   = df_end.reset_index  (drop=True)
-    
-    df_begin = df_begin.set_index("instrument")
-    df_end   = df_end.set_index(  "instrument")
-    
-    df = pd.concat([df_begin,df_end],axis=1)
-    
-    df.columns =["date_begin","close_begin","date_end","close_end"]
-    df = df.dropna() 
-#     print(df)
-    res = pd.DataFrame()
-    res["code"] = df.index 
-    res["rate"] = (df["close_end"].values / df["close_begin"].values) - 1
-    res = res.dropna() 
-    
-    p   = res.boxplot(return_type ="dict")    
-
-    y   = p['fliers'][0].get_ydata() # 'flies'即为异常值的标签    
-
-    c = []
-    r = []
-    for (code , rate) in zip(res["code"].values,res["rate"].values) :
-        if rate in y :
-            continue
-        c.append(code)
-        r.append(rate)
-
-    res = pd.DataFrame()
-    res["instrument"] = c
-    res["rate"]       = r
-
-    return res
-    
-
-def get_train_data(date="",last_month_date=""):
-    train_x = get_data  (date =last_month_date,codes = instruments)
-    train_y = get_data_y(instruments=instruments,begin=last_month_date,end = date)
-#     print(train_x)
-    train_x = train_x.reset_index(drop=True)
-    train_y = train_y.reset_index(drop=True)
-    
-    train_x = train_x.set_index("instrument")
-    train_y = train_y.set_index("instrument")
-    
-    df = pd.concat([train_x,train_y],axis=1) 
-    df = df.dropna()
-    
-    df["market_cap_0"] = df["market_cap_0"]/(10000000000)
-    
-    df = df.drop("st_status_0",axis=1)
-    df = df.drop("date",axis=1)
-    df = df.drop("list_days_0",axis=1)
-    df = df.drop("amount_0",axis=1)
-    df = df.reset_index(drop=True)
-    
-    train_y = df["rate"].values    
-    
-    df = df.drop("rate",axis=1)
-    
-    #print(df)
-    
-    train_x = np.array(df)
-        
-#     y = []
-#     for y_ in train_y :
-#         if y_ >= 0 :
-#             y.append(1)  #涨
-#         else :
-#             y.append(0)  #跌
-    
-#     train_y = np.array(y)
-    
-    return train_x,train_y
-
-def train(date="",last_month_date="") :
-    global module    
-    x,y = get_train_data(date=date,last_month_date=last_month_date)
-#     print(x)
-#     print(y)
-    xlf.fit(x, y, eval_metric='mae', verbose = True, eval_set = [(x, y)],early_stopping_rounds=50)
-    
-def predict(date=""):
-    global module,instruments
-    df = get_data(date = date ,codes = instruments)
-
-    df = df.dropna()
-        
-    df["market_cap_0"] = df["market_cap_0"]/(10000000000)
-    
-    codes = df["instrument"].values
-    
-    df = df.drop("st_status_0",axis=1)
-    df = df.drop("date"       ,axis=1)
-    df = df.drop("list_days_0",axis=1)
-    df = df.drop("amount_0"   ,axis=1)
-    df = df.drop("instrument" ,axis=1)
-    
-    #print(df)
-        
-    x = np.array(df)
-    
-    y = xlf.predict(x)
-    
-    c  = []
-    y_ = []
-    
-    #print("y",y)
-    
-    for code,y_ in zip(codes,y):
-        #if y_[0]  == 1 :
-        if y_ > 0 :
-#             print("y_",y_)
-            c.append(code)
-
-    return c
-
-def get_buy_list(date=""):
-    global last_month_date
-    
-    if last_month_date == "" :
-        last_month_date = date
-        return []
-    
-    print(last_month_date)
-    train(date=date , last_month_date=last_month_date)
-    codes = predict(date=date)
-    #print("codes:",codes)  
-    
-    last_month_date = date
-    if len(codes) < 1 :
-        return []
-    
-    data = get_data(date,codes=codes)
-    code = data["instrument"].values
-#     beta = data["beta_industry_5_0"].values
-    mc   = data["market_cap_0"].values
-    eps  = data["fs_eps_0"].values
-#     fx   = data["west_eps_ftm_0"].values
-    
-#     beta  = preprocessing.scale(abs(beta-1))
-#     beta  = preprocessing.scale(beta*-1)
-    if len(mc)<1 :
-        return []
-    
-    mc    = preprocessing.scale(mc*1)
-    eps   = preprocessing.scale(eps*-1)
-#     fx    = preprocessing.scale(fx*-1)
-    
-    data = pd.DataFrame()
-    data["code"]  = code     
-    data["factor"]= mc
-    
-    #6 3806.69% 36.74%
-    #5 3334.79% 35.24%
-    #4 3948.35% 37.15%
-    #3 2118.67% 30.29%    
-#     print(data.sort_values('factor',ascending =True))
-    data = data.sort_values('factor',ascending =True)[:4]
-    last_month_date = date
-    return data["code"].values
-
-    
-
-# 回测参数设置，initialize函数只运行一次
+import jqdata
+# 初始化函数，设定基准等等
 def initialize(context):
-    # 手续费设置
-    context.set_commission(PerOrder(buy_cost=0.002 , sell_cost=0.002  , min_cost=5)) 
-#     context.set_commission(PerOrder(buy_cost=0.0002, sell_cost=0.00122, min_cost=5)) 
-    # 调仓规则（每月的第一天调仓）
-    context.schedule_function(rebalance, date_rule=date_rules.month_start(days_offset=0)) 
-#     context.schedule_function(rebalance, date_rule=date_rules.month_start(days_offset=0)) 
-    # 传入 整理好的调仓股票数据
-#     context.daily_buy_stock = daily_buy_stock
-    set_long_only()
-#     set_max_leverage(1)  
-
-#     print(context.daily_buy_stock)
-
-# handle_data函数会每天运行一次
-def handle_data(context,data):
-    if data.current_dt.strftime('%Y-%m-%d') == end_date :
-#         rebalance(context, data)
-        # 打印持仓的股票        
-        positions = context.portfolio.positions
-        for equity in positions:
-            position = positions[equity]
-            print(position.sid)
+    # 设定沪深300作为基准
+    set_benchmark('000300.XSHG')
+    # 开启动态复权模式(真实价格)
+    set_option('use_real_price', True)
+    # 输出内容到日志 log.info()
+    log.info('初始函数开始运行且全局只运行一次')
+    # 过滤掉order系列API产生的比error级别低的log
+    # log.set_level('order', 'error')
+    #策略参数设置
+    #操作的股票列表
+    g.buy_list = []
+    ### 股票相关设定 ###
+    # 股票类每笔交易时的手续费是：买入时佣金万分之三，卖出时佣金万分之三加千分之一印花税, 每笔交易佣金最低扣5块钱
+    set_order_cost(OrderCost(close_tax=0.001, open_commission=0.0003, close_commission=0.0003, min_commission=5), type='stock')
     
-
-# 换仓函数
-def rebalance(context, data):
-    # 当前的日期
-    date = data.current_dt.strftime('%Y-%m-%d')
-    # 根据日期获取调仓需要买入的股票的列表
-    print("today is :",date)
-    stock_to_buy = get_buy_list(date)
-    print(stock_to_buy)
-
-    # 通过positions对象，使用列表生成式的方法获取目前持仓的股票列表
-    stock_hold_now = [equity.symbol for equity in context.portfolio.positions]
-    # 继续持有的股票：调仓时，如果买入的股票已经存在于目前的持仓里，那么应继续持有
-    no_need_to_sell = [i for i in stock_hold_now if i in stock_to_buy]
-    # 需要卖出的股票
-    stock_to_sell = [i for i in stock_hold_now if i not in no_need_to_sell]
-  
-    # 卖出
-    for stock in stock_to_sell:
-        # 如果该股票停牌，则没法成交。因此需要用can_trade方法检查下该股票的状态
-        # 如果返回真值，则可以正常下单，否则会出错
-        # 因为stock是字符串格式，我们用symbol方法将其转化成平台可以接受的形式：Equity格式
-
-        if data.can_trade(context.symbol(stock)):
-            # order_target_percent是平台的一个下单接口，表明下单使得该股票的权重为0，
-            #   即卖出全部股票，可参考回测文档
-            context.order_target_percent(context.symbol(stock), 0)
+    # 每月第5个交易日进行操作
+    # 开盘前运行
+    run_monthly(before_market_open,5,time='before_open', reference_security='000300.XSHG') 
+    # 开盘时运行
+    run_monthly(market_open,5,time='open', reference_security='000300.XSHG')
     
-    # 如果当天没有买入的股票，就返回
-    if len(stock_to_buy) == 0:
-        return
+## 开盘前运行函数     
+def before_market_open(context):
+    #获取要操作的股票列表
+    temp_list = get_stock_list(context)
 
-    # 等权重买入 
-    weight =  1 / len(stock_to_buy)
+    #获取满足条件的股票列表
+    temp_list = get_stock_list(context)
+    log.info('满足条件的股票有%s只'%len(temp_list))
+    #按市值进行排序
+    g.buy_list = get_check_stocks_sort(context,temp_list)
+
+## 开盘时运行函数
+def market_open(context):
+    #卖出不在买入列表中的股票
+    sell(context,g.buy_list)
+    #买入不在持仓中的股票，按要操作的股票平均资金
+    buy(context,g.buy_list)
     
-    # 买入
-    for stock in stock_to_buy:
-        if data.can_trade(context.symbol(stock)):
-            # 下单使得某只股票的持仓权重达到weight，因为
-            # weight大于0,因此是等权重买入
-#             print(context.symbol(stock))
-            context.order_target_percent(context.symbol(stock), weight)
-#             print(stock)
+#交易函数 - 买入
+def buy(context, buy_lists):
+    # 获取最终的 buy_lists 列表
+    # 买入股票
+    if len(buy_lists)>0:
+        #分配资金
+        cash = context.portfolio.available_cash/(len(buy_lists)*1.0)
+        # 进行买入操作
+        for s in buy_lists:
+            order_value(s,cash)
+       
+# 交易函数 - 出场
+def sell(context, buy_lists):
+    # 获取 sell_lists 列表
+    hold_stock = context.portfolio.positions.keys()
+    for s in hold_stock:
+        #卖出不在买入列表中的股票
+        if s not in buy_lists:
+            order_target_value(s,0)   
 
-m = M.trade.v3(
-    instruments=instruments,
-    start_date=start_date,
-    end_date=end_date,
-    initialize=initialize,
-    handle_data=handle_data,
-    # 买入订单以开盘价成交
-    order_price_field_buy='open',
-    # 卖出订单以开盘价成交
-    order_price_field_sell='close',
-    # 策略本金    
-    capital_base=400000,
-    # 比较基准：沪深300
-    benchmark='000300.INDX',
-    # 传入数据给回测模块，所有回测函数里用到的数据都要从这里传入，并通过 context.options 使用，否则可能会遇到缓存问题
-    m_cached=False,
-    volume_limit=0,    
-#     options={'selected_data': None, 'rebalance_period': None}
-)
+#按市值进行排序   
+#从大到小
+def get_check_stocks_sort(context,check_out_lists):
+    df = get_fundamentals(query(valuation.circulating_cap,valuation.pe_ratio,valuation.code).filter(valuation.code.in_(check_out_lists)),date=context.previous_date)
+    #asc值为0，从大到小
+    df = df.sort('circulating_cap',ascending=0)
+    out_lists = list(df['code'].values)
+    return out_lists
+    
+'''
+1.总市值≧市场平均值*1.0。
+2.最近一季流动比率≧市场平均值（流动资产合计/流动负债合计）。
+3.近四季股东权益报酬率（roe）≧市场平均值。
+4.近五年自由现金流量均为正值。（cash_flow.net_operate_cash_flow - cash_flow.net_invest_cash_flow）
+5.近四季营收成长率介于6%至30%（）。    'IRYOY':indicator.inc_revenue_year_on_year, # 营业收入同比增长率(%)
+6.近四季盈余成长率介于8%至50%。(eps比值)
+'''
+def get_stock_list(context):
+    temp_list = list(get_all_securities(types=['stock']).index)    
+    #剔除停牌股
+    all_data = get_current_data()
+    temp_list = [stock for stock in temp_list if not all_data[stock].paused]
+    #获取多期财务数据
+    panel = get_data(temp_list,4)
+    #1.总市值≧市场平均值*1.0。
+    df_mkt = panel.loc[['circulating_market_cap'],3,:]
+    df_mkt = df_mkt[df_mkt['circulating_market_cap']>df_mkt['circulating_market_cap'].mean()]
+    l1 = set(df_mkt.index)
+    
+    #2.最近一季流动比率≧市场平均值（流动资产合计/流动负债合计）。
+    df_cr = panel.loc[['total_current_assets','total_current_liability'],3,:]
+    #替换零的数值
+    df_cr = df_cr[df_cr['total_current_liability'] != 0]
+    df_cr['cr'] = df_cr['total_current_assets']/df_cr['total_current_liability']
+    df_cr_temp = df_cr[df_cr['cr']>df_cr['cr'].mean()]
+    l2 = set(df_cr_temp.index)
 
-m.pyfolio_full_tear_sheet()
-m.risk_analyze()
-            
-# m=M.backtest.v5( 
-#     instruments=instruments,
-#     start_date=start_date, 
-#     end_date=end_date,
-#     # 必须传入initialize，只在第一天运行
-#     initialize=initialize,
-#     #  必须传入handle_data,每个交易日都会运行
-#     handle_data=handle_data,
-#     # 买入以开盘价成交
-#     order_price_field_buy='open',
-#     # 卖出也以开盘价成交
-#     order_price_field_sell='close',
-#     # 策略本金
-#     capital_base=400000,
-#     # 比较基准：沪深300
-#     benchmark='000300.INDX',
-#     m_cached=False,
-#     volume_limit=0,
-# )      
+    #3.近四季股东权益报酬率（roe）≧市场平均值。
+    l3 = {}
+    for i in range(4):
+        roe_mean = panel.loc['roe',i,:].mean()
+        df_3 = panel.iloc[:,i,:]
+        df_temp_3 = df_3[df_3['roe']>roe_mean]
+        if i == 0:    
+            l3 = set(df_temp_3.index)
+        else:
+            l_temp = df_temp_3.index
+            l3 = l3 & set(l_temp)
+    l3 = set(l3)
 
+    #4.近五年自由现金流量均为正值。（cash_flow.net_operate_cash_flow - cash_flow.net_invest_cash_flow）
+    y = context.current_dt.year
+    l4 = {}
+    for i in range(1,6):
+        df = get_fundamentals(query(cash_flow.code,cash_flow.statDate,cash_flow.net_operate_cash_flow , \
+                                    cash_flow.net_invest_cash_flow),statDate=str(y-i))
+        if len(df) != 0:
+            df['FCF'] = df['net_operate_cash_flow']-df['net_invest_cash_flow']
+            df = df[df['FCF']>0]
+            l_temp = df['code'].values
+            if len(l4) != 0:
+                l4 = set(l4) & set(l_temp)
+            l4 = l_temp
+        else:
+            continue
+    l4 = set(l4)
+    #print 'test'
+    #print l4
+    #5.近四季营收成长率介于6%至30%（）。    'IRYOY':indicator.inc_revenue_year_on_year, # 营业收入同比增长率(%)
+    l5 = {}
+    for i in range(4):
+        df_5 = panel.iloc[:,i,:]
+        df_temp_5 = df_5[(df_5['inc_revenue_year_on_year']>6) & (df_5['inc_revenue_year_on_year']<30)]
+        if i == 0:    
+            l5 = set(df_temp_5.index)
+        else:
+            l_temp = df_temp_5.index
+            l5 = l5 & set(l_temp)
+    l5 = set(l5)
+    
+    #6.近四季盈余成长率介于8%至50%。(eps比值)
+    l6 = {}
+    for i in range(4):
+        df_6 = panel.iloc[:,i,:]
+        df_temp = df_6[(df_6['eps']>0.08) & (df_6['eps']<0.5)]
+        if i == 0:    
+            l6 = set(df_temp.index)
+        else:
+            l_temp = df_temp.index
+            l6 = l6 & set(l_temp)
+    l6 = set(l6)
+    
+    return list(l1 & l2 &l3 & l4 & l5 & l6)
+    
+#去极值（分位数法）  
+def winsorize(se):
+    q = se.quantile([0.025, 0.975])
+    if isinstance(q, pd.Series) and len(q) == 2:
+        se[se < q.iloc[0]] = q.iloc[0]
+        se[se > q.iloc[1]] = q.iloc[1]
+    return se
+    
+#获取多期财务数据内容
+def get_data(pool, periods):
+    q = query(valuation.code, income.statDate, income.pubDate).filter(valuation.code.in_(pool))
+    df = get_fundamentals(q)
+    df.index = df.code
+    stat_dates = set(df.statDate)
+    stat_date_stocks = { sd:[stock for stock in df.index if df['statDate'][stock]==sd] for sd in stat_dates }
 
-# # 4. 策略回测：https://bigquant.com/docs/module_trade.html
-# m = M.trade.v1(
-#     instruments=instruments,
-#     start_date=start_date,
-#     end_date=end_date,
-#     initialize=initialize,
-#     handle_data=handle_data,
-#     # 买入订单以开盘价成交
-#     order_price_field_buy='open',
-#     # 卖出订单以开盘价成交
-#     order_price_field_sell='open',
-#     capital_base=capital_base,
-#     benchmark=benchmark,
-#     # 传入数据给回测模块，所有回测函数里用到的数据都要从这里传入，并通过 context.options 使用，否则可能会遇到缓存问题
-#     options={'selected_data': selected_data, 'rebalance_period': rebalance_period}
-# )
+    def quarter_push(quarter):
+        if quarter[-1]!='1':
+            return quarter[:-1]+str(int(quarter[-1])-1)
+        else:
+            return str(int(quarter[:4])-1)+'q4'
+
+    q = query(valuation.code,valuation.code,valuation.circulating_market_cap,balance.total_current_assets,balance.total_current_liability,\
+    indicator.roe,cash_flow.net_operate_cash_flow,cash_flow.net_invest_cash_flow,indicator.inc_revenue_year_on_year,indicator.eps
+              )
+
+    stat_date_panels = { sd:None for sd in stat_dates }
+
+    for sd in stat_dates:
+        quarters = [sd[:4]+'q'+str(int(sd[5:7])/3)]
+        for i in range(periods-1):
+            quarters.append(quarter_push(quarters[-1]))
+        nq = q.filter(valuation.code.in_(stat_date_stocks[sd]))
+        pre_panel = { quarter:get_fundamentals(nq, statDate = quarter) for quarter in quarters }
+        for thing in pre_panel.values():
+            thing.index = thing.code.values
+        panel = pd.Panel(pre_panel)
+        panel.items = range(len(quarters))
+        stat_date_panels[sd] = panel.transpose(2,0,1)
+
+    final = pd.concat(stat_date_panels.values(), axis=2)
+
+    return final.dropna(axis=2)
+    
+    
+    
