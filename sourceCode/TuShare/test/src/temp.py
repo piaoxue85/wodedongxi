@@ -13,6 +13,9 @@
 import pandas as pd
 import numpy as np
 import jqdata
+
+enable_profile()
+
 # 初始化函数，设定基准等等
 def initialize(context):
     # 设定沪深300作为基准
@@ -32,9 +35,9 @@ def initialize(context):
     
     # 每月第5个交易日进行操作
     # 开盘前运行
-    run_monthly(before_market_open,5,time='before_open', reference_security='000300.XSHG') 
+    run_monthly(before_market_open,1,time='before_open', reference_security='000300.XSHG') 
     # 开盘时运行
-    run_monthly(market_open,5,time='open', reference_security='000300.XSHG')
+    run_monthly(market_open,1,time='open', reference_security='000300.XSHG')
     
 ## 开盘前运行函数     
 def before_market_open(context):
