@@ -1,3 +1,0 @@
-import jqdatasdk as jq
-
-jq.auth('13600069823','didierg160')

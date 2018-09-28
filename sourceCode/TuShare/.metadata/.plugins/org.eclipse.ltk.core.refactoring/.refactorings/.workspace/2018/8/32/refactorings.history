@@ -1,4 +1,0 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<session version="1.0">
-<refactoring comment="Delete resource &apos;DevOps/src/ansible-cmdb&apos;" deleteContents="false" description="Delete resource &apos;DevOps/src/ansible-cmdb&apos;" element1="/DevOps/src/ansible-cmdb" flags="7" id="org.eclipse.ltk.core.refactoring.delete.resources" resources="1" stamp="1533786131604"/>
-</session>

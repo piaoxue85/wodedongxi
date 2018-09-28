@@ -1,4 +1,0 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<session version="1.0">
-<refactoring comment="Rename resource &apos;test/src/Copy of importAlpha101data_21_40.py&apos; to &apos;importAlpha101data_21_40.py&apos;" description="Rename resource &apos;Copy of importAlpha101data_21_40.py&apos;" flags="7" id="org.eclipse.ltk.core.refactoring.rename.resource" input="src/Copy of importAlpha101data_21_40.py" name="importAlpha101data_21_40.py" stamp="1507122961315" updateReferences="true"/>
-</session>
