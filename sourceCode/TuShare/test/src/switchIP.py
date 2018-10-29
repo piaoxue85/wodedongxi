@@ -20,6 +20,10 @@ if len(colNicConfigs) < 1:
 # 获取第一个网络适配器的设置
 objNicConfig = colNicConfigs[1]
 
+for objNicConfig in colNicConfigs :
+    if objNicConfig.Description == "Realtek PCIe GBE Family Controller" :
+        break ;
+
 #写入自己的IP地址
 arrIPAddresses = ['172.24.195.131']
 # arrIPAddresses = ['10.0.0.100']
