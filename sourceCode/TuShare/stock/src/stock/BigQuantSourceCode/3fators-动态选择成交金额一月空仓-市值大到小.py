@@ -7,48 +7,49 @@ from sklearn import preprocessing
 
 # 获取股票代码
 instruments = D.instruments()
+black_list = [ 
+                "603199.SHA",         #2018-9-26 嘉润金地计划6个月内减持占公司股份总数的14.46%
+             ]
+
+instruments_tmp = []
+for code in instruments :
+    if code not in black_list :
+        instruments_tmp.append(code)
+    
+    
+instruments = instruments_tmp
+instruments_tmp = []
+    
+
 # # 确定起始时间
-# start_date = '2018-01-01' 
+start_date = '2018-01-01' 
 # start_date = '2016-01-01'
-start_date = '2018-04-10'
-# start_date = '2010-01-01'
+# start_date = '2018-04-10'
+# start_date = '2017-01-01'
 # start_date = '2005-01-01'
 # start_date = "2007-02-01"
 
 # 确定结束时间
-end_date = '2018-09-17'
+end_date = '2018-11-01'
+# end_date = '2018-08-01'
 
-# # 确定起始时间
-# start_date = '2007-01-01' 
-# # 确定结束时间
-# end_date = '2018-01-17' 
 
-# # 确定起始时间
-# start_date = '2005-01-01 ' 
-# # 确定结束时间
-# end_date = '2007-11-01'  
-
-# 起始日期
-# start_date = '2006-01-01'
-# # 结束日期
-# end_date = '2007-01-08'
-
-# def get_codes(date=""):
-#     df = D.history_data(instruments,start_date = "1990-12-31",end_date =date,fields=['amount'])
-#     df = df.groupby(by=['instrument']).size()
-#     print(df.columns )
 
 # 获取股票总市值数据，返回DataFrame数据格式
 def get_data(date="",portfolio_value=0.0):
 #     get_codes(date)
 #     df = D.history_data(instruments, date, date, fields=['market_cap'  , 'fs_eps','amount',"st_status","pe_ttm","volatility_$i_0"])
     #,"beta_industry_5_0"
-    fields = ["list_board_0","list_days_0",'market_cap_0',"amount_0","st_status_0","pe_ttm_0","fs_roe_0","fs_eps_0","west_eps_ftm_0"]
+    fields = ["list_board_0","list_days_0",'market_cap_0',"market_cap_float_0","amount_0","st_status_0","pe_ttm_0","fs_roe_0","fs_eps_0","west_eps_ftm_0"]
 #     fields = ["list_board_0","list_days_0",'market_cap_0',"amount_0","st_status_0","pe_ttm_0","fs_roe_0","fs_eps_0"]
     df = D.features(    instruments, date, date, fields=fields, groupped_by_instrument=False, frequency='daily')
 #     print(df)
     #剔除创业板
     df = df[ (df['list_board_0'] != 3)]
+    
+    #剔除黑名单
+#     df = df[ df['instrument'].notin(black_list)]
+    
     df = df[ (df['list_days_0'] >= 365*2)]
     #4 0.5 5674.42% 41.36%
     df = df[  df['fs_eps_0'] >= 0.5 ]
@@ -65,6 +66,7 @@ def get_buy_list(date="",portfolio_value=0.0):
     code = data["instrument"].values
 #     beta = data["beta_industry_5_0"].values
     mc   = data["market_cap_0"].values
+#     mc   = data["market_cap_float_0"].values
     eps  = data["fs_eps_0"].values
     fx   = data["west_eps_ftm_0"].values
     
