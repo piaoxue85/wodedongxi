@@ -25,7 +25,7 @@ for objNicConfig in colNicConfigs :
         break ;
 
 #写入自己的IP地址
-arrIPAddresses = ['172.24.195.131']
+arrIPAddresses = ['172.24.195.249']
 # arrIPAddresses = ['10.0.0.100']
 arrSubnetMasks = ['255.255.255.0']
 arrDefaultGateways = ['172.24.195.254']

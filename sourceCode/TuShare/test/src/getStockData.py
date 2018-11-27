@@ -416,6 +416,54 @@ def get_stock_data_monthly_rqalpha(code='',end=''):
 #     print(sql)
     data = data.set_index('shi_jian')
     return data      
+
+def get_stock_data_monthly(code='',begin="",end=''):
+    engine = create_engine('oracle://c##stock:didierg160@myoracle')
+    
+    sql  =  "select to_char(shi_jian,'yyyy-mm-dd')                   shi_jian         , "
+    sql +=  "       decode(price           ,null,0,price )           price            , "
+    sql +=  "       decode(price_last_day  ,null,0,price_last_day  ) price_last_day   , "
+    sql +=  "       decode(price_today_open,null,0,price_today_open) price_today_open , "
+    sql +=  "       decode(zhang_die       ,null,0,zhang_die       ) zhang_die        , "
+    sql +=  "       decode(zhang_die_rate  ,null,0,zhang_die_rate  ) zhang_die_rate   , "
+    sql +=  "       decode(max_price       ,null,0,max_price       ) max_price        , "
+    sql +=  "       decode(min_price       ,null,0,min_price       ) min_price        , "
+    sql +=  "       decode(vol             ,null,0,vol             ) vol              , "
+    sql +=  "       decode(amount          ,null,0,amount          ) amount           , "
+    sql +=  "       decode(MA6             ,null,0,MA6             ) MA6              , "
+    sql +=  "       decode(MA12            ,null,0,MA12            ) MA12             , "
+    sql +=  "       decode(MA20            ,null,0,MA20            ) MA20             , "
+    sql +=  "       decode(MA30            ,null,0,MA30            ) MA30             , "
+    sql +=  "       decode(MA45            ,null,0,MA45            ) MA45             , "
+    sql +=  "       decode(MA60            ,null,0,MA60            ) MA60             , "
+    sql +=  "       decode(MA125           ,null,0,MA125           ) MA125            , "
+    sql +=  "       decode(MA250           ,null,0,MA250           ) MA250            , "
+    sql +=  "       decode(KDJ_K           ,null,0,KDJ_K           ) KDJ_K            , "
+    sql +=  "       decode(KDJ_D           ,null,0,KDJ_D           ) KDJ_D            , "
+    sql +=  "       decode(KDJ_J           ,null,0,KDJ_J           ) KDJ_J            , "
+    sql +=  "       decode(xstd_SLONG      ,null,0,xstd_SLONG      ) xstd_SLONG       , "
+    sql +=  "       decode(xstd_SSHORT     ,null,0,xstd_SSHORT     ) xstd_SSHORT      , "
+    sql +=  "       decode(xstd_LLONG      ,null,0,xstd_LLONG      ) xstd_LLONG       , "
+    sql +=  "       decode(xstd_LSHORT     ,null,0,xstd_LSHORT     ) xstd_LSHORT      , "
+    sql +=  "       decode(BOLL_uBOLL      ,null,0,BOLL_uBOLL      ) BOLL_uBOLL       , "
+    sql +=  "       decode(BOLL_dBOLL      ,null,0,BOLL_dBOLL      ) BOLL_dBOLL       , "
+    sql +=  "       decode(BOLL_BOLL       ,null,0,BOLL_BOLL       ) BOLL_BOLL        , "
+    sql +=  "       decode(MACD_DIF        ,null,0,MACD_DIF        ) MACD_DIF         , "
+    sql +=  "       decode(MACD_MACD       ,null,0,MACD_MACD       ) MACD_MACD        , "
+    sql +=  "       decode(MACD_DIF_MACD   ,null,0,MACD_DIF_MACD   ) MACD_DIF_MACD      "
+    sql +=  "from tb_stock_data_monthly where "
+    sql +=  "  code = '" + code + "'" 
+    sql +=  "    and "
+    sql +=  "  shi_jian >= to_date('"+begin[0:10] +" 15:00:00','yyyy-mm-dd hh24:mi:ss') "
+    sql +=  "    and "
+    sql +=  "  shi_jian <= to_date('"+end[0:10]   +" 15:00:00','yyyy-mm-dd hh24:mi:ss') "    
+    sql +=  "order by shi_jian asc "    
+
+    data = pd.read_sql_query(sql,con = engine)
+#     print(sql)
+    data = data.set_index('shi_jian')
+    return data      
+    
     
 def get_stock_data_Quarterly_rqalpha(code='',end=''):
     engine = create_engine('oracle://c##stock:didierg160@myoracle')

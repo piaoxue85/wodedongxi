@@ -6,19 +6,23 @@ Created on 2018年11月19日
 #loading important libraries
 import pandas as pd
 import matplotlib.pyplot as plt
+import getStockData as gsd
+
 
 #reading the dataset
-train = pd.read_csv('AirPassengers.csv')
+# train = pd.read_csv('AirPassengers.csv')
+train = gsd.get_stock_data_daily_df_time("399001zs","2017-01-01","2018-11-16")
 
 #preprocessing
-train.timestamp = pd.to_datetime(train.Month , format = '%Y-%m')
-train.index = train.timestamp
-train.drop('Month',axis = 1, inplace = True)
+# train.timestamp = pd.to_datetime(train.Month , format = '%Y-%m')
+# train.index = train.timestamp
+# train.drop('Month',axis = 1, inplace = True)
 
 #looking at the first few rows
 #train.head()
 
-train['#Passengers'].plot()
+# train['price'].plot()
+# plt.show()
 
 #define function for ADF test
 from statsmodels.tsa.stattools import adfuller
@@ -32,7 +36,7 @@ def adf_test(timeseries):
     print (dfoutput)
 
 #apply adf test on the series
-adf_test(train['#Passengers'])
+adf_test(train['price'])
 
 #define function for kpss test
 from statsmodels.tsa.stattools import kpss
@@ -42,15 +46,21 @@ def kpss_test(timeseries):
     kpsstest = kpss(timeseries, regression='c')
     kpss_output = pd.Series(kpsstest[0:3], index=['Test Statistic','p-value','Lags Used'])
     for key,value in kpsstest[3].items():
-    kpss_output['Critical Value (%s)'%key] = value
-print (kpss_output)
+        kpss_output['Critical Value (%s)'%key] = value    
+        
+    print(kpss_output)
+    
+kpss_test(train['price'])
 
-train['#Passengers_diff'] = train['#Passengers'] - train['#Passengers'].shift(1)
-train['#Passengers_diff'].dropna().plot()
+train['price_diff'] = train['price'] - train['price'].shift(1)
+train['price_diff'].dropna().plot()
 
 n=7
-train['#Passengers_diff'] = train['#Passengers'] - train['#Passengers'].shift(n)
+train['price_diff'] = train['price'] - train['price'].shift(n)
 
-train['#Passengers_log'] = np.log(train['#Passengers'])
-train['#Passengers_log_diff'] = train['#Passengers_log'] - train['#Passengers_log'].shift(1)
-train['#Passengers_log_diff'].dropna().plot()
+import numpy as np
+
+train['price_log'] = np.log(train['price'])
+train['price_log_diff'] = train['price_log'] - train['price_log'].shift(1)
+(train['price_log_diff'].dropna()).plot()
+plt.show()
