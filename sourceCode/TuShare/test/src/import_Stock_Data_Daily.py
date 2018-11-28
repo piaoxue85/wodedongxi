@@ -354,9 +354,9 @@ def isXR(code=""):
          
 # 导入个股   
 print("导入个股")      
-# codes,names = importStockList()
-codes = ["600664"]
-names = ["哈药股份"]
+codes,names = importStockList()
+# codes = ["600664"]
+# names = ["哈药股份"]
 importStockDataDaily(codes,names)
 
 #导入指数
