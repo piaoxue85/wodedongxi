@@ -14,12 +14,11 @@ import tushare as ts
 import time
 
 #获取连接备用
-# cons = ts.get_apis()
-#获取连接备用
-print(ts.__version__)
-ts.set_token("23bb6cd2f77e39ea16ca656f2fc1ec2aaaeb6d84aed8369030be7ee8")
+cons = ts.get_apis()
 
-cons = ts.pro_api()
+# print(ts.__version__)
+# ts.set_token("23bb6cd2f77e39ea16ca656f2fc1ec2aaaeb6d84aed8369030be7ee8")
+# cons = ts.pro_api()
 
 def importStockList():
     global cons
