@@ -258,9 +258,9 @@ def importStockDataDaily(codes= [],names=[],asset='E',adj='qfq'):
                 sql = "delete tb_stock_data_daily where code = '" + code + code_tail+ "'"
                 cr.execute(sql)
             
-            time.sleep(1)
+            ####time.sleep(1)
         
-        start_date = gsd.get_code_max_shi_jian(code=code + code_tail) 
+        start_date = gsd.get_code_max_shi_jian(code=code + code_tail).replace("-","") 
                
         if start_date == "None" :
             start_date = ""
@@ -360,7 +360,7 @@ def importStockDataDaily(codes= [],names=[],asset='E',adj='qfq'):
             except Exception as e: 
                 print(sql)
              
-        time.sleep(1)
+        ####time.sleep(1)
         db.commit()
         now = time.strftime('%Y-%m-%d %H:%M:%S',time.localtime(time.time()))
         print(now,code,"done")
@@ -426,8 +426,8 @@ def isXR(code=""):
 # 导入个股   
 print("导入个股")      
 codes,names = importStockList()
-# codes = ["600664"]
-# names = ["哈药股份"]
+# codes = ["002941"]
+# names = ["新疆交建"]
 importStockDataDaily(codes,names)
 
 # #导入指数
@@ -438,4 +438,4 @@ importStockDataDaily(codes,names)
 # importStockDataDailyZS(codes,names,asset='INDEX',adj='None')
 
 print("导入完成")
-ts.close_apis(conn=cons)
+# ts.close_apis(conn=cons)
