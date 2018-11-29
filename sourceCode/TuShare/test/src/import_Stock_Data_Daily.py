@@ -351,12 +351,12 @@ def isXR(code=""):
     else :
         return True
          
-# 导入个股   
-print("导入个股")      
-codes,names = importStockList()
-# codes = ["600664"]
-# names = ["哈药股份"]
-importStockDataDaily(codes,names)
+# # 导入个股   
+# print("导入个股")      
+# codes,names = importStockList()
+# codes = ["603520"]
+# names = ["司太立"]
+# importStockDataDaily(codes,names)
 
 #导入指数
 print("导入指数")
