@@ -46,8 +46,8 @@ def get_MSE_Test_loss(code="") :
     # print(df)
     # print(df_shi_jian)
     
-    data_train =df.iloc[:int(df.shape[0] * 0.99) , :]
-    data_test = df.iloc[ int(df.shape[0] * 0.99):, :]
+    data_train =df.iloc[:int(df.shape[0] * 0.85) , :]
+    data_test = df.iloc[ int(df.shape[0] * 0.85):, :]
     
     scaler = MinMaxScaler(feature_range=(0, 1))
     scaler.fit(data_train)
