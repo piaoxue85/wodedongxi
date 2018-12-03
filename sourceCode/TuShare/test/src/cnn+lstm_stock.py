@@ -14,7 +14,7 @@ import getStockData as gsd
 
 import pandas as pd
 import numpy as np
-import tensorflow as tf
+# import tensorflow as tf
 import matplotlib.pyplot as plt
 from sklearn.preprocessing import MinMaxScaler
 import time
@@ -24,6 +24,7 @@ from keras.models import Model
 from keras.layers import *
 from keras.models import *
 from keras.optimizers import Adam
+from keras.callbacks import EarlyStopping
 
 import cx_Oracle
 from sqlalchemy import create_engine
@@ -71,7 +72,7 @@ def get_MSE_Test_loss(code="") :
         
     inputs = Input(shape=(TIME_STEPS, INPUT_DIM))
 
-    x = Conv1D(filters = 128, kernel_size = 1, activation = 'relu')(inputs)  #, padding = 'same'
+    x = Conv1D(filters = 64, kernel_size = 1, activation = 'relu')(inputs)  #, padding = 'same'
     x = MaxPooling1D(pool_size = 5)(x)
     x = Dropout(0.2)(x)
     
@@ -81,7 +82,9 @@ def get_MSE_Test_loss(code="") :
     
     model = Model(inputs=inputs, outputs=output)
     model.compile(loss='mean_squared_error', optimizer='adam')
-    model.fit(X_train, y_train, epochs=epochs, batch_size=batch_size, shuffle=False,verbose = 0)
+    
+    early_stopping = EarlyStopping(monitor='val_loss', patience=5 , verbose= 0,mode="min")
+    model.fit(X_train, y_train, epochs=epochs, batch_size=batch_size,verbose= 0,validation_data=(X_test, y_test), shuffle=False,callbacks=[early_stopping])    
 #     y_pred = model.predict(X_test)
 #     print('MSE Train loss:', model.evaluate(X_train, y_train, batch_size=batch_size))
 #     print('MSE Test loss:' , model.evaluate(X_test, y_test  , batch_size=batch_size))

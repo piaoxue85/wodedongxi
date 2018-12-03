@@ -24,11 +24,11 @@ from keras.models import Model
 from keras.layers import *
 from keras.models import *
 from keras.optimizers import Adam
-
+from keras.callbacks import EarlyStopping
 # 000300zs
 
-# df_ = gsd.get_stock_data_daily_df_time("000300zs", "2005-01-04","2018-11-30")
-df_ = gsd.get_stock_data_daily_df_time("000850", "2005-01-04","2018-11-30")
+df_ = gsd.get_stock_data_daily_df_time("000300zs", "1995-01-04","2018-11-30")
+# df_ = gsd.get_stock_data_daily_df_time("600811", "2005-01-04","2018-11-30")
 df = pd.DataFrame()
 df_shi_jian = pd.DataFrame()
 
@@ -63,29 +63,32 @@ print(data_train)
 
 # output_dim = 1
 batch_size = 256
-epochs = 120
+epochs = 121
 seq_len = 5
 # hidden_size = 128
 
 
-TIME_STEPS = 5
+TIME_STEPS = seq_len
 INPUT_DIM = 6
 
 lstm_units = 64
 
-X_train = np.array([data_train[i : i + seq_len    , :]     for i in range(data_train.shape[0] - seq_len*2 )])
-y_train = np.array([data_train[i     + seq_len*2  , 0]     for i in range(data_train.shape[0] - seq_len*2 )]) 
-X_test  = np.array([data_test[ i : i + seq_len    , :]     for i in range(data_test.shape[0]  - seq_len*2 )])
-y_test  = np.array([data_test[ i     + seq_len*2  , 0]     for i in range(data_test.shape[0]  - seq_len*2 )]) 
+#预测多少天后的价格
+pre_date = 5
+
+X_train = np.array([data_train[i : i + seq_len           , :]     for i in range(data_train.shape[0] - seq_len-pre_date )])
+y_train = np.array([data_train[i     + seq_len+pre_date  , 0]     for i in range(data_train.shape[0] - seq_len-pre_date )]) 
+X_test  = np.array([data_test[ i : i + seq_len           , :]     for i in range(data_test.shape[0]  - seq_len-pre_date )])
+y_test  = np.array([data_test[ i     + seq_len+pre_date  , 0]     for i in range(data_test.shape[0]  - seq_len-pre_date )]) 
 
 print(X_train.shape, y_train.shape, X_test.shape, y_test.shape)
 
 inputs = Input(shape=(TIME_STEPS, INPUT_DIM))
 #drop1 = Dropout(0.3)(inputs)
 
-x = Conv1D(filters = 128, kernel_size = 1, activation = 'relu')(inputs)  #, padding = 'same'
-# x = Conv1D(filters = 64, kernel_size = 1, activation = 'relu')(inputs)  #, padding = 'same'
-x = MaxPooling1D(pool_size = 5)(x)
+# x = Conv1D(filters = 128, kernel_size = 1, activation = 'relu')(inputs)  #, padding = 'same'
+x = Conv1D(filters = 64, kernel_size = 1, activation = 'relu')(inputs)  #, padding = 'same'
+x = MaxPooling1D(pool_size = seq_len)(x)
 x = Dropout(0.2)(x)
 
 print(x.shape)
@@ -100,8 +103,12 @@ output = Dense(1, activation='sigmoid')(lstm_out)
 model = Model(inputs=inputs, outputs=output)
 print(model.summary())
 
-model.compile(loss='mean_squared_error', optimizer='adam')
-model.fit(X_train, y_train, epochs=epochs, batch_size=batch_size, shuffle=False)
+model.compile(loss='MSLE', optimizer='adam')
+
+# early_stopping = EarlyStopping(monitor='val_loss', patience=50 , verbose=2,mode="min")
+# model.fit(X_train, y_train, epochs=epochs, batch_size=batch_size,validation_data=(X_test, y_test), shuffle=False,callbacks=[early_stopping])
+model.fit(X_train, y_train, epochs=epochs, batch_size=batch_size,validation_data=(X_test, y_test), shuffle=False)
+
 y_pred = model.predict(X_test)
 print('MSE Train loss:', model.evaluate(X_train, y_train, batch_size=batch_size))
 print('MSE Test loss:' , model.evaluate(X_test, y_test  , batch_size=batch_size))
