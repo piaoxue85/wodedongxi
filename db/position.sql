@@ -1,18 +1,16 @@
 connect c##stock/didierg160@myoracle;
 
-update tb_stock_bigquant_dict set value = 3264.43 + 5000 + 625.81 where key = '×¯»ªcash_balance';
+update tb_stock_bigquant_dict set value =136217.10 +150402.93  where key = '×¯»ªcash_balance';
 
 delete tb_stock_bigquant_Position ;
 --insert into tb_stock_bigquant_Position values ('002705',169    ,14.15 ,sysdate,'×¯»ª');
 
-insert into tb_stock_bigquant_Position values ('603520',1500.00,21.410,sysdate,'×¯»ª');
-insert into tb_stock_bigquant_Position values ('002718',1100.00,27.490,sysdate,'×¯»ª');
-insert into tb_stock_bigquant_Position values ('002746',4200.00,14.950,sysdate,'×¯»ª');  
-insert into tb_stock_bigquant_Position values ('002789',600.00 ,16.780,sysdate,'×¯»ª');            
-insert into tb_stock_bigquant_Position values ('002718',1400   ,27.49 ,sysdate,'×¯»ª');          
-insert into tb_stock_bigquant_Position values ('002746',500    ,14.95 ,sysdate,'×¯»ª');          
-insert into tb_stock_bigquant_Position values ('002789',3400   ,16.78 ,sysdate,'×¯»ª');          
-insert into tb_stock_bigquant_Position values ('603520',1800   ,21.41 ,sysdate,'×¯»ª');       
+--insert into tb_stock_bigquant_Position values ('',,,sysdate,'×¯»ª'); 
+--insert into tb_stock_bigquant_Position values ('',,,sysdate,'×¯»ª');                                                 
+--insert into tb_stock_bigquant_Position values ('',,,sysdate,'×¯»ª');                                                 
+--insert into tb_stock_bigquant_Position values ('',,,sysdate,'×¯»ª');  
+--insert into tb_stock_bigquant_Position values ('',,,sysdate,'×¯»ª');
+--insert into tb_stock_bigquant_Position values ('',,,sysdate,'×¯»ª');
 --insert into tb_stock_bigquant_Position values ('',,,sysdate,'×¯»ª'); 
 --insert into tb_stock_bigquant_Position values ('',,,sysdate,'×¯»ª');                                                 
 --insert into tb_stock_bigquant_Position values ('',,,sysdate,'×¯»ª');                                                 
@@ -29,14 +27,11 @@ insert into tb_stock_bigquant_Position values ('603520',1800   ,21.41 ,sysdate,'
 commit;                                                 
                                                       
 ------------------------------------------------------------------------------------------------------
-update tb_stock_bigquant_dict set value =20573.06 where key = '¹¨ö©cash_balance';
+update tb_stock_bigquant_dict set value = 56684.69 where key = '¹¨ö©cash_balance';
                                                       
 --insert into tb_stock_bigquant_Position values ('002705',169,14.15,sysdate,'¹¨ö©');
 
-insert into tb_stock_bigquant_Position values ('002718',200,27.49,sysdate,'¹¨ö©');       
-insert into tb_stock_bigquant_Position values ('002789',600,16.78,sysdate,'¹¨ö©');               
-insert into tb_stock_bigquant_Position values ('603520',400,21.41,sysdate,'¹¨ö©');     
-insert into tb_stock_bigquant_Position values ('002746',700,14.95,sysdate,'¹¨ö©');       
+     
 --insert into tb_stock_bigquant_Position values ('',,,sysdate,'¹¨ö©');               
 --insert into tb_stock_bigquant_Position values ('',,,sysdate,'¹¨ö©');                                                     
 --insert into tb_stock_bigquant_Position values ('',,,sysdate,'¹¨ö©');                                                                 
