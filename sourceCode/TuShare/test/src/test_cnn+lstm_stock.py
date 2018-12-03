@@ -27,8 +27,8 @@ from keras.optimizers import Adam
 
 # 000300zs
 
-# df_ = gsd.get_stock_data_daily_df_time("000001zs", "1995-01-04","2018-11-30")
-df_ = gsd.get_stock_data_daily_df_time("000300zs", "2005-01-04","2018-11-30")
+# df_ = gsd.get_stock_data_daily_df_time("000300zs", "2005-01-04","2018-11-30")
+df_ = gsd.get_stock_data_daily_df_time("000850", "2005-01-04","2018-11-30")
 df = pd.DataFrame()
 df_shi_jian = pd.DataFrame()
 
@@ -45,8 +45,8 @@ df_shi_jian["shi_jian"] = df_["shi_jian"].values
 # print(df)
 # print(df_shi_jian)
 
-data_train =df.iloc[:int(df.shape[0] * 0.99) , :]
-data_test = df.iloc[ int(df.shape[0] * 0.99):, :]
+data_train =df.iloc[:int(df.shape[0] * 0.95) , :]
+data_test = df.iloc[ int(df.shape[0] * 0.95):, :]
 print(data_train.shape, data_test.shape)
 
 print(data_train)
