@@ -19,7 +19,7 @@ pro = ts.pro_api()
 
 
 # df = pro.pledge_detail(ts_code='603520.SH')
-df = ts.pro_bar(pro_api=pro, ts_code='600664.SH', adj='qfq', start_date='20181128', end_date='20181128')
+df = ts.pro_bar(pro_api=pro, ts_code='001872.SZ', adj='qfq', start_date='', end_date='')
 print(df.columns)
 print(np.array(df))
 print(df)

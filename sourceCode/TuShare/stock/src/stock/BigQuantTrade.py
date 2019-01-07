@@ -287,10 +287,12 @@ class TradeSmallMarketValue(Trade):
             
             if cash_balance < cash_to_buy  :
                 cash_to_buy   = cash_balance
+                
+            last_price = round(self.get_last_price(code=code)*100*1.01)/100
                                          
             if cash_balance >= cash_to_buy : 
                 #cash_balance -= cash_to_buy
-                last_price = round(self.get_last_price(code=code)*100*1.01)/100
+                #last_price = round(self.get_last_price(code=code)*100*1.01)/100
                 buy_vol    = floor((float(cash_to_buy)/last_price)/100)*100
                 cash_balance -= last_price * buy_vol 
             
@@ -301,7 +303,7 @@ class TradeSmallMarketValue(Trade):
                 else :
                     market = "深圳"
                                     
-                last_price = round(self.get_last_price(code=code)*100*1.01)/100
+                #last_price = round(self.get_last_price(code=code)*100*1.01)/100
                 if last_price == 0 :
                     print(code,"price:",last_price)
                     continue                

@@ -461,7 +461,7 @@ def get_stock_data_monthly(code='',begin="",end=''):
 
     data = pd.read_sql_query(sql,con = engine)
 #     print(sql)
-    data = data.set_index('shi_jian')
+#     data = data.set_index('shi_jian')
     return data      
     
     
@@ -567,6 +567,32 @@ def get_stock_data_daily_df_time(code='',start='',end=''):
     sql +=  "       decode(DPO_DPO         ,null,0,DPO_DPO         ) DPO_DPO          , "
     sql +=  "       decode(DPO_6MA         ,null,0,DPO_6MA         ) DPO_6MA            "
     sql +=  "from tb_stock_data_daily where "
+    sql +=  "  code = '" + code[0:8] + "'" 
+    sql +=  "    and "
+    sql +=  "  shi_jian >= to_date('"+start[0:10] +" 15:00:00','yyyy-mm-dd hh24:mi:ss') "
+    sql +=  "    and "
+    sql +=  "  shi_jian <= to_date('"+end[0:10]   +" 15:00:00','yyyy-mm-dd hh24:mi:ss') "    
+    sql +=  "order by shi_jian asc "    
+
+    data = pd.read_sql_query(sql,con = engine)
+#     print(sql)
+#     data = data.set_index('shi_jian')
+    return data    
+
+def get_stock_data_weekly_df_time(code='',start='',end=''):
+    engine = create_engine('oracle://c##stock:didierg160@myoracle')
+    
+    sql  =  "select to_char(shi_jian,'yyyy-mm-dd')                   shi_jian         , "
+    sql +=  "       decode(price           ,null,0,price )           price            , "
+    sql +=  "       decode(price_last_day  ,null,0,price_last_day  ) price_last_day   , "
+    sql +=  "       decode(price_today_open,null,0,price_today_open) price_today_open , "
+    sql +=  "       decode(zhang_die       ,null,0,zhang_die       ) zhang_die        , "
+    sql +=  "       decode(zhang_die_rate  ,null,0,zhang_die_rate  ) zhang_die_rate   , "
+    sql +=  "       decode(max_price       ,null,0,max_price       ) max_price        , "
+    sql +=  "       decode(min_price       ,null,0,min_price       ) min_price        , "
+    sql +=  "       decode(vol             ,null,0,vol             ) vol              , "
+    sql +=  "       decode(amount          ,null,0,amount          ) amount             "
+    sql +=  "from tb_stock_data_weekly where "
     sql +=  "  code = '" + code[0:8] + "'" 
     sql +=  "    and "
     sql +=  "  shi_jian >= to_date('"+start[0:10] +" 15:00:00','yyyy-mm-dd hh24:mi:ss') "
