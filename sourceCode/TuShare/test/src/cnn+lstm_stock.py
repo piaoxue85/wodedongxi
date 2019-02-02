@@ -17,7 +17,6 @@ import numpy as np
 # import tensorflow as tf
 import matplotlib.pyplot as plt
 from sklearn.preprocessing import MinMaxScaler
-import time
 
 from keras.layers import Input, Dense, LSTM
 from keras.models import Model

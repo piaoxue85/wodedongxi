@@ -14,6 +14,12 @@ import json, urllib.request, urllib.parse, urllib.error
 from urllib.parse import urlencode
 import pandas as pd
 
+def get_tb_temp_data():
+    engine = create_engine('oracle://c##stock:didierg160@myoracle')
+    sql = "select * from tb_temp order by shi_jian asc"
+    data = pd.read_sql_query(sql,con = engine)
+    return data  
+
 def get_report_data(year="" , quarter=""):
     engine = create_engine('oracle://c##tushare:didierg160@myoracle')
     sql = "select * from tb_stock_report_data     where year = " + str(year) + " and quarter = " + str(quarter)

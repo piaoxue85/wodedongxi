@@ -17,9 +17,8 @@ pro = ts.pro_api()
 # df = pro.daily(ts_code='002230.SZ', start_date='', end_date='')
 # print(df)
 
-
 # df = pro.pledge_detail(ts_code='603520.SH')
-df = ts.pro_bar(pro_api=pro, ts_code='001872.SZ', adj='qfq', start_date='', end_date='')
+df = ts.pro_bar(pro_api=pro, ts_code='000022.SZ', adj='qfq', start_date='', end_date='')
 print(df.columns)
 print(np.array(df))
 print(df)
