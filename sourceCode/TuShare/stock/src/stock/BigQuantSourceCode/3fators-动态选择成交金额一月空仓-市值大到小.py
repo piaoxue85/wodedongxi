@@ -7,10 +7,13 @@ from sklearn import preprocessing
 
 # 获取股票代码
 instruments = D.instruments()
+
 black_list = [ 
                 "603199.SHA",         #2018-9-26 嘉润金地计划6个月内减持占公司股份总数的14.46%
+#                 "002809.SZA",         #红墙股份 破位
              ]
 
+#剔除黑名单
 instruments_tmp = []
 for code in instruments :
     if code not in black_list :
@@ -22,17 +25,17 @@ instruments_tmp = []
     
 
 # # 确定起始时间
-start_date = '2018-01-01' 
+# start_date = '2018-01-01' 
 # start_date = '2016-01-01'
 # start_date = '2018-04-10'
 # start_date = '2017-01-01'
 # start_date = '2005-01-01'
 # start_date = "2007-02-01"
+start_date = '2019-01-01'
 
 # 确定结束时间
-end_date = '2018-11-01'
+end_date = '2019-02-01'
 # end_date = '2018-08-01'
-
 
 
 # 获取股票总市值数据，返回DataFrame数据格式
@@ -46,10 +49,7 @@ def get_data(date="",portfolio_value=0.0):
 #     print(df)
     #剔除创业板
     df = df[ (df['list_board_0'] != 3)]
-    
-    #剔除黑名单
-#     df = df[ df['instrument'].notin(black_list)]
-    
+        
     df = df[ (df['list_days_0'] >= 365*2)]
     #4 0.5 5674.42% 41.36%
     df = df[  df['fs_eps_0'] >= 0.5 ]
@@ -137,10 +137,12 @@ def rebalance(context, data):
         try:
             stock_to_buy = get_buy_list(date,portfolio_value=context.portfolio.portfolio_value)
         except:
-            stock_to_buy = []     
-        
+            stock_to_buy = []  
+            
+#     stock_to_buy = get_buy_list(date,portfolio_value=context.portfolio.portfolio_value)    
+    
     print(stock_to_buy)
-
+    
     # 通过positions对象，使用列表生成式的方法获取目前持仓的股票列表
     stock_hold_now = [equity.symbol for equity in context.portfolio.positions]
     # 继续持有的股票：调仓时，如果买入的股票已经存在于目前的持仓里，那么应继续持有
@@ -176,7 +178,7 @@ def rebalance(context, data):
             context.order_target_percent(context.symbol(stock), weight)
 #             print(stock)
 
-m = M.trade.v3(
+m = M.trade.v2(
     instruments=instruments,
     start_date=start_date,
     end_date=end_date,
@@ -187,7 +189,8 @@ m = M.trade.v3(
     # 卖出订单以开盘价成交
     order_price_field_sell='close',
     # 策略本金    
-    capital_base= 295056.07,
+    capital_base= 266812.27,
+#     capital_base= 10000,
     # 比较基准：沪深300
     benchmark='000300.INDX',
     # 传入数据给回测模块，所有回测函数里用到的数据都要从这里传入，并通过 context.options 使用，否则可能会遇到缓存问题
@@ -196,9 +199,42 @@ m = M.trade.v3(
 #     price_type  = "真实价格" ,
 #     options={'selected_data': None, 'rebalance_period': None}
 )
+
 m.pyfolio_full_tear_sheet()
 m.risk_analyze()
             
+# m5 = M.N_days_performance_statistics.v5(
+#     input_1=m.raw_perf,
+#     N=5
+# )
+
+# m6 = M.daily_position_analysis.v6(
+#     input_1=m.raw_perf
+# )
+
+# m7 = M.Brinson.v3(
+#     input_1=m.raw_perf,
+#     benchmark='000300.HIX'
+# )    
+
+# m22 = M.N_days_performance_statistics.v5(
+#     input_1=m.raw_perf,
+#     N=5
+# )
+
+# m23 = M.daily_position_analysis.v6(
+#     input_1=m.raw_perf
+# )
+
+# m20 = M.Brinson.v3(
+#     input_1=m.raw_perf,
+#     benchmark='000300.HIX'
+# )
+
+# m5 = M.因子收益及风险分析.v11(
+#     input_1=m.raw_perf
+# )
+    
 # m=M.backtest.v5( 
 #     instruments=instruments,
 #     start_date=start_date, 
